@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+<!-- 
+	<context:property-placeholder
+		location="classpath:conf/config.properties" />
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="100" />
+		<property name="maxWait" value="1000" />
+		<property name="poolPreparedStatements" value="true" />
+	</bean>
+	
+	<bean id="lobHandler"
+		class="org.springframework.jdbc.support.lob.DefaultLobHandler"
+		lazy-init="true">
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		p:dataSource-ref="dataSource">
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.jdbc.batch_size">
+					${hibernate.jdbc.batch_size}
+				</prop>
+				<prop key="hibernate.dialect">
+					${hibernate.dialect}
+				</prop>
+				<prop key="hibernate.show_sql">
+					${hibernate.show_sql}
+				</prop>
+				<prop key="hibernate.generate_statistics">
+					${hibernate.generate_statistics}
+				</prop>
+				<prop key="hibernate.use_query_cache">
+					${hibernate.use_query_cache}
+				</prop>
+				<prop key="hibernate.cglib.use_reflection_optimizer">
+					${hibernate.cglib.use_reflection_optimizer}
+				</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.connection.pool_size">200</prop>
+				<prop key="hibernate.cache.provider_class">
+					org.hibernate.cache.OSCacheProvider
+				</prop>
+				<prop key="hibernate.use_sql_comments">
+					${hibernate.use_sql_comments}
+				</prop>
+				<prop key="hibernate.hbm2ddl.auto">
+					${hibernate.hbm2ddl.auto}
+				</prop>
+			</props>
+		</property>
+		<property name="lobHandler" ref="lobHandler"></property>
+
+		<property name="configLocations">
+			<list>
+				<value>classpath:conf/orm-platform.cfg.xml</value>
+				<value>classpath:conf/orm-workflow.cfg.xml</value>
+				<value>classpath:conf/orm-oa.cfg.xml</value>
+			</list>
+		</property>
+		<!-- 
+			<property name="annotatedPackages" value="com.xenging.platform"></property>
+			<property name="annotatedClasses">
+			<list>
+			<value>com.xenging.platform.function.obj.Function</value>
+			<value>com.xenging.platform.function.obj.FunctionVo</value>
+			<value>com.xenging.platform.function.obj.TreeNode</value>
+			<value>com.xenging.platform.org.obj.Org</value>
+			<value>com.xenging.platform.org.obj.OrgTreeNode</value>
+			<value>com.xenging.platform.region.obj.RegionTreeNode</value>
+			<value>com.xenging.platform.region.obj.Region</value>
+			<value>com.xenging.platform.role.obj.Role</value>
+			<value>com.xenging.platform.resource.obj.Resource</value>
+			<value>com.xenging.platform.user.obj.User</value>
+			<value>com.xenging.platform.log.obj.Log</value>
+			<value>com.xenging.platform.person.obj.Person</value>
+			<value>com.xenging.platform.role.resource.obj.RoleResource</value>
+			<value>com.xenging.platform.role.function.obj.RoleFunction</value>
+			<value>com.xenging.platform.user.role.obj.UserRole</value>
+			</list>
+			</property>
+			
+			<property name="mappingResources">
+			<list>
+			<value>com/xenging/platform/workflow/model/BusinessType.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowDeploy.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowMetaFile.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowNodeBinding.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowNodeInputParamBinding.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowNodeOutputParamBinding.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowNodeOutputParamEnumeBinding.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowUserPerformer.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowRolePerformer.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowProc.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowProcRelativeData.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowProcTransaction.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowProcTransition.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowTask.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowTaskUser.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowTaskRole.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowTaskAssigner.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowTaskRefuse.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/WFDriverInputParam.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/WFDriverOutputParam.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/WFDriverOutputParamEnume.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/WorkflowDriver.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/WorkflowMeta.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/FlowMetaFileStore.hbm.xml</value>
+			<value>com/xenging/platform/workflow/model/NewTask.hbm.xml</value>
+			</list>
+			</property>
+		-->
+		<property name="eventListeners">
+			<map>
+				<entry key="merge">
+					<bean
+						class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+		p:sessionFactory-ref="sessionFactory" />
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="load*" read-only="true" />
+			<tx:method name="is*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:advisor pointcut="execution(* *..*ServiceImpl.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config>
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="shared" value="true"></property>
+	</bean>
+	<bean id="cacheProviderFacade"
+		class="com.xenging.platform.cache.service.EhCacheFacade">
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+	<bean id="sqlMapClient"
+		class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation"
+			value="WEB-INF/conf/sqlmap-config.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+</beans>
