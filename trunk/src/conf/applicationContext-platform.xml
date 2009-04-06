@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+			http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd 
+			http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd " 
+			default-lazy-init="true">
+	
+
+	<bean id="roleDao" class="com.secoo.platform.dao.impl.RoleDaoImpl"
+		p:sessionFactory-ref="sessionFactory" />
+	<bean id="regionDao" class="com.secoo.platform.dao.impl.RegionDaoImpl"
+		p:sessionFactory-ref="sessionFactory" />
+	<bean id="functionDao" class="com.secoo.platform.dao.impl.FunctionDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="roleService" class="com.secoo.platform.service.impl.RoleServiceImpl"  >
+		<property name="dao" ref="roleDao"></property>
+		<property name="functionService" ref="functionService"></property>
+	</bean>
+	
+	<bean id="roleAction" class="com.secoo.platform.action.RoleAction"  scope="prototype" >
+		<property name="service" ref="roleService"></property>
+	</bean>
+	<bean id="regionService"
+		class="com.secoo.platform.service.impl.RegionServiceImpl"
+		>
+		<property name="dao" ref="regionDao"></property>
+	</bean>
+	
+	<bean id="regionAction" class="com.secoo.platform.action.RegionAction"  scope ="prototype">
+		<property name="service" ref="regionService"></property>
+	</bean>
+	
+	<bean id="functionService" 	class="com.secoo.platform.service.impl.FunctionServiceImpl" >
+		<property name="functionDao" ref="functionDao"></property>
+	</bean>
+	
+	<bean id="functionAction" class="com.secoo.platform.action.FunctionAction"  scope ="prototype">
+		<property name="service" ref="functionService"></property>
+	</bean>
+	
+	<bean id="orgDao" class="com.secoo.platform.dao.impl.OrgDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="orgService" 	class="com.secoo.platform.service.impl.OrgServiceImpl" >
+		<property name="dao" ref="orgDao"></property>
+	</bean>
+	
+	<bean id="orgAction" class="com.secoo.platform.action.OrgAction"  scope ="prototype">
+		<property name="service" ref="orgService"></property>
+	</bean>
+
+	
+	<bean id="logDao" class="com.secoo.platform.dao.impl.LogDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="logService" 	class="com.secoo.platform.service.impl.LogServiceImpl" >
+		<property name="dao" ref="logDao"></property>
+	</bean>
+	<bean id="logAction" 	class="com.secoo.platform.action.LogAction"  scope ="prototype">
+		<property name="service" ref="logService"></property>
+	</bean>
+	<bean id="userDao" class="com.secoo.platform.dao.impl.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="userService" 	class="com.secoo.platform.service.impl.UserServiceImpl" >
+		<property name="dao" ref="userDao"></property>
+	</bean>
+	
+	
+	<bean id="changePasswordAction" class="com.secoo.platform.action.ChangePasswordAction"  scope ="prototype">
+		<property name="service" ref="userService"></property>
+	</bean>
+	
+	<bean id="userAction" class="com.secoo.platform.action.UserAction"  scope ="prototype">
+		<property name="service" ref="userService"></property>
+	</bean>
+	
+	<bean id="personDao" class="com.secoo.platform.dao.impl.PersonDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="personService" 	class="com.secoo.platform.service.impl.PersonServiceImpl" >
+		<property name="dao" ref="personDao"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="personAction" class="com.secoo.platform.action.PersonAction"  scope ="prototype">
+		<property name="service" ref="personService"></property>
+	</bean>
+	<bean id="cacheAction" class="com.secoo.platform.action.EhCacheAction"  scope ="prototype">
+		<property name="service" ref="cacheService"></property>
+	</bean>
+	<bean id="cacheService" class="com.secoo.platform.service.impl.EhCacheServiceImpl">
+		<property name="facade" ref="cacheProviderFacade"></property>
+	</bean>
+	
+</beans>
