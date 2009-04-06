@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+	default-autowire="byType" default-lazy-init="true">
+	<jaxws:client id="userClient"
+		serviceClass="org.springside.examples.miniservice.ws.user.UserWebService"
+		address="http://localhost:8080/miniservice/services/UserService">
+		<jaxws:outInterceptors>
+			<ref bean="wss4jOutConfiguration" />
+		</jaxws:outInterceptors>
+	</jaxws:client>
+	
+	<bean id="wss4jOutConfiguration"
+		class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+		<property name="properties">
+			<map>
+				<entry key="action" value="UsernameToken" />
+				<entry key="user" value="admin" />
+				<entry key="passwordType" value="PasswordText" />
+				<entry key="passwordCallbackRef">
+					<ref bean="passwordCallback" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="passwordCallback" class="test.ClientPasswordCallback"></bean>
+</beans>

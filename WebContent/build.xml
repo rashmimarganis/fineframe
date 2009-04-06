@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="TomcatManager" default="start" basedir="">
+  
+    <description>
+        与tomcat相互配合的任务. Version 1.0.
+        Copyright 2004 camry.wu@gmail.com
+    </description>
+   <property name="tomcat.home" value="D:/jboss-web-2.1.1.GA/"/>
+    <property name="tomcat.base.home" value="D:/jboss-web-2.1.1.GA/"/>
+    <property name="tomcat.manager.url" value="http://127.0.0.1:8080/manager"/>
+    <!-- 读入 tomcat 配置 -->
+    <xmlproperty  file="tomcat.xml"
+                  semanticAttributes="true" keepRoot="false"/>
+  
+    <!--发布到 tomcat 
+    <target name="deploy_tomcat"
+            depends="compile" description="Deploy application">
+      <copy todir="${path.war}/WEB-INF/classes" preservelastmodified="true">
+        <fileset dir="${dist}/classes">
+          <include name="**/*"/>
+        </fileset>
+      </copy>
+      <copy todir="${path.war}/WEB-INF/lib" preservelastmodified="true">
+        <fileset dir="${dist}/lib">
+          <include name="**/*"/>
+        </fileset>
+      </copy>
+      <copy todir="${path.deploy}/${component.name}" preservelastmodified="true">
+        <fileset dir="${path.war}">
+          <include name="**/*"/>
+        </fileset>
+      </copy>
+    </target>
+  -->
+   
+  
+    <!-- install 工程 -->
+    <taskdef name="install" classname="org.apache.catalina.ant.InstallTask">
+      <classpath>
+        <path location="${tomcat.home}/lib/catalina-ant.jar"/>
+      </classpath>
+    </taskdef>
+  
+    <!-- reload 工程 -->
+    <taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask">
+      <classpath>
+        <path location="${tomcat.home}/lib/catalina-ant.jar"/>
+      </classpath>
+    </taskdef>
+  
+    <!-- 查看工程列表 -->
+    <taskdef name="list" classname="org.apache.catalina.ant.ListTask">
+      <classpath>
+        <path location="${tomcat.home}/lib/catalina-ant.jar"/>
+      </classpath>
+    </taskdef>
+  
+    <!-- 启动 tomcat -->
+    <taskdef name="start" classname="org.apache.catalina.ant.StartTask">
+      <classpath>
+        <path location="${tomcat.home}/lib/catalina-ant.jar"/>
+      </classpath>
+    </taskdef>
+  
+    <!-- 停止 tomcat -->
+    <taskdef name="stop" classname="org.apache.catalina.ant.StopTask">
+      <classpath>
+        <path location="${tomcat.home}/lib/catalina-ant.jar"/>
+      </classpath>
+    </taskdef>
+	<!-- 获取ServerInfo -->
+    <taskdef name="serverInfo" classname="org.apache.catalina.ant.ServerinfoTask">
+      <classpath>
+        <path location="${tomcat.home}/lib/catalina-ant.jar"/>
+      </classpath>
+    </taskdef>
+	<!-- 获取Resources -->
+    <taskdef name="resources" classname="org.apache.catalina.ant.ResourcesTask">
+      <classpath>
+        <path location="${tomcat.home}/lib/catalina-ant.jar"/>
+      </classpath>
+    </taskdef>
+  
+    <!-- install 工程 -->
+    <target name="install" description="Install application in Tomcat">
+      <install  url="${tomcat.manager.url}"
+                username="${tomcat.manager.username}"
+                password="${tomcat.manager.password}"
+                path="/${component.name}"
+                war="${component.name}.war"/>
+    </target>
+  
+    <!-- reload 工程  -->
+    <target name="reload" description="Reload application in Tomcat">
+      <reload url="${tomcat.manager.url}"
+              username="${tomcat.manager.username}"
+              password="${tomcat.manager.password}"
+              path="/${component.name}"/>
+    </target>
+ 
+    <!-- 启动 tomcat   -->
+    <target name="start" description="Start Tomcat application">
+      <start  url="${tomcat.manager.url}"
+              username="${tomcat.manager.username}"
+              password="${tomcat.manager.password}"
+              path="/${component.name}"/>
+    </target>
+
+    <!-- 停止 tomcat   -->
+    <target name="stop" description="Stop Tomcat application">
+      <stop url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"
+            path="/${component.name}"/>
+    </target>
+
+    <!-- 查看工程列表 -->
+    <target name="list" description="List Tomcat applications">
+      <list url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"/>
+    </target>
+	<!-- 查看ServerInfo -->
+    <target name="serverInfo" description="See Server Info">
+      <serverInfo url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"/>
+    </target>
+	<!-- 查看Resources -->
+    <target name="resources" description="See Resources">
+      <serverInfo url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"/>
+    </target>
+	
+	<target name="tomcat.start">
+		<java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
+		<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+		<jvmarg value="-Dcatalina.base=${tomcat.base.home}"/>
+	</java>
+	</target>
+
+	<target name="tomcat.stop">
+		<java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
+		<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+		<arg line="stop"/>
+	</java>
+	</target>
+</project>

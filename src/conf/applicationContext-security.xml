@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd"
+	default-lazy-init="true">
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename">
+			<value>org/acegisecurity/messages</value>
+		</property>
+	</bean>
+	<!-- ======================== FILTER CHAIN ======================= -->
+	<bean id="filterChainProxy"
+		class="org.acegisecurity.util.FilterChainProxy">
+		<property name="filterInvocationDefinitionSource">
+			<value>
+				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+				PATTERN_TYPE_APACHE_ANT
+				/**=httpSessionContextIntegrationFilter,rememberMeProcessingFilter,logoutFilter,captchaValidationProcessingFilter,channelProcessingFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,switchOrgProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+			</value>
+		</property>
+	</bean>
+
+	<bean id="httpSessionContextIntegrationFilter"
+		class="org.acegisecurity.context.HttpSessionContextIntegrationFilter">
+		<property name="context"
+			value="org.acegisecurity.captcha.CaptchaSecurityContextImpl">
+		</property>
+		<property name="forceEagerSessionCreation" value="true"></property>
+		<property name="allowSessionCreation" value="true"></property>
+	</bean>
+
+	<bean id="logoutFilter"
+		class="org.acegisecurity.ui.logout.LogoutFilter">
+		<constructor-arg value="/login.jsp" />
+		<constructor-arg>
+			<list>
+				<ref bean="rememberMeServices" />
+				<bean
+					class="org.acegisecurity.ui.logout.SecurityContextLogoutHandler" />
+				<ref bean="customSessionLogoutHandler" />
+			</list>
+		</constructor-arg>
+		<property name="filterProcessesUrl" value="/logout.jsp" />
+	</bean>
+	<bean id="customSessionLogoutHandler"
+		class="com.izhi.platform.webapp.security.SessionLogoutHandler">
+		<property name="sessionRegistry">
+			<ref bean="sessionRegistry" />
+		</property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="sessionRegistry"
+		class="org.acegisecurity.concurrent.SessionRegistryImpl" />
+	<bean id="authenticationProcessingFilter"
+		class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter">
+		<property name="authenticationManager"
+			ref="authenticationManager" />
+		<property name="authenticationFailureUrl"
+			value="/errors/userPswError.html" />
+		<property name="alwaysUseDefaultTargetUrl" value="true"></property>
+		<property name="defaultTargetUrl" value="/main.jhtm" />
+		<property name="useRelativeContext" value="false"></property>
+		<property name="filterProcessesUrl" value="/j_security_check"></property>
+		<property name="rememberMeServices" ref="rememberMeServices" />
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.acegisecurity.AuthenticationException">
+					/errors/userPswError.html
+				</prop>
+				<prop
+					key="org.acegisecurity.concurrent.ConcurrentLoginException">
+					/errors/tooManyUserError.html
+				</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="securityContextHolderAwareRequestFilter"
+		class="org.acegisecurity.wrapper.SecurityContextHolderAwareRequestFilter" />
+
+	<bean id="rememberMeProcessingFilter"
+		class="org.acegisecurity.ui.rememberme.RememberMeProcessingFilter">
+		<property name="authenticationManager"
+			ref="authenticationManager" />
+		<property name="rememberMeServices" ref="rememberMeServices" />
+	</bean>
+
+	<bean id="anonymousProcessingFilter"
+		class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
+		<property name="key" value="anonymous" />
+		<property name="userAttribute" value="anonymous,ROLE_ANONYMOUS" />
+	</bean>
+
+	<bean id="exceptionTranslationFilter"
+		class="org.acegisecurity.ui.ExceptionTranslationFilter">
+		<property name="authenticationEntryPoint">
+			<bean
+				class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+				<property name="loginFormUrl" value="/login.jsp" />
+				<property name="forceHttps" value="false" />
+			</bean>
+		</property>
+		<property name="accessDeniedHandler">
+			<bean
+				class="org.acegisecurity.ui.AccessDeniedHandlerImpl">
+				<property name="errorPage" value="/accessDenied.jsp" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="filterInvocationInterceptor"
+		class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
+		<property name="authenticationManager"
+			ref="authenticationManager" />
+		<property name="accessDecisionManager"
+			ref="accessDecisionManager" />
+		<property name="objectDefinitionSource"
+			ref="filterDefinitionSource">
+		</property>
+		<!-- <property name="runAsManager" ></property> -->
+	</bean>
+	<bean id="filterDefinitionSource"
+		class="com.izhi.platform.webapp.security.FilterInvocationDefinitionSource">
+		<property name="service" ref="securityFilterService"></property>
+	</bean>
+	<!-- 
+	<bean id="securityFilterService"
+		class="com.izhi.platform.service.impl.SecurityFilterServiceImpl">
+		<property name="convertUrlToLowercaseBeforeComparison"
+			value="false" />
+		<property name="useAntPath" value="true" />
+		<property name="functionService" ref="functionService"></property>
+		<property name="logService" ref="logService"></property>
+		<property name="roleService" ref="roleService"></property>
+	</bean>
+	 -->
+	<bean id="accessDecisionManager"
+		class="org.acegisecurity.vote.AffirmativeBased">
+		<property name="allowIfAllAbstainDecisions" value="false" />
+		<property name="decisionVoters">
+			<list>
+				<bean class="org.acegisecurity.vote.RoleVoter">
+					<property name="rolePrefix" value="" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="rememberMeServices"
+		class="org.acegisecurity.ui.rememberme.TokenBasedRememberMeServices">
+		<property name="userDetailsService" ref="userService" />
+		<property name="key" value="izhiRocks" />
+		<property name="tokenValiditySeconds" value="31536000" />
+		<property name="parameter" value="rememberme" />
+		<property name="authenticationDetailsSource"
+			ref="authenticationDetailsSourceHelper" />
+	</bean>
+	<bean id="authenticationDetailsSourceHelper"
+		class="com.izhi.platform.webapp.security.AuthenticationDetailsSourceHelper" />
+	<bean id="authenticationManager"
+		class="org.acegisecurity.providers.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref local="daoAuthenticationProvider" />
+				<ref local="anonymousAuthenticationProvider" />
+				<ref local="rememberMeAuthenticationProvider" />
+			</list>
+		</property>
+		<property name="sessionController">
+			<ref bean="concurrentSessionController" />
+		</property>
+	</bean>
+
+	<bean id="concurrentSessionController"
+		class="com.izhi.platform.webapp.security.ConcurrentSessionControllerImpl">
+		<property name="maximumSessions">
+			<value>${concurrent.maximumSessions}</value>
+		</property>
+		<property name="sessionRegistry">
+			<ref local="sessionRegistry" />
+		</property>
+		<property name="exceptionIfMaximumExceeded" value="true" />
+	</bean>
+
+
+	<bean id="daoAuthenticationProvider"
+		class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="userService" />
+		<property name="passwordEncoder" ref="passwordEncoder" />
+	</bean>
+
+	<bean id="anonymousAuthenticationProvider"
+		class="org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider">
+		<property name="key" value="anonymous" />
+	</bean>
+
+	<bean id="rememberMeAuthenticationProvider"
+		class="org.acegisecurity.providers.rememberme.RememberMeAuthenticationProvider">
+		<property name="key" value="aizhi_rememeber_me" />
+	</bean>
+
+	<bean id="passwordEncoder"
+		class="org.acegisecurity.providers.encoding.Md5PasswordEncoder" />
+
+	<bean id="loggerListener"
+		class="org.acegisecurity.event.authentication.LoggerListener" />
+		<!-- 
+	<bean id="loginSuccessListener"
+		class="com.izhi.platform.webapp.listener.LoginSuccessListener">
+		<property name="logService" ref="logService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+ -->
+	<bean id="channelProcessingFilter"
+		class="org.acegisecurity.securechannel.ChannelProcessingFilter">
+		<property name="channelDecisionManager"
+			ref="channelDecisionManager" />
+		<property name="filterInvocationDefinitionSource">
+			<value>
+				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+				PATTERN_TYPE_APACHE_ANT
+				/j_security_check=REQUIRES_CAPTCHA_ONCE_ABOVE_THRESOLD_REQUESTS
+			</value>
+		</property>
+	</bean>
+
+	<bean id="channelDecisionManager"
+		class="org.acegisecurity.securechannel.ChannelDecisionManagerImpl">
+		<property name="channelProcessors">
+			<list>
+				<bean
+					class="org.acegisecurity.securechannel.SecureChannelProcessor" />
+				<bean
+					class="org.acegisecurity.securechannel.InsecureChannelProcessor" />
+				<ref
+					local="testOnceAfterMaxRequestsCaptchaChannelProcessor" />
+				<ref
+					local="alwaysTestAfterTimeInMillisCaptchaChannelProcessor" />
+				<ref
+					local="alwaysTestAfterMaxRequestsCaptchaChannelProcessor" />
+				<ref
+					local="alwaysTestBelowAverageTimeInMillisBetweenRequestsChannelProcessor" />
+			</list>
+		</property>
+	</bean>
+	<bean id="testOnceAfterMaxRequestsCaptchaChannelProcessor"
+		class="org.acegisecurity.captcha.TestOnceAfterMaxRequestsCaptchaChannelProcessor">
+		<property name="thresold">
+			<value>0</value>
+		</property>
+		<property name="entryPoint">
+			<ref bean="captchaEntryPoint" />
+		</property>
+	</bean>
+
+	<bean id="alwaysTestAfterTimeInMillisCaptchaChannelProcessor"
+		class="org.acegisecurity.captcha.AlwaysTestAfterTimeInMillisCaptchaChannelProcessor">
+		<property name="thresold">
+			<value>5000</value>
+		</property>
+		<property name="entryPoint">
+			<ref bean="captchaEntryPoint" />
+		</property>
+	</bean>
+
+	<bean id="alwaysTestAfterMaxRequestsCaptchaChannelProcessor"
+		class="org.acegisecurity.captcha.AlwaysTestAfterMaxRequestsCaptchaChannelProcessor">
+		<property name="thresold">
+			<value>5</value>
+		</property>
+		<property name="entryPoint">
+			<ref bean="captchaEntryPoint" />
+		</property>
+	</bean>
+
+	<bean
+		id="alwaysTestBelowAverageTimeInMillisBetweenRequestsChannelProcessor"
+		class="org.acegisecurity.captcha.AlwaysTestBelowAverageTimeInMillisBetweenRequestsChannelProcessor">
+		<property name="thresold">
+			<value>20000</value>
+		</property>
+		<property name="entryPoint">
+			<ref bean="captchaEntryPoint" />
+		</property>
+	</bean>
+
+	<bean id="captchaEntryPoint"
+		class="org.acegisecurity.captcha.CaptchaEntryPoint">
+		<property name="captchaFormUrl">
+			<value>/errors/codeError.html</value>
+		</property>
+		<property name="includeOriginalRequest">
+			<value>false</value>
+		</property>
+		<property name="includeOriginalParameters">
+			<value>false</value>
+		</property>
+	</bean>
+	<bean id="captchaValidationProcessingFilter"
+		class="org.acegisecurity.captcha.CaptchaValidationProcessingFilter">
+		<property name="captchaService">
+			<ref bean="captchaService" />
+		</property>
+		<property name="captchaValidationParameter">
+			<value>j_captcha_response</value>
+		</property>
+	</bean>
+
+	<bean id="switchOrgProcessingFilter"
+		class="com.izhi.platform.webapp.filter.SwitchOrgProcessingFilter">
+		<property name="userService" ref="userService" />
+		<property name="orgService" ref="orgService" />
+		<property name="switchOrgUrl">
+			<value>/j_switch_org</value>
+		</property>
+		<property name="exitOrgUrl">
+			<value>/j_exit_org</value>
+		</property>
+		<property name="targetUrl">
+			<value>/main.jhtm</value>
+		</property>
+	</bean>
+</beans>
