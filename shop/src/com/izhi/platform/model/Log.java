@@ -20,7 +20,8 @@ public class Log implements Serializable {
 	private static final long serialVersionUID = -5426144134638037407L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	@Column(name="log_id")
+	private int logId;
 	@ManyToOne(cascade={CascadeType.REMOVE})
 	@JoinColumn(name="user_id",insertable=true,updatable=false)
 	private User user;
@@ -31,13 +32,13 @@ public class Log implements Serializable {
 	@Column(length=20)
 	private String ip;
 	@ManyToOne(cascade={CascadeType.REMOVE})
-	@JoinColumn(name="org_id",insertable=true,updatable=false)
-	private Org org;
-	public int getId() {
-		return id;
+	@JoinColumn(name="shop_id",insertable=true,updatable=false)
+	private Shop shop;
+	public int getLogId() {
+		return logId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setLogId(int id) {
+		this.logId = id;
 	}
 	
 	public User getUser() {
@@ -60,11 +61,11 @@ public class Log implements Serializable {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
-	public Org getOrg() {
-		return org;
+	public Shop getShop() {
+		return shop;
 	}
-	public void setOrg(Org org) {
-		this.org = org;
+	public void setShop(Shop org) {
+		this.shop = org;
 	}
 	public Date getTime() {
 		return time;

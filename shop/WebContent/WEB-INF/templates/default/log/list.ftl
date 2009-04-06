@@ -21,8 +21,8 @@
 </tr>
 <#list objs as log>
 	<tr>
-		<td class="align_c"><input type="checkbox" class="log" name="logId" value="${log.id}"></td>
-		<td class="align_c">${log.id}</td>
+		<td class="align_c"><input type="checkbox" class="log" name="logId" value="${log.logId}"></td>
+		<td class="align_c">${log.logId}</td>
 		<td>${log.operation}</td>
 		<td class="align_c">${log.user.username}</td>
 		<td class="align_c">${log.time}</td>
@@ -46,7 +46,7 @@
 	var pageCount='${page.totalPage}';
 	var limit=${page.limit};
 	var cp='${page.currentPage}';
-	var url='${base}/log/page.jhtm?';
+	var url='${base}/log/list.jhtm?';
 	$('#checkAll').click(function(){
 		if($(this).attr('checked')){
 			selectAll('log');

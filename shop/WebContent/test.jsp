@@ -19,10 +19,10 @@
 </head>
 <body>
 <%
-WebApplicationContext wac=WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
+	WebApplicationContext wac=WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
 IFunctionService fs=(IFunctionService)wac.getBean("functionService");
-User u=SecurityUser.getCurrentUser();
-List<Function> s=fs.findTopFunctions(u.getPerson().getOrg().getId(),u.getId());
+User u=SecurityUser.getUser();
+List<Function> s=fs.findTopFunctions(u.getPerson().getShop().getShopId(),u.getUserId());
 for(Function f:s){
 	out.println(f.getFunctionName()+" "+f.getFunctionTitle());
 }
@@ -43,7 +43,6 @@ for(Function f:s){
 	User u=client.getById(2);
 	out.println("LoginName:"+u.getLoginName()+" Email:"+u.getEmail());
 	*/
-	
 %>
 </body>
 </html>

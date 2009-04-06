@@ -1,6 +1,6 @@
 package com.izhi.platform.action;
 
-import com.izhi.platform.model.PageParameter;
+import com.izhi.platform.util.PageParameter;
 
 public class BasePageAction extends BaseAction {
 

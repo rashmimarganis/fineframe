@@ -13,16 +13,16 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.dao.IUserDao;
-import com.izhi.platform.model.PageParameter;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.model.User;
+import com.izhi.platform.util.PageParameter;
 @Service("userDao")
 public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements IUserDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public User findUserByName(String username) {
-		String sql="select o from User o join o.roles r where r.org.id=o.person.org.id and o.username=? ";
+		String sql="select o from User o join o.roles r where  o.username=? ";
 		List<User> l= this.getHibernateTemplate().find(sql,username);
 		if(l!=null&&l.size()>0){
 			return l.get(0);
@@ -83,10 +83,10 @@ public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements IUserDao 
 		Object[] vs=null;
 		if(obj.getPassword().trim().equals("")){
 			sql="update User o set o.username=?,o.enabled=?,o.email=?,o.nonLocked=?,o.nonExpired=?,o.credentialsNonExpired=? where o.usreId=?";
-			vs=new Object[]{obj.getUsername(),obj.getEnabled(),obj.getEmail(),obj.getNonLocked(),obj.getNonExpired(),obj.isCredentialsNonExpired(),obj.getId()};
+			vs=new Object[]{obj.getUsername(),obj.getEnabled(),obj.getEmail(),obj.getLocked(),obj.getExpired(),obj.isCredentialsNonExpired(),obj.getUserId()};
 		}else{
 			sql="update User o set o.username=?,o.enabled=?,o.email=?,o.password=?,o.locked=?,o.expired=?,o.credentialsExpired=? where o.userId=?";
-			vs=new Object[]{obj.getUsername(),obj.getEnabled(),obj.getEmail(),obj.getPassword(),obj.getNonLocked(),obj.getNonExpired(),obj.getCredentialsNonExpired(),obj.getId()};
+			vs=new Object[]{obj.getUsername(),obj.getEnabled(),obj.getEmail(),obj.getPassword(),obj.getLocked(),obj.getExpired(),obj.getCredentialsNonExpired(),obj.getUserId()};
 		}
 		this.getHibernateTemplate().bulkUpdate(sql, vs);
 	}

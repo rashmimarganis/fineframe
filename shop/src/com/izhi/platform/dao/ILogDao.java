@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.izhi.platform.model.Log;
-import com.izhi.platform.model.PageParameter;
+import com.izhi.platform.util.PageParameter;
 
 public interface ILogDao extends IBaseDao<Log,Integer> {
 	List<Map<String,Object>> findPage(int userId,int orgId,Date beginTime,Date endTime,PageParameter pp);

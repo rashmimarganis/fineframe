@@ -9,21 +9,21 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.dao.IRoleDao;
-import com.izhi.platform.model.Org;
-import com.izhi.platform.model.PageParameter;
+import com.izhi.platform.model.Shop;
 import com.izhi.platform.model.Role;
+import com.izhi.platform.util.PageParameter;
 @Service("roleDao")
 public class RoleDaoImpl extends BaseDaoImpl<Role, Integer> implements IRoleDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Map<String,Object>> findPage(PageParameter pp, Org org) {
+	public List<Map<String,Object>> findPage(PageParameter pp, Shop org) {
 		String sort=pp.getDir();
 		String sortField=pp.getSort();
 		String sql="select new map(o.id as id,o.name as name,o.title as title,o.org.title as orgTitle) from Role o where o.org.id=:orgId order by o."+sortField+" "+sort;
 		Session s=this.getSession();
 		Query q=s.createQuery(sql);
-		q.setInteger("orgId", org.getId());
+		q.setInteger("orgId", org.getShopId());
 		q.setMaxResults(pp.getLimit());
 		q.setFirstResult(pp.getStart());
 		return q.list();
@@ -40,9 +40,9 @@ public class RoleDaoImpl extends BaseDaoImpl<Role, Integer> implements IRoleDao 
 	}
 
 	@Override
-	public int findTotalCount(Org org) {
+	public int findTotalCount(Shop org) {
 		int i=0;
-		Long i1=(Long)(this.getHibernateTemplate().find("select count(obj) from Role obj where obj.org.id = ?",org.getId()).get(0));
+		Long i1=(Long)(this.getHibernateTemplate().find("select count(obj) from Role obj where obj.org.id = ?",org.getShopId()).get(0));
 		i=i1.intValue();
 		return i;
 	}

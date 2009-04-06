@@ -14,7 +14,7 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	
 	@Override
 	public List<Function> findTopFunctions(Integer orgId,Integer userId) {
-		String sql="select f from Function f join f.roles r join r.users u where  f.show=true and f.parent is null and u.person.org.id=? and u.id=? order by f.sequence";
+		String sql="select f from Function f join f.roles r join r.users u where  f.show=true and f.parent is null and u.shop.id=? and u.id=? order by f.sequence";
 		List<Function> list=this.getHibernateTemplate().find(sql, new Object[]{orgId,userId});
 		return list;
 	}
@@ -71,7 +71,7 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 
 	@Override
 	public List<String> findRolesByUrl(String url) {
-		String sql="select r.name from Role r left join r.functions f where f.url=?";
+		String sql="select r.roleName from Role r left join r.functions f where f.url=?";
 		List<String> rs=this.getHibernateTemplate().find(sql, url);
 		return rs;
 	}
@@ -106,7 +106,7 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	@Override
 	public List<Function> findNextFunctions(int orgId, int userId,
 			int pid) {
-		String sql="select f from Function f join f.roles r join r.users u where u.person.org.id=? and u.id=? and f.parent.functionId=? order by f.sequence desc";
+		String sql="select f from Function f join f.roles r join r.users u where u.shop.id=? and u.id=? and f.parent.functionId=? order by f.sequence desc";
 		List<Function> list=this.getHibernateTemplate().find(sql, new Object[]{orgId,userId,pid});
 		/*for (Function m:list){
 			String pname=m.getFunctionName();

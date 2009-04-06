@@ -52,7 +52,7 @@ public class UserAction extends BasePageAction {
 	 */
 	public String findPageBySort(){
 		if( orgId == 0 ){
-			orgId = SecurityUser.getCurrentOrg().getId();
+			orgId = SecurityUser.getShop().getShopId();
 		}
 		Map<String, Object> m = userService.findPageBySort(this.getPageParameter(),orgId);
 		//m.put("objs", userService.findPageBySort(this.getPageParameter(),orgId));
@@ -62,19 +62,19 @@ public class UserAction extends BasePageAction {
 	
 	public String page(){
 		if(orgId==0){
-			orgId=SecurityUser.getCurrentOrg().getId();
+			orgId=SecurityUser.getShop().getShopId();
 		}
 		this.out(JSONObject.fromObject(userService.findPage(this.getPageParameter(), orgId)).toString());
 		return null;
 	}
 	
 	public String load(){
-		this.out(JSONObject.fromObject(userService.findInfoById(obj.getId())).toString());
+		this.out(JSONObject.fromObject(userService.findInfoById(obj.getUserId())).toString());
 		return null;
 	}
 	
 	public String findById(){
-		this.out(JSONObject.fromObject(userService.loadById(obj.getId())).toString());
+		this.out(JSONObject.fromObject(userService.loadById(obj.getUserId())).toString());
 		return null;
 	}
 	

@@ -10,10 +10,10 @@ import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.platform.model.Org;
+import com.izhi.platform.model.Shop;
 import com.izhi.platform.model.json.HibernateJSONObject;
 import com.izhi.platform.security.support.SecurityUser;
-import com.izhi.platform.service.IOrgService;
+import com.izhi.platform.service.IShopService;
 @Service
 @Scope(value="prototype")
 public class OrgAction extends BaseAction {
@@ -23,8 +23,8 @@ public class OrgAction extends BaseAction {
 	 */
 	private static final long serialVersionUID = -3796085807778344395L;
 	@Resource(name="service")
-	private IOrgService service;
-	private Org obj;
+	private IShopService service;
+	private Shop obj;
 	private int node=0;
 	private String oldName;
 	private String ids;
@@ -46,17 +46,17 @@ public class OrgAction extends BaseAction {
 	}
 
 	public String load() {
-		if(obj.getId()==0){
-			obj.setId(SecurityUser.getCurrentOrg().getId());
+		if(obj.getShopId()==0){
+			obj.setShopId(SecurityUser.getShop().getShopId());
 		}
-		obj = this.service.findById(obj.getId());
+		obj = this.service.findById(obj.getShopId());
 		this.out(HibernateJSONObject.fromObject(obj));
 		return null;
 	}
 
 	public String tree() {
 		if(node==0){
-			node=SecurityUser.getCurrentOrg().getId();
+			node=SecurityUser.getShop().getShopId();
 		}
 		log.debug("Current_ID : " + node);
 		this.out(this.service.findChildNodes(node));
@@ -83,10 +83,10 @@ public class OrgAction extends BaseAction {
 		if(obj.getParent()==null){
 			return null;
 		}
-		if(obj.getParent().getId()==0){
-			obj.setParent(SecurityUser.getCurrentOrg());
+		if(obj.getParent().getShopId()==0){
+			obj.setParent(SecurityUser.getShop());
 		}
-		this.out(HibernateJSONObject.fromObject(this.service.saveOrg(obj, oldName)).toString());
+		this.out(HibernateJSONObject.fromObject(this.service.saveShop(obj, oldName)).toString());
 		return null;
 	}
 
@@ -94,7 +94,7 @@ public class OrgAction extends BaseAction {
 		boolean success = false;
 		String msg = "";
 		if (obj != null) {
-			this.service.delete(obj.getId());
+			this.service.delete(obj.getShopId());
 			success = true;
 			msg = "删除成功！";
 		}
@@ -105,19 +105,19 @@ public class OrgAction extends BaseAction {
 		return null;
 	}
 
-	public IOrgService getService() {
+	public IShopService getService() {
 		return service;
 	}
 
-	public void setService(IOrgService service) {
+	public void setService(IShopService service) {
 		this.service = service;
 	}
 
-	public Org getObj() {
+	public Shop getObj() {
 		return obj;
 	}
 
-	public void setObj(Org obj) {
+	public void setObj(Shop obj) {
 		this.obj = obj;
 	}
 

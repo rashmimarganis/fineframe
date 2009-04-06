@@ -21,14 +21,14 @@ import org.springmodules.cache.annotations.CacheFlush;
 import org.springmodules.cache.annotations.Cacheable;
 
 import com.izhi.platform.dao.IRoleDao;
-import com.izhi.platform.model.Org;
-import com.izhi.platform.model.PageParameter;
+import com.izhi.platform.model.Shop;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.security.support.Constants;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.BaseService;
 import com.izhi.platform.service.IFunctionService;
 import com.izhi.platform.service.IRoleService;
+import com.izhi.platform.util.PageParameter;
 
 @Service("roleService")
 
@@ -73,7 +73,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Override
 	
 	@Cacheable(modelId = "roleCaching")
-	public ConfigAttributeDefinition findRolesByUrl(Org org, String url) {
+	public ConfigAttributeDefinition findRolesByUrl(Shop org, String url) {
 		List<String> urls = functionService.findAllUrl();
 		List<String> roles = new ArrayList<String>();
 		boolean matched = false;
@@ -188,18 +188,18 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@CacheFlush(modelId = "roleFlushing")
 	public Integer save(Role obj, String oldName) {
 		if (obj != null) {
-			if (obj.getId() == 0) {
-				if (this.findIsExist(obj.getName())) {
+			if (obj.getRoleId() == 0) {
+				if (this.findIsExist(obj.getRoleName())) {
 					return -1;
 				} else {
 					return roleDao.save(obj);
 				}
 			} else {
-				if (obj.getName().equals(oldName)) {
+				if (obj.getRoleName().equals(oldName)) {
 					roleDao.update(obj);
 					return 1;
 				} else {
-					if (this.findIsExist(obj.getName())) {
+					if (this.findIsExist(obj.getRoleName())) {
 						return -1;
 					} else {
 						roleDao.update(obj);
@@ -238,9 +238,9 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Override
 	
 	@Cacheable(modelId = "roleCaching")
-	public Map<String, Object> findPage(PageParameter pp, Org org) {
-		if (org == null || org.getId() == 0) {
-			org = SecurityUser.getCurrentOrg();
+	public Map<String, Object> findPage(PageParameter pp, Shop org) {
+		if (org == null || org.getShopId() == 0) {
+			org = SecurityUser.getShop();
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (pp != null) {
@@ -255,7 +255,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Override
 	
 	@Cacheable(modelId = "roleCaching")
-	public Integer findTotalCount(Org org) {
+	public Integer findTotalCount(Shop org) {
 		return roleDao.findTotalCount(org);
 	}
 
@@ -264,13 +264,13 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Cacheable(modelId = "roleCaching")
 	public Map<String, Object> findPage(PageParameter pp, int orgId, int userId) {
 		if (orgId == 0) {
-			orgId = SecurityUser.getCurrentOrg().getId();
+			orgId = SecurityUser.getShop().getShopId();
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (pp != null) {
 			List<Map<String, Object>> lp = roleDao.findPage(pp, orgId, userId);
-			Org o = new Org();
-			o.setId(orgId);
+			Shop o = new Shop();
+			o.setShopId(orgId);
 			Integer tc = roleDao.findTotalCount(o);
 			map.put("totalCount", tc);
 			map.put("objs", lp);

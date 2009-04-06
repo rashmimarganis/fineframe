@@ -1,112 +1,83 @@
 package com.izhi.platform.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
-public class Shop  implements Serializable{
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+@Entity
+@Table(name="p_shops")
+public class Shop implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4437473501614693472L;
-	
+	private static final long serialVersionUID = -5390001174287826313L;
+	@Id
+	@Basic(fetch=FetchType.EAGER)
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="shop_id")
 	private int shopId;
-	
+	@Column(length=32)
+	@Basic(fetch=FetchType.EAGER)
 	private String shopName;
-
-	private String shopTitle;
-	
-	private Date startTitle;
-	
-	private String description;
-	
+	@Column(length=32)
+	@Basic(fetch=FetchType.EAGER)
+	private String title;
+	@Basic(fetch=FetchType.EAGER)
 	private int type;
-	
-	private String logo;
-	
-	private String theme;
-	
-	private boolean status;
-	
-	private User admin;
-
+	@ManyToOne(optional=true,fetch=FetchType.EAGER)
+	@NotFound(action=NotFoundAction.IGNORE)
+	@JoinColumn(name="parent_id",updatable=true,nullable=true)
+	private Shop parent;
+	@Column
+	private int sort=0;
 	public int getShopId() {
 		return shopId;
 	}
-
-	public void setShopId(int shopId) {
-		this.shopId = shopId;
+	public void setShopId(int id) {
+		this.shopId = id;
 	}
-
 	public String getShopName() {
 		return shopName;
 	}
-
-	public void setShopName(String shopName) {
-		this.shopName = shopName;
+	public void setShopName(String name) {
+		this.shopName = name;
 	}
-
-	public String getShopTitle() {
-		return shopTitle;
+	public Shop getParent() {
+		return parent;
 	}
-
-	public void setShopTitle(String shopTitle) {
-		this.shopTitle = shopTitle;
+	public void setParent(Shop parent) {
+		this.parent = parent;
 	}
-
-	public Date getStartTitle() {
-		return startTitle;
+	
+	public String getTitle() {
+		return title;
 	}
-
-	public void setStartTitle(Date startTitle) {
-		this.startTitle = startTitle;
+	public void setTitle(String title) {
+		this.title = title;
 	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public int getType() {
 		return type;
 	}
-
 	public void setType(int type) {
 		this.type = type;
 	}
-
-	public String getLogo() {
-		return logo;
+	public int getSort() {
+		return sort;
 	}
-
-	public void setLogo(String logo) {
-		this.logo = logo;
+	public void setSort(int sort) {
+		this.sort = sort;
 	}
-
-	public String getTheme() {
-		return theme;
-	}
-
-	public void setTheme(String theme) {
-		this.theme = theme;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
-
-	public User getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(User admin) {
-		this.admin = admin;
-	}
+	
 }

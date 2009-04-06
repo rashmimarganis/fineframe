@@ -31,7 +31,8 @@ public class User  implements UserDetails {
 	private static final long serialVersionUID = -6655187104320740141L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	@Column(name="user_id")
+	private int userId;
 	@Column(length = 32)
 	private String username;
 	@Column(length = 32)
@@ -48,16 +49,16 @@ public class User  implements UserDetails {
 	@JoinTable(name = "p_user_roles", joinColumns = {@JoinColumn(name = "user_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 	
-	@Column(name="credentials_non_expired")
-	private boolean credentialsNonExpired=true;
+	@Column(name="credentials_expired")
+	private boolean credentialsExpired=true;
 	@Column(name="hint_question")
 	private String hintQuestion;
 	@Column(name="hint_answer")
 	private String hintAnswer;
-	@Column(name="non_expired")
-	private boolean nonExpired=true;
-	@Column(name="non_locked")
-	private boolean nonLocked=true;
+	@Column(name="expired")
+	private boolean expired=true;
+	@Column(name="locked")
+	private boolean locked=true;
 	@Basic
 	private boolean enabled=true;
 	@Column(name="login_attempts_max")
@@ -68,10 +69,28 @@ public class User  implements UserDetails {
 	private int concurrentMax=7;
 	@Column(name="password_code")
 	private String passwordCode;
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="person_id")
-	private Person person;
 	
+	@ManyToOne
+	@JoinColumn(name = "shop_id")
+	private Shop shop;
+	@Basic
+	private String realname;
+	
+	public String getRealname() {
+		return realname;
+	}
+
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
+
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
+	}
 
 	public String getHintQuestion() {
 		return hintQuestion;
@@ -91,27 +110,27 @@ public class User  implements UserDetails {
 
 
 	public boolean getCredentialsNonExpired() {
-		return credentialsNonExpired;
+		return credentialsExpired;
 	}
 
-	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-		this.credentialsNonExpired = credentialsNonExpired;
+	public void setCredentialsExpired(boolean credentialsNonExpired) {
+		this.credentialsExpired = credentialsNonExpired;
 	}
 
-	public boolean getNonExpired() {
-		return nonExpired;
+	public boolean getExpired() {
+		return expired;
 	}
 
-	public void setNonExpired(boolean nonExpired) {
-		this.nonExpired = nonExpired;
+	public void setExpired(boolean nonExpired) {
+		this.expired = nonExpired;
 	}
 
-	public boolean getNonLocked() {
-		return nonLocked;
+	public boolean getLocked() {
+		return locked;
 	}
 
-	public void setNonLocked(boolean nonLocked) {
-		this.nonLocked = nonLocked;
+	public void setLocked(boolean nonLocked) {
+		this.locked = nonLocked;
 	}
 
 	public int getLoginAttemptsMax() {
@@ -158,12 +177,12 @@ public class User  implements UserDetails {
 		this.roles = roles;
 	}
 
-	public int getId() {
-		return id;
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setUserId(int id) {
+		this.userId = id;
 	}
 
 	public String getUsername() {
@@ -195,7 +214,7 @@ public class User  implements UserDetails {
 		if(roles!=null){
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>(roles.size());
     	for(Role role : roles) {
-    		grantedAuthorities.add(new GrantedAuthorityImpl(role.getName()));
+    		grantedAuthorities.add(new GrantedAuthorityImpl(role.getRoleName()));
     	}
         return grantedAuthorities.toArray(new GrantedAuthority[roles.size()]);
 		}
@@ -285,30 +304,19 @@ public class User  implements UserDetails {
 		this.lastLoginIp = lastLoginIp;
 	}
 
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		if(person==null)
-			this.person = new Person();
-		else
-			this.person = person;
-	}
-
 	@Override
 	public boolean isAccountNonExpired() {
-		return this.nonExpired;
+		return !this.expired;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return this.nonLocked;
+		return !this.locked;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return this.credentialsNonExpired;
+		return !this.credentialsExpired;
 	}
 
 }

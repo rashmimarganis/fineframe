@@ -24,16 +24,17 @@ public class Role implements Serializable,GrantedAuthority {
 	private static final long serialVersionUID = -2854904129718773716L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
-	@Column(length=32)
-	private String name;
+	@Column(name="role_id")
+	private int roleId;
+	@Column(length=32,name="role_name")
+	private String roleName;
 	@Column(length=32)
 	private String title;
 	@Column(length=100)
 	private String note;
 	@ManyToOne
-	@JoinColumn(name="org_id")
-	private Org org;
+	@JoinColumn(name="shop_id")
+	private Shop shop;
 	
 	@ManyToMany( fetch = FetchType.LAZY)
 	@JoinTable(name = "p_user_roles", joinColumns = {@JoinColumn(name = "role_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "user_id",insertable=false,updatable=false))
@@ -42,17 +43,17 @@ public class Role implements Serializable,GrantedAuthority {
 	@JoinTable(name = "p_role_functions", joinColumns = {@JoinColumn(name = "role_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "function_id",insertable=false,updatable=false))
 	private Set<Function> functions;
 
-	public int getId() {
-		return id;
+	public int getRoleId() {
+		return roleId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setRoleId(int id) {
+		this.roleId = id;
 	}
-	public String getName() {
-		return name;
+	public String getRoleName() {
+		return roleName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setRoleName(String name) {
+		this.roleName = name;
 	}
 	public String getNote() {
 		return note;
@@ -60,11 +61,11 @@ public class Role implements Serializable,GrantedAuthority {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	public Org getOrg() {
-		return org;
+	public Shop getShop() {
+		return shop;
 	}
-	public void setOrg(Org org) {
-		this.org = org;
+	public void setShop(Shop org) {
+		this.shop = org;
 	}
 	public String getTitle() {
 		return title;
@@ -75,7 +76,7 @@ public class Role implements Serializable,GrantedAuthority {
 
 	@Override
 	public String getAuthority() {
-		return this.name;
+		return this.roleName;
 	}
 	public Set<User> getUsers() {
 		return users;
@@ -87,7 +88,7 @@ public class Role implements Serializable,GrantedAuthority {
 	public int compareTo(Object o) {
 		if(o!=null&&(o instanceof Role)){
 			Role o1=(Role)o;
-			if(o1.getId()==this.getId()){
+			if(o1.getRoleId()==this.getRoleId()){
 				return 1;
 			}
 		}

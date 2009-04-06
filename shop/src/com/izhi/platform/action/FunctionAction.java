@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import net.sf.json.JSONObject;
 
 import com.izhi.platform.model.Function;
-import com.izhi.platform.model.Org;
+import com.izhi.platform.model.Shop;
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IFunctionService;
@@ -82,9 +82,9 @@ public class FunctionAction extends BaseAction {
 
 	public String topFunctions() {
 		if (!SecurityUser.isAnonymous()) {
-			User user = SecurityUser.getCurrentUser();
-			Org org = SecurityUser.getCurrentOrg();
-			this.out(JSONObject.fromObject(service.findTopFunctions(org.getId(), user.getId())).toString());
+			User user = SecurityUser.getUser();
+			Shop org = SecurityUser.getShop();
+			this.out(JSONObject.fromObject(service.findTopFunctions(org.getShopId(), user.getUserId())).toString());
 		} else {
 			this.out("[]");
 		}

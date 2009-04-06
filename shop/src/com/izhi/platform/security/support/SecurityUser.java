@@ -8,11 +8,11 @@ import org.acegisecurity.userdetails.UserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.izhi.platform.model.Org;
+import com.izhi.platform.model.Shop;
 import com.izhi.platform.model.User;
 
 public class SecurityUser {
-	private static Logger logger = LoggerFactory.getLogger(SecurityUser.class);
+	static Logger logger = LoggerFactory.getLogger(SecurityUser.class);
 
 	public static String getUsername() {
 		SecurityContext ctx = SecurityContextHolder.getContext();
@@ -49,9 +49,9 @@ public class SecurityUser {
 	}
 
 	public static int getUserId() {
-		User user = SecurityUser.getCurrentUser();
+		User user = SecurityUser.getUser();
 		if (user != null) {
-			return user.getId();
+			return user.getUserId();
 		} else {
 			return 0;
 		}
@@ -73,7 +73,7 @@ public class SecurityUser {
 		return null;
 	}
 
-	public static User getCurrentUser() {
+	public static User getUser() {
 		SecurityContext ctx = SecurityContextHolder.getContext();
 		if (ctx != null) {
 			Authentication auth = ctx.getAuthentication();
@@ -90,14 +90,14 @@ public class SecurityUser {
 	}
 
 	public static String getRealname() {
-		User user = getCurrentUser();
+		User user = getUser();
 		if (user != null) {
-			return user.getPerson().getRealname();
+			return user.getRealname();
 		}
 		return "";
 	}
 
-	public static String getIp() {
+	public static String getLoginIp() {
 
 		SecurityContext ctx = SecurityContextHolder.getContext();
 		if (ctx != null) {
@@ -138,12 +138,11 @@ public class SecurityUser {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Org getCurrentOrg() {
-		Org org = null;
-		User u = SecurityUser.getCurrentUser();
+	public static Shop getShop() {
+		Shop org = null;
+		User u = SecurityUser.getUser();
 		if (u != null) {
-			org = u.getPerson().getOrg();
+			org = u.getShop();
 		}
 		return org;
 	}

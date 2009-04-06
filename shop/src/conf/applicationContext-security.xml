@@ -18,7 +18,7 @@
 			<value>
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_APACHE_ANT
-				/**=httpSessionContextIntegrationFilter,rememberMeProcessingFilter,logoutFilter,captchaValidationProcessingFilter,channelProcessingFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,switchOrgProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+				/**=httpSessionContextIntegrationFilter,rememberMeProcessingFilter,logoutFilter,captchaValidationProcessingFilter,channelProcessingFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
 			</value>
 		</property>
 	</bean>
@@ -126,17 +126,7 @@
 		class="com.izhi.platform.webapp.security.FilterInvocationDefinitionSource">
 		<property name="service" ref="securityFilterService"></property>
 	</bean>
-	<!-- 
-	<bean id="securityFilterService"
-		class="com.izhi.platform.service.impl.SecurityFilterServiceImpl">
-		<property name="convertUrlToLowercaseBeforeComparison"
-			value="false" />
-		<property name="useAntPath" value="true" />
-		<property name="functionService" ref="functionService"></property>
-		<property name="logService" ref="logService"></property>
-		<property name="roleService" ref="roleService"></property>
-	</bean>
-	 -->
+
 	<bean id="accessDecisionManager"
 		class="org.acegisecurity.vote.AffirmativeBased">
 		<property name="allowIfAllAbstainDecisions" value="false" />
@@ -207,13 +197,12 @@
 
 	<bean id="loggerListener"
 		class="org.acegisecurity.event.authentication.LoggerListener" />
-		<!-- 
 	<bean id="loginSuccessListener"
 		class="com.izhi.platform.webapp.listener.LoginSuccessListener">
 		<property name="logService" ref="logService"></property>
 		<property name="userService" ref="userService"></property>
 	</bean>
- -->
+
 	<bean id="channelProcessingFilter"
 		class="org.acegisecurity.securechannel.ChannelProcessingFilter">
 		<property name="channelDecisionManager"
@@ -309,18 +298,4 @@
 		</property>
 	</bean>
 
-	<bean id="switchOrgProcessingFilter"
-		class="com.izhi.platform.webapp.filter.SwitchOrgProcessingFilter">
-		<property name="userService" ref="userService" />
-		<property name="orgService" ref="orgService" />
-		<property name="switchOrgUrl">
-			<value>/j_switch_org</value>
-		</property>
-		<property name="exitOrgUrl">
-			<value>/j_exit_org</value>
-		</property>
-		<property name="targetUrl">
-			<value>/main.jhtm</value>
-		</property>
-	</bean>
 </beans>

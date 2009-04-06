@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.izhi.platform.dao.ILogDao;
 import com.izhi.platform.model.Log;
-import com.izhi.platform.model.PageParameter;
 import com.izhi.platform.service.BaseService;
 import com.izhi.platform.service.ILogService;
+import com.izhi.platform.util.PageParameter;
 @Service("logService")
 public class LogServiceImpl extends BaseService implements ILogService {
 	@Resource(name="logDao")

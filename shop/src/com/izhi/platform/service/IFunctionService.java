@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.izhi.platform.model.Function;
-import com.izhi.platform.model.Org;
+import com.izhi.platform.model.Shop;
 import com.izhi.platform.model.User;
 
 public interface IFunctionService extends IBaseService<Function,Integer> {
 	List<Function> findTopFunctions(int orgId,int userid) ;
 	List<Function> findNextFunctions(int orgId, int userId,int pid);
-	List<Function> findChildren(Org org,User user,String parntname); 
+	List<Function> findChildren(Shop org,User user,String parntname); 
 	String findTreeNodes(Integer id);
 	
 	Map<String,Object> saveFunction(Function obj,String oldName);

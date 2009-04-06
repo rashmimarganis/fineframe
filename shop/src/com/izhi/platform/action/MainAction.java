@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.model.Function;
-import com.izhi.platform.model.Org;
+import com.izhi.platform.model.Shop;
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IFunctionService;
@@ -28,15 +28,15 @@ public class MainAction extends BaseAction {
 	private Map<String,Object> site=new HashMap<String, Object>();
 	private User user;
 	private List<Function> topFunctions=new ArrayList<Function>();
-	private Org org;
+	private Shop org;
 	@Resource(name="functionService")
 	private IFunctionService functionService;
 	@Action(value="main")
 	public String execute(){
-		user=SecurityUser.getCurrentUser();
+		user=SecurityUser.getUser();
 		site.put("name", "FineCMS网站管理系统");
-		org=SecurityUser.getCurrentOrg();
-		topFunctions=functionService.findTopFunctions(org.getId(), user.getId());
+		org=SecurityUser.getShop();
+		topFunctions=functionService.findTopFunctions(org.getShopId(), user.getUserId());
 		if(topFunctions==null){
 			topFunctions=new ArrayList<Function>();
 		}
@@ -51,7 +51,7 @@ public class MainAction extends BaseAction {
 	public void setFunctionService(IFunctionService functionService) {
 		this.functionService = functionService;
 	}
-	public Org getOrg() {
+	public Shop getOrg() {
 		return org;
 	}
 	public Map<String, Object> getSite() {

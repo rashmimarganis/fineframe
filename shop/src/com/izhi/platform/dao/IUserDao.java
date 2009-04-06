@@ -3,8 +3,8 @@ package com.izhi.platform.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.izhi.platform.model.PageParameter;
 import com.izhi.platform.model.User;
+import com.izhi.platform.util.PageParameter;
 
 public interface IUserDao extends IBaseDao<User,Integer> {
 	User findUserByName(String username);

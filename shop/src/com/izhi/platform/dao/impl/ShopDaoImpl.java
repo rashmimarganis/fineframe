@@ -5,19 +5,19 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.izhi.platform.dao.IOrgDao;
-import com.izhi.platform.model.Org;
+import com.izhi.platform.dao.IShopDao;
+import com.izhi.platform.model.Shop;
 @Service("orgDao")
-public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
+public class ShopDaoImpl extends BaseDaoImpl<Shop, Integer> implements IShopDao {
 
 	@Override
-	public List<Org> findChildren(Integer parentId) {
+	public List<Shop> findChildren(Integer parentId) {
 		String sql="";
 		if(parentId==0){
-			sql="select o from Org o where o.parent.id is null";
+			sql="select o from Shop o where o.parent.id is null";
 			return this.find(sql);
 		}else{
-			sql="select o from Org o where o.parent.id=?";
+			sql="select o from Shop o where o.parent.id=?";
 			return this.find(sql, parentId);
 		}
 	}
@@ -35,13 +35,13 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 	}
 
 	@Override
-	public Map<String, Object> saveOrg(Org obj, String oldName) {
+	public Map<String, Object> saveShop(Shop obj, String oldName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<String, Object> saveOrg(Org obj) {
+	public Map<String, Object> saveShop(Shop obj) {
 		// TODO Auto-generated method stub
 		return null;
 	}

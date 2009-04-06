@@ -13,7 +13,7 @@ Java虚拟机版本：</td><td>${serverInfo.javaVmVersion}
 </tr>
 <tr>
 <td>
-JVM Verdor：</td><td>${serverInfo.javaVmVendor}
+JVM Vendor：</td><td>${serverInfo.javaVmVendor}
 </td>
 </tr>
 <tr>
@@ -47,3 +47,5 @@ JVM Verdor：</td><td>${serverInfo.javaVmVendor}
 最大内存：</td><td>${serverInfo.maxMemory}
 </td>
 </tr>
+<tr><td colspan="2" class="align_c"><input class="button_style" type="button" value="&nbsp;刷新状态&nbsp;" onclick="javascript:loadPage('${base}/system/status.jhtm');"></td></tr>
+</table>

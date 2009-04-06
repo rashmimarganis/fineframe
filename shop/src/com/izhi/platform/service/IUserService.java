@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.jws.WebService;
 
-import com.izhi.platform.model.PageParameter;
 import com.izhi.platform.model.User;
+import com.izhi.platform.util.PageParameter;
 @WebService(name = "UserService")
 public interface IUserService extends IBaseService<User, Integer> {
 	void updateLoginInfo(User user);

@@ -20,7 +20,7 @@
 	<!-- <import resource="classpath:conf/applicationContext-platform.xml"/>-->
 	<import resource="classpath:conf/applicationContext-security.xml"/>
 	<import resource="classpath:conf/applicationContext-captcha.xml"/>
-	<import resource="classpath:conf/applicationContext-client.xml"/>
+	<!--<import resource="classpath:conf/applicationContext-client.xml"/>-->
 	<!-- 
 	<import resource="classpath:conf/applicationContext-security.xml"/>
 	<import resource="classpath:conf/applicationContext-platform.xml"/>

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.izhi.platform.dao.ILogDao;
 import com.izhi.platform.model.Log;
-import com.izhi.platform.model.PageParameter;
+import com.izhi.platform.util.PageParameter;
 @Service("logDao")
 public class LogDaoImpl extends BaseDaoImpl<Log, Integer> implements ILogDao {
 

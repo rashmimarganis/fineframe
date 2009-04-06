@@ -15,10 +15,10 @@ import org.springmodules.cache.annotations.CacheFlush;
 import org.springmodules.cache.annotations.Cacheable;
 
 import com.izhi.platform.dao.IUserDao;
-import com.izhi.platform.model.PageParameter;
 import com.izhi.platform.model.User;
 import com.izhi.platform.service.BaseService;
 import com.izhi.platform.service.IUserService;
+import com.izhi.platform.util.PageParameter;
 
 @Service("userService")
 public class UserServiceImpl extends BaseService implements IUserService,
@@ -130,7 +130,7 @@ public class UserServiceImpl extends BaseService implements IUserService,
 			}
 			boolean success = false;
 			boolean exist = false;
-			if (obj.getId() == 0) {
+			if (obj.getUserId() == 0) {
 				if (!this.findIsExist(obj.getUsername())) {
 					success = userDao.save(obj) > 0;
 				} else {
@@ -138,7 +138,7 @@ public class UserServiceImpl extends BaseService implements IUserService,
 				}
 			} else {
 				if (obj.getUsername().equals(oldName)) {
-					User obj1 = this.findById(obj.getId());
+					User obj1 = this.findById(obj.getUserId());
 					obj1.setUsername(obj1.getUsername());
 					userDao.updateUser(obj);
 					success = true;

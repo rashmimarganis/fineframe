@@ -1,4 +1,4 @@
-package com.izhi.platform.model;
+package com.izhi.platform.util;
 
 import java.io.Serializable;
 

@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.model.Log;
-import com.izhi.platform.model.Org;
+import com.izhi.platform.model.Shop;
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.ILogService;
@@ -41,7 +41,7 @@ public class LoginSuccessListener implements ApplicationListener {
 			Log spLog = new Log();
 			spLog.setIp(ip);
 			spLog.setUser(user);
-			spLog.setOrg(user.getPerson().getOrg());
+			spLog.setShop(user.getShop());
 			spLog.setOperation("成功登录系统");
 			log.debug("User:"+user.getUsername()+" 成功登录系统");
 			spLog.setUrl("/login.jsp");
@@ -55,11 +55,11 @@ public class LoginSuccessListener implements ApplicationListener {
 			String ip=((WebAuthenticationDetails)obj).getRemoteAddress();
 			User user=(User)auth.getPrincipal();
 			user.setLastLoginIp(ip);
-			Org org=SecurityUser.getCurrentOrg();
+			Shop org=SecurityUser.getShop();
 			Log spLog = new Log();
 			spLog.setIp(ip);
 			spLog.setUser(user);
-			spLog.setOrg(org);
+			spLog.setShop(org);
 			spLog.setOperation("切换组织");
 			spLog.setUrl("");
 			//logService.save(spLog);

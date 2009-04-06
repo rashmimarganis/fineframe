@@ -8,11 +8,12 @@ http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd" default-lazy-init="false">
 
 	<!-- 验证码Bean开始 -->
-	
+	<!-- 
 	<bean id="captchaAction"
 		class="com.izhi.platform.action.CaptchaAction">
 		<property name="jcaptchaService" ref="jcaptchaService"></property>
 	</bean>
+	 -->
 	<bean id="captchaService"
 		class="com.izhi.platform.webapp.security.captcha.JCaptchaServiceProxyImpl">
 		<property name="jcaptchaService" ref="jcaptchaService" />
