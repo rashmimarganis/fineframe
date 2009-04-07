@@ -2,6 +2,7 @@
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,   
 form,fieldset,input,textarea,p,blockquote,th,td {padding:0; margin:0;}
 html, body { height:100%;} /* 同时设置html是为了兼容FF */
+body {TEXT-ALIGN: center;}
 body {
 	font-size: 12px; 
 	color: black; 
@@ -19,7 +20,10 @@ body {
 	scrollbar-darkshadow-color: #E7F5FE; 
 	scrollbar-base-color: #E7F5FE;
 	}
-.loading { text-align:center; width:790px;z-index:10000; }
+.loading { text-align:center; width:790px;z-index:10000; background:#fff; margin:0 auto;margin-left:50%; left: -395; 
+vertical-align:middle;line-height:300px;
+
+}
 .loadOut {  border:1px solid #45A0E5; width:126px; margin:100px 0 0; }
 .loadInner { text-align:center; line-height:40px;_line-height:45x; height:40px; font-size:40px;  _font-size:38px; width:120px; border:3px solid #CAE6FC;}    
 .loadInner span { font-size:14px; margin-left:6px;background:#fff; color:#003366 }
@@ -52,7 +56,7 @@ select,textarea,.textarea_style{border:1px solid #dcdcdc;}
 .radio_style, .checkbox_style { border:0;}
 /*按钮样式*/
 .button_style { background:url(images/btn_bg.gif) repeat-x 0 0; text-align:center; border:1px solid #9cc9e0; padding:3px 4px; *padding:0 4px; color:#077ac7; cursor:pointer; height:21px; line-height:21px; overflow:hidden;}
-.file_style{ height:20px; line-height:20px;border:1px solid #dcdcdc; }
+.file_style{background:url(images/btn_bg.gif) repeat-x 0 0; height:20px; line-height:20px;border:1px solid #dcdcdc;  border:1px solid #9cc9e0; padding:3px 4px;}
 
 /*按钮区域*/
 .button_box { text-align:left; padding:5px;}

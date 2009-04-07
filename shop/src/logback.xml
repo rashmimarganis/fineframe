@@ -22,7 +22,7 @@
 		</layout>
 	</appender>
 	
-	<logger name="com.secoo.platform">
+	<logger name="com.izhi">
 		<level value="DEBUG" />
 	</logger>
 	<logger name="org.apache.struts2">
@@ -33,7 +33,7 @@
 	</logger>
 
 	<logger name="org.hibernate.SQL">
-		<level value="ERROR" />
+		<level value="INFO" />
 	</logger>
 		<logger name="org.hibernate.cache">
 		<level value="ERROR" />

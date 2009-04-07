@@ -8,7 +8,7 @@
 	<!-- <constant name= "struts.convention.action.mapAllMatches" value= "true" /> -->
 	<constant name="struts.action.extension" value="jhtm" />	
 	<constant name="struts.devMode" value="true" />
-	<constant name="struts.enable.SlashesInActionNames" value="false" />
+	<constant name="struts.enable.SlashesInActionNames" value="true" />
 	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
 	<!-- <constant name="struts.freemarker.templatesCache" value="false" />-->
 	<constant name="struts.convention.result.path" value="/WEB-INF/templates/default/"/>
@@ -36,7 +36,7 @@
 		</interceptors>
 
 		<default-interceptor-ref name="crudStack" />
-		<default-action-ref name="main"/>
+		<!-- <default-action-ref name="main"/> -->
 		<global-results>
             <result name="login" type="redirect">/login.jsp</result>
             <result name="exception">/common/exception.jsp</result>
@@ -45,11 +45,6 @@
             <exception-mapping exception="java.sql.SQLException" result="SQLException"/>
             <exception-mapping exception="java.lang.Exception" result="Exception"/>
         </global-exception-mappings>
-        <!-- 
-		<action name="main">
-			<result>/main.jsp</result>
-		</action>
-		 -->
 	</package>
 
 	<!-- 

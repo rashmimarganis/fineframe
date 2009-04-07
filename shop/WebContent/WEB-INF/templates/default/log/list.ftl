@@ -71,73 +71,8 @@
 			changeMonth: true,
 			changeYear: true
 		});
-	function getIds(idName){
-		var ids='';
-		$.each( $('.'+idName), function(i, n){
-			if($(n).attr('checked')){
-				if(ids==''){
-					ids= $(n).val();
-				}else{
-					ids=ids+","+ $(n).val();
-				}
-		  	}
-		}); 
-		return ids;
-	}
-	function selectAll(idName){
-		$.each( $('.'+idName), function(i, n){
-			if($(n).attr('checked')==false){
-				$(n).attr('checked',true);
-		  	}
-		}); 
-	}
 	
-	function cancelSel(idName){
-		$.each( $('.'+idName), function(i, n){
-			if($(n).attr('checked')==true){
-				$(n).attr('checked',false);
-		  	}
-		}); 
-	}
 	
-	function firstPage(){
-		if(cp==0){
-			alert("已经是第一页。");
-		}else{
-			cp=0;
-			loadPage(url+'p='+cp);
-		}
-	}
-	
-	function prevPage(){
-		if(cp==0){
-			alert("已经是第一页。");
-		}else{
-			cp=cp*1-1;
-			loadPage(url+'p='+cp);
-		}
-	}
-	
-	function nextPage(){
-		if(cp==pageCount){
-			alert("已经是最后一页。");
-		}else{
-			cp=cp*1+1;
-			loadPage(url+'p='+cp);
-		}
-	}
-	
-	function lastPage(){
-		if(cp==pageCount){
-			alert("已经是最后一页。");
-		}else{
-			cp=pageCount;
-			loadPage(url+'&p='+cp);
-		}
-	}
-	function refresh(){
-		loadPage(url+'p='+cp);
-	}
 	function deleteObj(){
 		if(!confirm("确定要删除日志吗？")){
 			return;

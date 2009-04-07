@@ -85,12 +85,16 @@
 		</div>  
 	</DIV>
 </DIV>
+
 <script type="text/javascript" src="${base}/js/jquery.js"></script>
 <script type="text/javascript" src="${base}/js/treeview.js"></script>
+<script type="text/javascript" src="${base}/js/jquery.form.js"></script>
+<script type="text/javascript" src="${base}/js/jquery.validate.js"></script>
 <script type="text/javaScript" src="${base}/js/common.js"></script>
 <script type="text/javascript" src="${base}/js/menu.js"></script>
 <script type="text/javascript" src="${base}/ui/ui.core.js"></script>
 <script type="text/javascript" src="${base}/ui/ui.datepicker.js"></script>
+<script type="text/javascript" src="${base}/ui/ui.dialog.js"></script>
 <script type="text/javascript" src="${base}/ui/i18n/ui.datepicker-zh-CN.js"></script>
 <script type="text/javascript" src="${base}/fckeditor/fckeditor.js"></script>
 <#if (topFunctions.size()>0)>

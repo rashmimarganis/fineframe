@@ -339,14 +339,14 @@
            memoryStoreEvictionPolicy="LFU"
     />
 
- 	<cache name="roleResourceCache"
+ 	<cache name="brandCache"
            maxElementsInMemory="10000"
            maxElementsOnDisk="1000"
            eternal="true"
            overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU"
     />
- 	<cache name="orgCache"
+ 	<cache name="shopCache"
            maxElementsInMemory="5000"
            maxElementsOnDisk="1000"
            eternal="true"
@@ -354,13 +354,7 @@
            memoryStoreEvictionPolicy="LFU"
     />
  	
- 	<cache name="resourceCache"
-           maxElementsInMemory="1000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
+ 	
  	<cache name="functionCache"
            maxElementsInMemory="200"
            maxElementsOnDisk="1000"
@@ -368,48 +362,8 @@
            overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU"
     />
- 	<cache name="orghelpCache"
-           maxElementsInMemory="200"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
- 	<cache name="securityCache"
-           maxElementsInMemory="200"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    <cache name="personCache"
-           maxElementsInMemory="200"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    <cache name="personOrgCache"
-           maxElementsInMemory="200"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    <cache name="alumniUserOrgCache"
-           maxElementsInMemory="200"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
- 	<cache name="alumniConfigCache"
-           maxElementsInMemory="200"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
+ 	
+ 	
     <cache name="alumniResourceCache"
            maxElementsInMemory="200"
            maxElementsOnDisk="1000"
@@ -417,306 +371,7 @@
            overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU"
     />
- 	<cache name="alumniUserCache"
-           maxElementsInMemory="200"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    <cache name="alumniRoleResourceCache"
-           maxElementsInMemory="200"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    
-	
-    <cache name="xengingCacheCache"
-           maxElementsInMemory="200"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    
-    <!-- Auto Generator Cache Here startxengingcache -->
-	<!-- oa work cache start here -->    
-	<cache name="oasendfileCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    
-	<cache name="oasendfileunionorgCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-	<cache name="oarecvfileCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-	
-	<cache name="oarecvfileattachmentCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-	
-	<cache name="recvfileunitCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="fileserialnumberCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="mailboxCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	<cache name="mailboxsenderCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-	
-	<cache name="mailboxrecverCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="mailboxattachmentCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="oabulletinCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="oabulletinattachmentCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="addressbookCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="budgetCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="infostoryCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="infostoryfileCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="carinfoCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="carapplyinfoCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-	
-	<cache name="applycarCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	<cache name="mettingCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="mettingfileCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="mettinggatherCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="mettingwpCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="sssmettingCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="businessentertainmentCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="bookmealCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="bookticketCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="bookroomCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-
-	
-	<cache name="officedocumentCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    
-    <cache name="taskadviceCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    
-    <cache name="taskattachmentCache"
-           maxElementsInMemory="20000"
-           maxElementsOnDisk="1000"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
-    
-    <cache name="timerlogCache"
-           maxElementsInMemory="100"
-           maxElementsOnDisk="200"
-           eternal="true"
-           overflowToDisk="true"
-           memoryStoreEvictionPolicy="LFU"
-    />
+ 	
 	<!-- oa work cache end here -->
 	
 	<!-- Auto Generator Cache Here endxengingcache -->

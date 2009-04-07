@@ -32,7 +32,7 @@
 
 	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
 	<context:component-scan
-		base-package="com.izhi.platform.dao,com.izhi.platform.service,com.izhi.platform.action" />
+		base-package="com.izhi.platform,com.izhi.shop" />
 
 	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
@@ -83,6 +83,7 @@
 		<property name="packagesToScan">
 			<list>
 				<value>com.izhi.platform.model</value>
+				<value>com.izhi.shop.model</value>
 			</list>
 		</property>
 	</bean>
@@ -146,6 +147,7 @@
 				<prop key="functionCaching">cacheName=functionCache</prop>
 				<prop key="personCaching">cacheName=personCache</prop>
 				<prop key="regionCaching">cacheName=regionCache</prop>
+				<prop key="brandCaching">cacheName=brandCache</prop>
 			</props>
 		</property>
 	</bean>
@@ -171,6 +173,8 @@
 				<prop key="personFlushing">cacheNames=userCache,personCache
 				</prop>
 				<prop key="functionFlushing">cacheNames=functionCache
+				</prop>
+				<prop key="brandFlushing">cacheNames=brandCache
 				</prop>
 			</props>
 		</property>
