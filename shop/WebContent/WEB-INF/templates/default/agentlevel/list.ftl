@@ -47,9 +47,9 @@
 	var url='${base}/agentlevel/list.jhtm?';
 	$('#checkAll').click(function(){
 		if($(this).attr('checked')){
-			selectAll('log');
+			selectAll('agentLevel');
 		}else{
-			cancelSel('log');
+			cancelSel('agentLevel');
 		}
 	});
 	

@@ -371,6 +371,41 @@
            overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU"
     />
+    <cache name="currencyCache"
+           maxElementsInMemory="200"
+           maxElementsOnDisk="1000"
+           eternal="true"
+           overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU"
+    />
+    <cache name="memberTypeCache"
+           maxElementsInMemory="200"
+           maxElementsOnDisk="1000"
+           eternal="true"
+           overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU"
+    />
+    <cache name="agentTypeCache"
+           maxElementsInMemory="200"
+           maxElementsOnDisk="1000"
+           eternal="true"
+           overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU"
+    />
+    <cache name="areaTypeCache"
+           maxElementsInMemory="200"
+           maxElementsOnDisk="1000"
+           eternal="true"
+           overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU"
+    />
+    <cache name="areaCache"
+           maxElementsInMemory="200"
+           maxElementsOnDisk="1000"
+           eternal="true"
+           overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU"
+    />
  	
 	<!-- oa work cache end here -->
 	

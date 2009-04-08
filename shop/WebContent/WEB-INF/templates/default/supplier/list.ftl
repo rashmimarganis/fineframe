@@ -53,9 +53,9 @@
 	var url='${base}/supplier/list.jhtm?';
 	$('#checkAll').click(function(){
 		if($(this).attr('checked')){
-			selectAll('log');
+			selectAll('supplier');
 		}else{
-			cancelSel('log');
+			cancelSel('supplier');
 		}
 	});
 	

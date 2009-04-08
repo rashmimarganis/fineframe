@@ -51,9 +51,9 @@
 	var url='${base}/memberlevel/list.jhtm?';
 	$('#checkAll').click(function(){
 		if($(this).attr('checked')){
-			selectAll('log');
+			selectAll('memberLevel');
 		}else{
-			cancelSel('log');
+			cancelSel('memberLevel');
 		}
 	});
 	

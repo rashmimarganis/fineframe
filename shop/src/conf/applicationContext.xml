@@ -149,6 +149,11 @@
 				<prop key="regionCaching">cacheName=regionCache</prop>
 				<prop key="brandCaching">cacheName=brandCache</prop>
 				<prop key="supplierCaching">cacheName=supplierCache</prop>
+				<prop key="areaTypeCaching">cacheName=areaTypeCache</prop>
+				<prop key="areaCaching">cacheName=areaCache</prop>
+				<prop key="currencyCaching">cacheName=currencyCache</prop>
+				<prop key="agentLevelCaching">cacheName=agentLevelCache</prop>
+				<prop key="memberLevelCaching">cacheName=memberLevelCache</prop>
 			</props>
 		</property>
 	</bean>
@@ -179,6 +184,11 @@
 				</prop>
 				<prop key="supplierFlushing">cacheNames=supplierCache
 				</prop>
+				<prop key="areaTypeFlushing">cacheNames=areaTypeCache</prop>
+				<prop key="areaFlushing">cacheNames=areaCache</prop>
+				<prop key="currencyFlushing">cacheNames=currencyCache</prop>
+				<prop key="agentLevelFlushing">cacheNames=agentLevelCache</prop>
+				<prop key="memberLevelFlushing">cacheNames=memberLevelCache</prop>
 			</props>
 		</property>
 	</bean>

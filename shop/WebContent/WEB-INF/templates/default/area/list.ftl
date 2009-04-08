@@ -1,38 +1,34 @@
 <#compress>
 <table cellpadding="0" cellspacing="1" class="table_form">
-  <caption>品牌类别管理</caption>
+  <caption>地区管理</caption>
   <tr>
-    <td class="align_l"><a href="#" id="addBrand">添加品牌</a></td>
+    <td class="align_l"><a href="#" id="addArea">添加地区</a></td>
   </tr>
 </table>
 
 <table cellpadding="0" cellspacing="1" class="table_list">
-<caption>品牌类别管理</caption>
+<caption>地区管理</caption>
 <tr align="center">
 	<th width="35" class="align_c"><input type="checkbox" id="checkAll"></th>
-	<th width="10%">品牌编号</th>
-	<th width="10%">品牌名称</th>
-	<th>品牌Logo</th>
-	<th>官方网站</th>
-	<th>品牌介绍</th>
+	<th width="70">地区编号</th>
+	<th >地区名称</th>
+	<th >排序</th>
 	<th width="100" class="align_c">操作</th>
 </tr>
 <#list objs as obj>
 	<tr>
-		<td class="align_c"><input type="checkbox" class="brand" name="brandId" value="${obj.brandId}"></td>
-		<td class="align_c">${obj.brandId}</td>
-		<td>${obj.brandName}</td>
-		<td class="align_c"><img src='${base+(obj.brandLogo)!""}' width="80" height="80"></td>
-		<td>${obj.brandUrl}</td>
-		<td>${obj.description}</td>
-		<td ><a href="#" class="brandEdit" id="${obj.brandId}">编辑</a>&nbsp;&nbsp;<a href="#" class="brandDelete" id="${obj.brandId}">删除</a></td>
+		<td class="align_c"><input type="checkbox" class="area" name="areaId" value="${obj.areaId}"></td>
+		<td class="align_c">${obj.areaId}</td>
+		<td class="align_c">${obj.areaName}</td>
+		<td>${obj.sequence}</td>
+		<td ><a href="#" class="areaEdit" id="${obj.areaId}">编辑</a>&nbsp;&nbsp;<a href="#" class="areaDelete" id="${obj.areaId}">删除</a></td>
 	</tr>
 </#list>
 </table>
 <div class="button_box">
 		<a href="#" id="selectAll"onClick="javascript:selectAll('log');">全选</a>/<a href="#" id="cancelSel">取消</a>
         
-		<input type="submit" class="button_style" value="删除" id="deleteBrand">&nbsp;&nbsp;
+		<input type="submit" class="button_style" value="删除" id="deleteArea">&nbsp;&nbsp;
 </div>
 
 <div id="pages"><SPAN>总数：<b>${(page.totalCount)!}</b></SPAN>
@@ -44,31 +40,31 @@
 	var pageCount='${(page.totalPage)!}';
 	var limit=${(page.limit)!};
 	var cp='${(page.currentPage)!}';
-	var url='${base}/brand/list.jhtm?';
+	var url='${base}/area/list.jhtm?';
 	$('#checkAll').click(function(){
 		if($(this).attr('checked')){
-			selectAll('brand');
+			selectAll('log');
 		}else{
-			cancelSel('brand');
+			cancelSel('log');
 		}
 	});
 	
 	$('#selectAll').click(function(){
-		selectAll('brand');
+		selectAll('area');
 	});
-	$('#addBrand').click(function(){
-		loadPage('${base}/brand/add.jhtm');
+	$('#addArea').click(function(){
+		loadPage('${base}/area/add.jhtm');
 	});
 	$('#cancelSel').click(function(){
-		cancelSel('brand');
+		cancelSel('area');
 	});
 	
-	$('.brandEdit').click(function(){
-		loadPage("${base}/brand/load.jhtm?id="+$(this).attr("id"));
+	$('.areaEdit').click(function(){
+		loadPage("${base}/area/load.jhtm?id="+$(this).attr("id"));
 	});
-	$('.brandDelete').click(function(){
-		if(confirm("确定要删除选中的品牌分类吗？")){
-			$.getJSON("${base}/brand/delete.jhtm?id="+$(this).attr("id"), function(o){
+	$('.areaDelete').click(function(){
+		if(confirm("确定要删除选中的地区分类吗？")){
+			$.getJSON("${base}/area/delete.jhtm?id="+$(this).attr("id"), function(o){
 			  	if(o.success){
 			  		alert("删除成功！");
 			  		loadPage(url+'p='+cp);
@@ -80,14 +76,14 @@
 		}
 	});
 	
-	$("#deleteBrand").click(function(){
+	$("#deleteArea").click(function(){
 		deleteObj();
 	});
 	function deleteObj(){
-		if(!confirm("确定要删除品牌类别吗？")){
+		if(!confirm("确定要删除地区吗？")){
 			return;
 		}
-		$.post('${base}/brand/deletes.jhtm?'+getDelIds('brand','ids'),function(o){
+		$.post('${base}/area/deletes.jhtm?'+getDelIds('area','ids'),function(o){
 			eval("var o1="+o);
 			if(o1.success){
 				alert("删除成功！");

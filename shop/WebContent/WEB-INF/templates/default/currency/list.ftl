@@ -47,9 +47,9 @@
 	var url='${base}/currency/list.jhtm?';
 	$('#checkAll').click(function(){
 		if($(this).attr('checked')){
-			selectAll('log');
+			selectAll('currency');
 		}else{
-			cancelSel('log');
+			cancelSel('currency');
 		}
 	});
 	
