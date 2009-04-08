@@ -2,7 +2,7 @@
 <table cellpadding="0" cellspacing="1" class="table_form">
   <caption>系统缓存管理</caption>
   <tr>
-    <td><a href='javascript:loadPage("${base}/cache/clearAll.jhtm");' >清空缓存</a> 
+    <td><a href='javascript:loadPage("${base}/cache/clearAll.jhtm");' >刷新缓存</a> 
   </tr>
 </table>
 <table cellpadding="0" cellspacing="1" class="table_list" >

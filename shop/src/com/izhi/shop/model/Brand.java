@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
-@Table(name="s_brand")
+@Table(name="shop_brand")
 public class Brand implements Serializable {
 
 	/**
