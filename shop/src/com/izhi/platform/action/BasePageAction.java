@@ -7,7 +7,7 @@ public class BasePageAction extends BaseAction {
 	private static final long serialVersionUID = -1813480563281107682L;
 	
 	private PageParameter pp=null;
-	
+	protected int p=1;
 	public String init(){
 		return "success";
 	}
@@ -63,6 +63,16 @@ public class BasePageAction extends BaseAction {
 
 	public void setLimit(Integer limit) {
 		pp.setLimit(limit);
+	}
+
+
+	public int getP() {
+		return p;
+	}
+
+
+	public void setP(int p) {
+		this.p = p;
 	}
 
 }

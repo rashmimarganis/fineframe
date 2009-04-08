@@ -1,6 +1,5 @@
 package com.izhi.shop.action;
 
-import java.io.File;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,86 +11,81 @@ import org.springframework.stereotype.Service;
 
 import com.izhi.platform.action.BasePageAction;
 import com.izhi.platform.util.PageParameter;
-import com.izhi.shop.model.Brand;
-import com.izhi.shop.service.IBrandService;
+import com.izhi.shop.model.Supplier;
+import com.izhi.shop.service.ISupplierService;
 @Service
 @Scope(value="prototype")
-@Namespace("/brand")
-public class BrandAction extends BasePageAction{
+@Namespace("/supplier")
+public class SupplierAction extends BasePageAction{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8190220809475487574L;
-	@Resource(name="brandService")
-	private IBrandService brandService;
-	private Brand obj;
+	@Resource(name="supplierService")
+	private ISupplierService supplierService;
+	private Supplier obj;
 	private List<Integer> ids;
-	private File logo;
-	private String logoContentType;
-	private String logoFileName;
 	
 	private int id;
+	
 	
 	@Action("list")
 	public String list(){
 		PageParameter pp=this.getPageParameter();
-		int totalCount=(int)brandService.findTotalCount();
+		int totalCount=(int)supplierService.findTotalCount();
 		pp.setCurrentPage(p);
 		pp.setTotalCount(totalCount);
-		pp.setSort("brandId");
+		pp.setSort("supplierId");
 		pp.setDir("desc");
-		List<Brand> l=brandService.findPage(pp);
+		List<Supplier> l=supplierService.findPage(pp);
 		this.getRequest().setAttribute("objs", l);
 		this.getRequest().setAttribute("page", pp);
 		return SUCCESS;
 	}
 	@Action("add")
 	public String add(){
-		obj=new Brand();
+		obj=new Supplier();
 		return SUCCESS;
 	}
 	@Action("load")
 	public String load(){
-		obj=brandService.findBrandById(id);
+		obj=supplierService.findSupplierById(id);
 		return SUCCESS;
 	}
 	
 	@Action("delete")
 	public String delete(){
-		boolean i=brandService.deleteBrand(id);
+		boolean i=supplierService.deleteSupplier(id);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
 	@Action("deletes")
 	public String deletes(){
 		log.debug("Id size:"+ids.size());
-		boolean i=brandService.deleteBrands(ids);
+		boolean i=supplierService.deleteSuppliers(ids);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
 	
 	@Action("save")
 	public String save(){
-		if(logo!=null){
-			String logoPath=this.uploadFile(logo,this.getLogoContentType());
-			obj.setBrandLogo(logoPath);
-		}
-		if(obj.getBrandId()==0){
-			int i=brandService.saveBrand(obj);
+		
+		if(obj.getSupplierId()==0){
+			int i=supplierService.saveSupplier(obj);
 			this.getRequest().setAttribute("success", i>0);
 		}else{
-			boolean i=brandService.updateBrand(obj);
+			boolean i=supplierService.updateSupplier(obj);
 			this.getRequest().setAttribute("success", i);
 		}
 		return SUCCESS;
 	}
 	
-	public IBrandService getBrandService() {
-		return brandService;
+	public ISupplierService getSupplierService() {
+		return supplierService;
 	}
-	public void setBrandService(IBrandService brandService) {
-		this.brandService = brandService;
+	public void setSupplierService(ISupplierService supplierService) {
+		this.supplierService = supplierService;
 	}
 	public List<Integer> getIds() {
 		return ids;
@@ -99,10 +93,10 @@ public class BrandAction extends BasePageAction{
 	public void setIds(List<Integer> ids) {
 		this.ids = ids;
 	}
-	public Brand getObj() {
+	public Supplier getObj() {
 		return obj;
 	}
-	public void setObj(Brand obj) {
+	public void setObj(Supplier obj) {
 		this.obj = obj;
 	}
 	public int getId() {
@@ -111,24 +105,4 @@ public class BrandAction extends BasePageAction{
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public File getLogo() {
-		return logo;
-	}
-	public void setLogo(File logo) {
-		this.logo = logo;
-	}
-	public String getLogoContentType() {
-		return logoContentType;
-	}
-	public void setLogoContentType(String logoContentType) {
-		this.logoContentType = logoContentType;
-	}
-	public String getLogoFileName() {
-		return logoFileName;
-	}
-	public void setLogoFileName(String logoFileName) {
-		this.logoFileName = logoFileName;
-	}
-	
 }

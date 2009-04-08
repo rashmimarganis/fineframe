@@ -148,6 +148,7 @@
 				<prop key="personCaching">cacheName=personCache</prop>
 				<prop key="regionCaching">cacheName=regionCache</prop>
 				<prop key="brandCaching">cacheName=brandCache</prop>
+				<prop key="supplierCaching">cacheName=supplierCache</prop>
 			</props>
 		</property>
 	</bean>
@@ -175,6 +176,8 @@
 				<prop key="functionFlushing">cacheNames=functionCache
 				</prop>
 				<prop key="brandFlushing">cacheNames=brandCache
+				</prop>
+				<prop key="supplierFlushing">cacheNames=supplierCache
 				</prop>
 			</props>
 		</property>

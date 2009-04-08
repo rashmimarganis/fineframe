@@ -220,3 +220,20 @@ overflow:hidden;}
 #adminlist{border:1px solid #BFD3EF;}
 
 input, textarea, select, button, file { font-size:12px; padding-left:2px;}
+
+form.cmxform { width: 50em; }
+label.error {
+  background:url("images/unchecked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+}
+label.success {
+  background:url("images/checked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+}
+
+form.cmxform label.error {
+	margin-left: auto;
+	width: 250px;
+}
+em.error { color: black; }
+#warning { display: none; }

@@ -364,7 +364,7 @@
     />
  	
  	
-    <cache name="alumniResourceCache"
+    <cache name="supplierCache"
            maxElementsInMemory="200"
            maxElementsOnDisk="1000"
            eternal="true"

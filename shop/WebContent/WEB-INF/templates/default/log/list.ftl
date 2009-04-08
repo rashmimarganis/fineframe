@@ -27,7 +27,7 @@
 		<td class="align_c">${log.user.username}</td>
 		<td class="align_c">${log.time}</td>
 		<td class="align_c">${log.ip!""}</td>
-		<td>${(log.org.title)!""}</td>
+		<td>${(log.shop.title)!""}</td>
 	</tr>
 </#list>
 </table>
