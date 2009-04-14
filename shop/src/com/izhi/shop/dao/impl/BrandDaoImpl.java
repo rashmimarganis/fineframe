@@ -80,4 +80,11 @@ public class BrandDaoImpl extends HibernateDaoSupport implements IBrandDao {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Brand> findAll() {
+		String sql="from Brand";
+		return this.getHibernateTemplate().find(sql);
+	}
+
 }

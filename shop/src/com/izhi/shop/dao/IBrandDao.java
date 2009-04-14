@@ -12,6 +12,7 @@ public interface IBrandDao  {
 	boolean deleteBrands(List<Integer> ids) ;
 	Brand findBrandById(int id);
 	List<Brand> findPage(PageParameter pp);
+	List<Brand> findAll();
 	int findTotalCount();
 	
 }

@@ -84,7 +84,7 @@ public abstract class BaseAction extends ActionSupport {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}            
-        return "/upload/"+pn+"/"+targetFileName;//保存文件的存放路径
+        return "/UserFiles/"+pn+"/"+targetFileName;//保存文件的存放路径
 	}
 	
 	protected String getFileExt(String ct){

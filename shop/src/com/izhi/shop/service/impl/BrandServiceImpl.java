@@ -67,4 +67,9 @@ public class BrandServiceImpl implements IBrandService {
 		return brandDao.updateBrand(obj);
 	}
 
+	@Override
+	public List<Brand> findAll() {
+		return brandDao.findAll();
+	}
+
 }
