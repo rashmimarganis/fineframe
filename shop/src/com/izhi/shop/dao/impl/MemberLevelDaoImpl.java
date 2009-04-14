@@ -79,5 +79,22 @@ public class MemberLevelDaoImpl extends HibernateDaoSupport implements IMemberLe
 		this.getHibernateTemplate().update(obj);
 		return true;
 	}
+	@Override
+	public boolean setDefaultLevel(int id) {
+		this.getHibernateTemplate().bulkUpdate("update MemberLevel m set  m.defaultLevel=false");
+		String sql="update MemberLevel m set m.defaultLevel=true where m.memberLevelId=?";
+		int i=this.getHibernateTemplate().bulkUpdate(sql,id);
+		return i>0;
+	}
+
+	@Override
+	public MemberLevel findDefault() {
+		String sql="from MemberLevel m where m.defaultLevel=true";
+		List<MemberLevel> m=this.getHibernateTemplate().find(sql);
+		if(m.size()==0){
+			return m.get(0);
+		}
+		return null;
+	}
 
 }

@@ -13,4 +13,6 @@ public interface IMemberLevelService {
 	MemberLevel findMemberLevelById(int id);
 	List<MemberLevel> findPage(PageParameter pp);
 	int findTotalCount();
+	boolean setDefaultLevel(int id);
+	MemberLevel findDefault();
 }

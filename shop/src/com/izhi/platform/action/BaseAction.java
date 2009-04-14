@@ -58,7 +58,7 @@ public abstract class BaseAction extends ActionSupport {
 		return path;
 	}
 	protected String getUploadPath(){
-		String path=this.getServletContext().getRealPath("/upload");
+		String path=this.getServletContext().getRealPath("/UserFiles/");
 		File file=new File(path);
 		if(!file.exists()){
 			file.mkdirs();

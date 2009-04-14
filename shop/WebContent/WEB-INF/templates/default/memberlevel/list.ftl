@@ -17,7 +17,7 @@
 	<th>交易额满足点</th>
 	<th>可销售折扣率</th>
 	<th>默认</th>
-	<th width="100" class="align_c">操作</th>
+	<th width="200" class="align_c">操作</th>
 </tr>
 <#list objs as obj>
 	<tr>
@@ -29,7 +29,7 @@
 		<td>${obj.minMoney!""}</td>
 		<td>${obj.discount!""}</td>
 		<td class="align_c"><#if obj.defaultLevel>是<#else>否</#if></td>
-		<td ><a href="#" class="memberLevelEdit" objId="${obj.memberLevelId}">编辑</a>&nbsp;&nbsp;<a href="#" class="memberLevelDelete" objId="${obj.memberLevelId}">删除</a></td>
+		<td class="align_c"><a href="#" class="memberLevelDefault" objId="${obj.memberLevelId}">设为默认</a>&nbsp;|&nbsp;<a href="#" class="memberLevelEdit" objId="${obj.memberLevelId}">编辑</a>&nbsp;|&nbsp;<a href="#" class="memberLevelDelete" objId="${obj.memberLevelId}">删除</a></td>
 	</tr>
 </#list>
 </table>
@@ -69,6 +69,19 @@
 	
 	$('.memberLevelEdit').click(function(){
 		loadPage("${base}/memberlevel/load.jhtm?id="+$(this).attr("objId"));
+	});
+	$('.memberLevelDefault').click(function(){
+		if(confirm("确定要设定为默认会员等级吗？")){
+			$.getJSON("${base}/memberlevel/default.jhtm?id="+$(this).attr("objId"), function(o){
+			  	if(o.success){
+			  		alert("设置成功！");
+			  		loadPage(url+'p='+cp);
+			  	}else{
+			  		alert("设置失败！");
+			  	}
+			}); 
+			
+		}
 	});
 	$('.memberLevelDelete').click(function(){
 		if(confirm("确定要删除选中的会员等级吗？")){

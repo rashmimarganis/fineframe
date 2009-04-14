@@ -378,14 +378,14 @@
            overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU"
     />
-    <cache name="memberTypeCache"
+    <cache name="memberLevelCache"
            maxElementsInMemory="200"
            maxElementsOnDisk="1000"
            eternal="true"
            overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU"
     />
-    <cache name="agentTypeCache"
+    <cache name="agentLevelCache"
            maxElementsInMemory="200"
            maxElementsOnDisk="1000"
            eternal="true"
@@ -400,6 +400,13 @@
            memoryStoreEvictionPolicy="LFU"
     />
     <cache name="areaCache"
+           maxElementsInMemory="200"
+           maxElementsOnDisk="1000"
+           eternal="true"
+           overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU"
+    />
+    <cache name="productConfigCache"
            maxElementsInMemory="200"
            maxElementsOnDisk="1000"
            eternal="true"

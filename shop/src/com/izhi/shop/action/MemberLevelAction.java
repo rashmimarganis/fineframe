@@ -60,9 +60,14 @@ public class MemberLevelAction extends BasePageAction{
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
+	@Action("default")
+	public String setDefault(){
+		boolean i=memberLevelService.setDefaultLevel(id);
+		this.getRequest().setAttribute("success", i);
+		return SUCCESS;
+	}
 	@Action("deletes")
 	public String deletes(){
-		log.debug("Id size:"+ids.size());
 		boolean i=memberLevelService.deleteMemberLevels(ids);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
@@ -70,7 +75,6 @@ public class MemberLevelAction extends BasePageAction{
 	
 	@Action("save")
 	public String save(){
-		
 		if(obj.getMemberLevelId()==0){
 			int i=memberLevelService.saveMemberLevel(obj);
 			this.getRequest().setAttribute("success", i>0);

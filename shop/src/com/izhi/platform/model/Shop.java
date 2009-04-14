@@ -1,8 +1,10 @@
 package com.izhi.platform.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NotFound;
@@ -28,13 +31,10 @@ public class Shop implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="shop_id")
 	private int shopId;
-	@Column(length=32)
-	@Basic(fetch=FetchType.EAGER)
+	@Column(length=32,name="shop_name")
 	private String shopName;
 	@Column(length=32)
-	@Basic(fetch=FetchType.EAGER)
 	private String title;
-	@Basic(fetch=FetchType.EAGER)
 	private int type;
 	@ManyToOne(optional=true,fetch=FetchType.EAGER)
 	@NotFound(action=NotFoundAction.IGNORE)
@@ -42,6 +42,7 @@ public class Shop implements Serializable {
 	private Shop parent;
 	@Column
 	private int sort=0;
+
 	public int getShopId() {
 		return shopId;
 	}

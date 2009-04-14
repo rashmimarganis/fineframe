@@ -67,4 +67,16 @@ public class MemberLevelServiceImpl implements IMemberLevelService {
 		return memberLevelDao.updateMemberLevel(obj);
 	}
 
+	@Override
+	@CacheFlush(modelId="memberLevelFlushing")
+	public boolean setDefaultLevel(int id) {
+		return memberLevelDao.setDefaultLevel(id);
+	}
+
+	@Override
+	@Cacheable(modelId="memberLevelCaching")
+	public MemberLevel findDefault() {
+		return memberLevelDao.findDefault();
+	}
+
 }

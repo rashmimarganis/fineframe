@@ -154,6 +154,7 @@
 				<prop key="currencyCaching">cacheName=currencyCache</prop>
 				<prop key="agentLevelCaching">cacheName=agentLevelCache</prop>
 				<prop key="memberLevelCaching">cacheName=memberLevelCache</prop>
+				<prop key="productConfigCaching">cacheName=productConfigCache</prop>
 			</props>
 		</property>
 	</bean>
@@ -189,6 +190,7 @@
 				<prop key="currencyFlushing">cacheNames=currencyCache</prop>
 				<prop key="agentLevelFlushing">cacheNames=agentLevelCache</prop>
 				<prop key="memberLevelFlushing">cacheNames=memberLevelCache</prop>
+				<prop key="productConfigFlushing">cacheNames=productConfigCache</prop>
 			</props>
 		</property>
 	</bean>

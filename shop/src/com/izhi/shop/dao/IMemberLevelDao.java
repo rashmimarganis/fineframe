@@ -13,5 +13,7 @@ public interface IMemberLevelDao  {
 	MemberLevel findMemberLevelById(int id);
 	List<MemberLevel> findPage(PageParameter pp);
 	int findTotalCount();
+	MemberLevel findDefault();
+	boolean setDefaultLevel(int id);
 	
 }
