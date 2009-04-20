@@ -75,6 +75,55 @@ public class User  implements UserDetails {
 	private Shop shop;
 	@Basic
 	private String realname;
+	@Basic
+	private int age;
+	@Basic
+	private String address;
+	@Column(length=1)
+	private String gender;
+	@Basic
+	private String postcode;
+	public String getPostcode() {
+		return postcode;
+	}
+
+	public void setPostcode(String postcode) {
+		this.postcode = postcode;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public boolean isCredentialsExpired() {
+		return credentialsExpired;
+	}
+
+	@Column(name="validate_code")
+	private String validateCode;
+	@Basic
+	private boolean validated=false;
+	
 	
 	public String getRealname() {
 		return realname;
@@ -317,6 +366,22 @@ public class User  implements UserDetails {
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return !this.credentialsExpired;
+	}
+
+	public String getValidateCode() {
+		return validateCode;
+	}
+
+	public void setValidateCode(String validateCode) {
+		this.validateCode = validateCode;
+	}
+
+	public boolean isValidated() {
+		return validated;
+	}
+
+	public void setValidated(boolean validated) {
+		this.validated = validated;
 	}
 
 }

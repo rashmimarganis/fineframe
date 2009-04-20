@@ -16,6 +16,7 @@ import com.izhi.platform.dao.IUserDao;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.model.User;
 import com.izhi.platform.util.PageParameter;
+import com.izhi.web.model.WebUser;
 @Service("userDao")
 public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements IUserDao {
 
@@ -153,9 +154,38 @@ public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements IUserDao 
 		}
 		return null;
 	}
-	
-	
 
+
+	@Override
+	public WebUser findUser(String username) {
+		String sql="select o from User o where  o.username=? ";
+		List<User> l= this.getHibernateTemplate().find(sql,username);
+		if(l!=null&&l.size()>0){
+			User u=l.get(0);
+			WebUser wu=new WebUser();
+			wu.setUserId(u.getUserId());
+			wu.setUsername(u.getUsername());
+			wu.setRealname(u.getRealname());
+			wu.setAge(u.getAge());
+			wu.setAddress(u.getAddress());
+			wu.setGender(u.getGender());
+			wu.setPostcode(u.getPostcode());
+			wu.setHintQuestion(u.getHintQuestion());
+			wu.setHintAnswer(u.getHintAnswer());
+			wu.setValidateCode(u.getValidateCode());
+			wu.setValidated(u.isValidated());
+			return wu;
+		}
+		return null;
+	}
+
+
+	@Override
+	public boolean validateUser(String un, String code) {
+		String sql="update User u set u.validated=true where u.username=? and u.validateCode=?";
+		int i=this.getHibernateTemplate().bulkUpdate(sql, new Object[]{un,code});
+		return i>0;
+	}
 }
 
 class UserByOrg implements HibernateCallback{

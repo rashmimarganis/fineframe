@@ -74,6 +74,10 @@
   </filter-mapping>
   <filter-mapping>
     <filter-name>openSessionInViewFilter</filter-name>
+    <url-pattern>/service/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>openSessionInViewFilter</filter-name>
     <url-pattern>/j_switch_org</url-pattern>
   </filter-mapping>
   <filter-mapping>
@@ -218,6 +222,7 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
   <servlet-mapping>
   	<servlet-name>Connector</servlet-name> 
   	

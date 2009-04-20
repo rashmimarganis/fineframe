@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.izhi.platform.model.User;
 import com.izhi.platform.util.PageParameter;
+import com.izhi.web.model.WebUser;
 
 public interface IUserDao extends IBaseDao<User,Integer> {
 	User findUserByName(String username);
@@ -20,4 +21,7 @@ public interface IUserDao extends IBaseDao<User,Integer> {
 	int deleteUserRoles(String userIds);
 	Map<String,Object> findInfoById(int id);
 	List<Map<String,Object>> findPage(PageParameter pp,String onlineIds);
+	
+	boolean validateUser(String un,String code);
+	WebUser findUser(String username);
 }

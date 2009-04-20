@@ -32,7 +32,7 @@
 
 	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
 	<context:component-scan
-		base-package="com.izhi.platform,com.izhi.shop" />
+		base-package="com.izhi.platform,com.izhi.shop,com.izhi.web" />
 
 	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
@@ -198,7 +198,25 @@
 		class="org.springmodules.cache.interceptor.flush.FlushingAttributeSourceAdvisor">
 		<constructor-arg ref="flushingInterceptor" />
 	</bean>
-
+	<bean id="emailFrom" class="java.lang.String">
+		<constructor-arg type="java.lang.String" value="${email.from}"></constructor-arg>
+	</bean>
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.qq.com" />
+		<property name="port" value="25" />
+		<property name="username" value="zhuzhsh@qq.com" />
+		<property name="password" value="letmego886" />
+		<property name="protocol" value="smtp"></property>
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="javaMailProperties">
+			<props>  
+                 <prop key="mail.smtp.auth">true</prop>  
+                 <prop key="mail.smtp.timeout">25000</prop>  
+                 <prop key="mail.smtp.starttls.enable">true</prop>  
+             </props>  
+		</property>
+	</bean>
+	<!--  
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.live.com" />
 		<property name="port" value="25" />
@@ -214,11 +232,34 @@
              </props>  
 		</property>
 	</bean>
-
+-->
 	<bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
 		<property name="from" value="service@lejiago.com" />
 		<property name="subject" value="恭喜你成功注册乐佳购物网！" />
 	</bean>
+	
+	<!-- 
+	<jaxws:endpoint id="userWebServiceEP"
+		implementorClass="org.springside.examples.miniservice.ws.user.UserWebService"
+		implementor="#userWebService" address="/UserService">
+		<jaxws:inInterceptors>
+			<bean
+				class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor" />
+			<bean
+				class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="UsernameToken" />
+						<entry key="passwordType" value="PasswordText" />
+						<entry key="passwordCallbackClass"
+							value="test.ServerPasswordCallback" />
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
+	
+	-->
 	<!-- 
 	<bean id="methodInvokingJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">           
    
