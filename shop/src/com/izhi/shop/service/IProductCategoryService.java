@@ -5,7 +5,7 @@ import java.util.List;
 import com.izhi.platform.util.PageParameter;
 import com.izhi.shop.model.ProductCategory;
 
-public interface ICategoryService {
+public interface IProductCategoryService {
 	int saveCategory(ProductCategory obj);
 	boolean updateCategory(ProductCategory obj);
 	boolean deleteCategory(int id);

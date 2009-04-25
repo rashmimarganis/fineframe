@@ -1,11 +1,11 @@
-package com.izhi.cms.dao;
+package com.izhi.cms.service;
 
 import java.util.List;
 
 import com.izhi.cms.model.Category;
 import com.izhi.platform.util.PageParameter;
 
-public interface ICategoryDao {
+public interface ICategoryService {
 	int saveCategory(Category obj);
 	boolean updateCategory(Category obj);
 	boolean deleteCategory(int id);

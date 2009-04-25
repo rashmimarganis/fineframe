@@ -9,19 +9,19 @@ import org.springmodules.cache.annotations.CacheFlush;
 import org.springmodules.cache.annotations.Cacheable;
 
 import com.izhi.platform.util.PageParameter;
-import com.izhi.shop.dao.ICategoryDao;
+import com.izhi.shop.dao.IProductCategoryDao;
 import com.izhi.shop.model.ProductCategory;
-import com.izhi.shop.service.ICategoryService;
+import com.izhi.shop.service.IProductCategoryService;
 @Service("productCategoryService")
-public class CategoryServiceImpl implements ICategoryService {
+public class CategoryServiceImpl implements IProductCategoryService {
 
 	@Resource(name="productCategoryDao")
-	private ICategoryDao categoryDao;
-	public ICategoryDao getCategoryDao() {
+	private IProductCategoryDao categoryDao;
+	public IProductCategoryDao getCategoryDao() {
 		return categoryDao;
 	}
 
-	public void setCategoryDao(ICategoryDao categoryDao) {
+	public void setCategoryDao(IProductCategoryDao categoryDao) {
 		this.categoryDao = categoryDao;
 	}
 

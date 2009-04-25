@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.action.BaseAction;
-import com.izhi.shop.service.ICategoryService;
+import com.izhi.shop.service.IProductCategoryService;
 import com.izhi.shop.service.IProductService;
 import com.izhi.shop.service.IProductTypeService;
 @Service
@@ -14,7 +14,7 @@ import com.izhi.shop.service.IProductTypeService;
 public class IndexAction extends BaseAction {
 	private static final long serialVersionUID = -6428838565411508169L;
 	private IProductTypeService productTypeService;
-	private ICategoryService categoryService;
+	private IProductCategoryService categoryService;
 	private IProductService productService;
 	
 	public String execute(){
@@ -27,10 +27,10 @@ public class IndexAction extends BaseAction {
 	public void setProductTypeService(IProductTypeService productTypeService) {
 		this.productTypeService = productTypeService;
 	}
-	public ICategoryService getCategoryService() {
+	public IProductCategoryService getCategoryService() {
 		return categoryService;
 	}
-	public void setCategoryService(ICategoryService categoryService) {
+	public void setCategoryService(IProductCategoryService categoryService) {
 		this.categoryService = categoryService;
 	}
 	public IProductService getProductService() {

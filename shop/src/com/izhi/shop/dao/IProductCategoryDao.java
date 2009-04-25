@@ -5,7 +5,7 @@ import java.util.List;
 import com.izhi.platform.util.PageParameter;
 import com.izhi.shop.model.ProductCategory;
 
-public interface ICategoryDao  {
+public interface IProductCategoryDao  {
 	int saveCategory(ProductCategory obj);
 	boolean updateCategory(ProductCategory obj);
 	boolean deleteCategory(int id);

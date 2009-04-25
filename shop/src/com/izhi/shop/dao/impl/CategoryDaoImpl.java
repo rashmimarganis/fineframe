@@ -11,10 +11,10 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.util.PageParameter;
-import com.izhi.shop.dao.ICategoryDao;
+import com.izhi.shop.dao.IProductCategoryDao;
 import com.izhi.shop.model.ProductCategory;
 @Service("productCategoryDao")
-public class CategoryDaoImpl extends HibernateDaoSupport implements ICategoryDao {
+public class CategoryDaoImpl extends HibernateDaoSupport implements IProductCategoryDao {
 
 	@Override
 	public boolean deleteCategory(int id) {

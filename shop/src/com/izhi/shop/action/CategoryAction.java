@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.izhi.platform.action.BasePageAction;
 import com.izhi.platform.util.PageParameter;
 import com.izhi.shop.model.ProductCategory;
-import com.izhi.shop.service.ICategoryService;
+import com.izhi.shop.service.IProductCategoryService;
 @Service
 @Scope(value="prototype")
 @Namespace("/category")
@@ -24,7 +24,7 @@ public class CategoryAction extends BasePageAction{
 	 */
 	private static final long serialVersionUID = 8190220809475487574L;
 	@Resource(name="productCategoryService")
-	private ICategoryService categoryService;
+	private IProductCategoryService categoryService;
 	private ProductCategory obj;
 	private List<Integer> ids;
 	private File image;
@@ -97,10 +97,10 @@ public class CategoryAction extends BasePageAction{
 		return SUCCESS;
 	}
 	
-	public ICategoryService getCategoryService() {
+	public IProductCategoryService getCategoryService() {
 		return categoryService;
 	}
-	public void setCategoryService(ICategoryService categoryService) {
+	public void setCategoryService(IProductCategoryService categoryService) {
 		this.categoryService = categoryService;
 	}
 	public List<Integer> getIds() {

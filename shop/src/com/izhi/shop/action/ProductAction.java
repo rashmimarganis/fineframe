@@ -19,7 +19,7 @@ import com.izhi.shop.model.ProductCategory;
 import com.izhi.shop.model.Product;
 import com.izhi.shop.model.ProductType;
 import com.izhi.shop.service.IBrandService;
-import com.izhi.shop.service.ICategoryService;
+import com.izhi.shop.service.IProductCategoryService;
 import com.izhi.shop.service.IProductService;
 import com.izhi.shop.service.IProductTypeService;
 @Service
@@ -36,7 +36,7 @@ public class ProductAction extends BasePageAction{
 	@Resource(name="productTypeService")
 	private IProductTypeService typeService;
 	@Resource(name="categoryService")
-	private ICategoryService categoryService;
+	private IProductCategoryService categoryService;
 	@Resource(name="brandService")
 	private IBrandService brandService;
 	
@@ -177,10 +177,10 @@ public class ProductAction extends BasePageAction{
 	public void setTypeService(IProductTypeService typeService) {
 		this.typeService = typeService;
 	}
-	public ICategoryService getCategoryService() {
+	public IProductCategoryService getCategoryService() {
 		return categoryService;
 	}
-	public void setCategoryService(ICategoryService categoryService) {
+	public void setCategoryService(IProductCategoryService categoryService) {
 		this.categoryService = categoryService;
 	}
 	public List<ProductCategory> getCategories() {
