@@ -153,6 +153,11 @@
     <servlet-name>ViewStatusMessages</servlet-name>
     <servlet-class>ch.qos.logback.classic.ViewStatusMessagesServlet</servlet-class>
   </servlet>
+  <servlet>
+  <servlet-name>JSPSupportServlet</servlet-name>
+  <servlet-class>org.apache.struts2.views.JspSupportServlet</servlet-class>
+  <load-on-startup>1</load-on-startup>
+</servlet>
   <servlet-mapping>
     <servlet-name>ViewStatusMessages</servlet-name>
     <url-pattern>/lbClassicStatus</url-pattern>

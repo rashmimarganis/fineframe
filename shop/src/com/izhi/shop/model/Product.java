@@ -31,7 +31,7 @@ public class Product implements Serializable {
 	private int weight;
 	@ManyToOne
 	@JoinColumn(name="category_id",updatable=false)
-	private Category category;
+	private ProductCategory category;
 	@ManyToOne
 	@JoinColumn(name="type_id",updatable=false)
 	private ProductType type;
@@ -151,11 +151,11 @@ public class Product implements Serializable {
 		this.weight = weight;
 	}
 
-	public Category getCategory() {
+	public ProductCategory getCategory() {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public void setCategory(ProductCategory category) {
 		this.category = category;
 	}
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.izhi.platform.dao.IShopDao;
 import com.izhi.platform.model.Shop;
 import com.izhi.platform.util.PageParameter;
-import com.izhi.shop.model.Category;
+import com.izhi.shop.model.ProductCategory;
 @Service("shopDao")
 public class ShopDaoImpl extends BaseDaoImpl<Shop, Integer> implements IShopDao {
 

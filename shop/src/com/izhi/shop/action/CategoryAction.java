@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.izhi.platform.action.BasePageAction;
 import com.izhi.platform.util.PageParameter;
-import com.izhi.shop.model.Category;
+import com.izhi.shop.model.ProductCategory;
 import com.izhi.shop.service.ICategoryService;
 @Service
 @Scope(value="prototype")
@@ -23,15 +23,15 @@ public class CategoryAction extends BasePageAction{
 	 * 
 	 */
 	private static final long serialVersionUID = 8190220809475487574L;
-	@Resource(name="categoryService")
+	@Resource(name="productCategoryService")
 	private ICategoryService categoryService;
-	private Category obj;
+	private ProductCategory obj;
 	private List<Integer> ids;
 	private File image;
 	private String imageContentType;
 	private String imageFileName;
 	private int id;
-	private List<Category> topCategories;
+	private List<ProductCategory> topCategories;
 	
 	@Action("list")
 	public String list(){
@@ -41,14 +41,14 @@ public class CategoryAction extends BasePageAction{
 		pp.setTotalCount(totalCount);
 		pp.setSort("categoryId");
 		pp.setDir("desc");
-		List<Category> l=categoryService.findPage(pp);
+		List<ProductCategory> l=categoryService.findPage(pp);
 		this.getRequest().setAttribute("objs", l);
 		this.getRequest().setAttribute("page", pp);
 		return SUCCESS;
 	}
 	@Action("add")
 	public String add(){
-		obj=new Category();
+		obj=new ProductCategory();
 		topCategories=categoryService.findTopAll();
 		return SUCCESS;
 	}
@@ -109,10 +109,10 @@ public class CategoryAction extends BasePageAction{
 	public void setIds(List<Integer> ids) {
 		this.ids = ids;
 	}
-	public Category getObj() {
+	public ProductCategory getObj() {
 		return obj;
 	}
-	public void setObj(Category obj) {
+	public void setObj(ProductCategory obj) {
 		this.obj = obj;
 	}
 	public int getId() {
@@ -139,10 +139,10 @@ public class CategoryAction extends BasePageAction{
 	public void setImageFileName(String imageFileName) {
 		this.imageFileName = imageFileName;
 	}
-	public List<Category> getTopCategories() {
+	public List<ProductCategory> getTopCategories() {
 		return topCategories;
 	}
-	public void setTopCategories(List<Category> topCategories) {
+	public void setTopCategories(List<ProductCategory> topCategories) {
 		this.topCategories = topCategories;
 	}
 	

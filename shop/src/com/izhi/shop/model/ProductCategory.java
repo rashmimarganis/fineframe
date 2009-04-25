@@ -20,7 +20,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 @Entity
 @Table(name="shop_category")
-public class Category implements Serializable {
+public class ProductCategory implements Serializable {
 
 	private static final long serialVersionUID = 4629967038003289674L;
 	@Id
@@ -49,12 +49,12 @@ public class Category implements Serializable {
 	@ManyToOne(optional=true)
 	@NotFound(action=NotFoundAction.IGNORE)
 	@JoinColumn(name="parent_id")
-	private Category parent;
+	private ProductCategory parent;
 	
 	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
 	@OrderBy("sequence desc")
 	@JoinColumn(name="parent_id",updatable=false,insertable=false)
-	private List<Category> children;
+	private List<ProductCategory> children;
 
 	public int getCategoryId() {
 		return categoryId;
@@ -136,22 +136,22 @@ public class Category implements Serializable {
 	}
 
 
-	public Category getParent() {
+	public ProductCategory getParent() {
 		return parent;
 	}
 
 
-	public void setParent(Category parent) {
+	public void setParent(ProductCategory parent) {
 		this.parent = parent;
 	}
 
 
-	public List<Category> getChildren() {
+	public List<ProductCategory> getChildren() {
 		return children;
 	}
 
 
-	public void setChildren(List<Category> children) {
+	public void setChildren(List<ProductCategory> children) {
 		this.children = children;
 	}
 }

@@ -15,7 +15,7 @@ import com.izhi.platform.action.BasePageAction;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.util.PageParameter;
 import com.izhi.shop.model.Brand;
-import com.izhi.shop.model.Category;
+import com.izhi.shop.model.ProductCategory;
 import com.izhi.shop.model.Product;
 import com.izhi.shop.model.ProductType;
 import com.izhi.shop.service.IBrandService;
@@ -47,7 +47,7 @@ public class ProductAction extends BasePageAction{
 	private String imageFileName;
 	private int id;
 	private List<ProductType> types;
-	private List<Category> categories;
+	private List<ProductCategory> categories;
 	private List<Brand> brands;
 	
 	public List<ProductType> getTypes() {
@@ -183,10 +183,10 @@ public class ProductAction extends BasePageAction{
 	public void setCategoryService(ICategoryService categoryService) {
 		this.categoryService = categoryService;
 	}
-	public List<Category> getCategories() {
+	public List<ProductCategory> getCategories() {
 		return categories;
 	}
-	public void setCategories(List<Category> categories) {
+	public void setCategories(List<ProductCategory> categories) {
 		this.categories = categories;
 	}
 	public IBrandService getBrandService() {

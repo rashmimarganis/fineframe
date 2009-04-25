@@ -1,3 +1,4 @@
+<#assign  cms =JspTaglibs["/WEB-INF/tag/cms.tld"] >
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -9,6 +10,8 @@
 <script type="text/javascript" src="${base}/js/jquery.validate.js"></script>
 </head>
 <body style="">
+<@cms.block name="header"/>
+
 	<form id="form1" action="${base}/member/register.jhtm" method="post">
 	<table width="100%" cellpadding="0" cellspacing="1" class="table_form">
 
