@@ -1,5 +1,7 @@
 package com.izhi.web.action;
 
+import javax.annotation.Resource;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -13,8 +15,11 @@ import com.izhi.shop.service.IProductTypeService;
 @Action(value="/index")
 public class IndexAction extends BaseAction {
 	private static final long serialVersionUID = -6428838565411508169L;
+	@Resource(name="productTypeService")
 	private IProductTypeService productTypeService;
-	private IProductCategoryService categoryService;
+	@Resource(name="productCategoryService")
+	private IProductCategoryService productCategoryService;
+	@Resource(name="productService")
 	private IProductService productService;
 	
 	public String execute(){
@@ -27,11 +32,11 @@ public class IndexAction extends BaseAction {
 	public void setProductTypeService(IProductTypeService productTypeService) {
 		this.productTypeService = productTypeService;
 	}
-	public IProductCategoryService getCategoryService() {
-		return categoryService;
+	public IProductCategoryService getProductCategoryService() {
+		return productCategoryService;
 	}
-	public void setCategoryService(IProductCategoryService categoryService) {
-		this.categoryService = categoryService;
+	public void setProductCategoryService(IProductCategoryService categoryService) {
+		this.productCategoryService = categoryService;
 	}
 	public IProductService getProductService() {
 		return productService;

@@ -3,10 +3,19 @@
 <taglib>
 	<tlibversion>1.0</tlibversion>
 	<jsp-version>1.2</jsp-version>
-	<shortname>block</shortname>
+	<shortname>cms</shortname>
 	<tag>
 		<name>block</name>
 		<tagclass>com.izhi.cms.tag.BlockTag</tagclass>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>tag</name>
+		<tagclass>com.izhi.cms.tag.CmsTag</tagclass>
 		<attribute>
 			<name>name</name>
 			<required>true</required>

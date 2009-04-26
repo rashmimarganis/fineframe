@@ -14,7 +14,7 @@ import com.izhi.platform.util.PageParameter;
 import com.izhi.shop.dao.IProductCategoryDao;
 import com.izhi.shop.model.ProductCategory;
 @Service("productCategoryDao")
-public class CategoryDaoImpl extends HibernateDaoSupport implements IProductCategoryDao {
+public class ProductCategoryDaoImpl extends HibernateDaoSupport implements IProductCategoryDao {
 
 	@Override
 	public boolean deleteCategory(int id) {

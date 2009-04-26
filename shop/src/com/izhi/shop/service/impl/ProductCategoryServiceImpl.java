@@ -13,76 +13,76 @@ import com.izhi.shop.dao.IProductCategoryDao;
 import com.izhi.shop.model.ProductCategory;
 import com.izhi.shop.service.IProductCategoryService;
 @Service("productCategoryService")
-public class CategoryServiceImpl implements IProductCategoryService {
+public class ProductCategoryServiceImpl implements IProductCategoryService {
 
 	@Resource(name="productCategoryDao")
-	private IProductCategoryDao categoryDao;
-	public IProductCategoryDao getCategoryDao() {
-		return categoryDao;
+	private IProductCategoryDao productCategoryDao;
+	public IProductCategoryDao getProductCategoryDao() {
+		return productCategoryDao;
 	}
 
-	public void setCategoryDao(IProductCategoryDao categoryDao) {
-		this.categoryDao = categoryDao;
+	public void setProductCategoryDao(IProductCategoryDao categoryDao) {
+		this.productCategoryDao = categoryDao;
 	}
 
 	@Override
 	@CacheFlush(modelId="categoryFlushing")
 	public boolean deleteCategory(int id) {
-		return categoryDao.deleteCategory(id);
+		return productCategoryDao.deleteCategory(id);
 	}
 
 	@Override
 	@CacheFlush(modelId="categoryFlushing")
 	public boolean deleteCategories(List<Integer> ids) {
-		return categoryDao.deleteCategorys(ids);
+		return productCategoryDao.deleteCategorys(ids);
 	}
 
 	@Override
 	@Cacheable(modelId="categoryCaching")
 	public ProductCategory findCategoryById(int id) {
-		return categoryDao.findCategoryById(id);
+		return productCategoryDao.findCategoryById(id);
 	}
 
 	@Override
 	@Cacheable(modelId="categoryCaching")
 	public List<ProductCategory> findPage(PageParameter pp) {
-		return categoryDao.findPage(pp);
+		return productCategoryDao.findPage(pp);
 	}
 
 	@Override
 	@Cacheable(modelId="categoryCaching")
 	public int findTotalCount() {
-		return categoryDao.findTotalCount();
+		return productCategoryDao.findTotalCount();
 	}
 
 	@Override
 	@CacheFlush(modelId="categoryFlushing")
 	public int saveCategory(ProductCategory obj) {
-		return categoryDao.saveCategory(obj);
+		return productCategoryDao.saveCategory(obj);
 	}
 
 	@Override
 	@CacheFlush(modelId="categoryFlushing")
 	public boolean updateCategory(ProductCategory obj) {
-		return categoryDao.updateCategory(obj);
+		return productCategoryDao.updateCategory(obj);
 	}
 
 	@Override
 	@Cacheable(modelId="categoryCaching")
 	public List<ProductCategory> findPage(PageParameter pp, int parentId) {
-		return categoryDao.findPage(pp, parentId);
+		return productCategoryDao.findPage(pp, parentId);
 	}
 
 	@Override
 	@Cacheable(modelId="categoryCaching")
 	public int findTotalCount(int id) {
-		return categoryDao.findTotalCount(id);
+		return productCategoryDao.findTotalCount(id);
 	}
 
 	@Override
 	@Cacheable(modelId="categoryCaching")
 	public List<ProductCategory> findTopAll() {
-		return categoryDao.findTopAll();
+		return productCategoryDao.findTopAll();
 	}
 
 }

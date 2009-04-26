@@ -7,11 +7,10 @@ import java.util.Map;
 import javax.servlet.jsp.JspException;
 
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import com.izhi.cms.model.ModelField;
 import com.izhi.cms.model.TemplateTag;
+import com.izhi.cms.service.ICmsService;
 import com.izhi.cms.service.ITemplateTagService;
 
 import freemarker.core.Environment;
@@ -24,21 +23,16 @@ public class CmsTag extends BaseCmsTag {
 	public int doStartTag() throws JspException {
 		try {
 			ITemplateTagService service=(ITemplateTagService)this.getBean("templateTagService");
-			SessionFactory sf=(SessionFactory)this.getBean("sessionFactory");
+			ICmsService dao=(ICmsService)this.getBean("cmsService");
+			
 			TemplateTag obj=service.findTemplateTagByName(name);
-			Session session=sf.getCurrentSession();
-			obj.getItemCount();
-			String sql="from "+obj.getModel().getClassName();
-			Query q=session.createQuery(sql);
-			q.setMaxResults(obj.getItemCount());
-			Map<String, Object> m=new HashMap<String, Object>();
-			m.put("data", q.list());
+			
 			
 			Environment e=Environment.getCurrentEnvironment();
 			
 			Template myTemplate = e.getConfiguration().getTemplate("cms/"+obj.getTemplate().getFileName()+".ftl");
 			
-			myTemplate.process(m, pageContext.getOut());
+			myTemplate.process(dao.findData(obj), pageContext.getOut());
 			/*pageContext.getOut().print(obj.getContent());*/
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -35,8 +35,8 @@ public class ProductAction extends BasePageAction{
 	private IProductService productService;
 	@Resource(name="productTypeService")
 	private IProductTypeService typeService;
-	@Resource(name="categoryService")
-	private IProductCategoryService categoryService;
+	@Resource(name="productCategoryService")
+	private IProductCategoryService productCategoryService;
 	@Resource(name="brandService")
 	private IBrandService brandService;
 	
@@ -73,14 +73,14 @@ public class ProductAction extends BasePageAction{
 	public String add(){
 		obj=new Product();
 		types=typeService.findAll();
-		categories=categoryService.findTopAll();
+		categories=productCategoryService.findTopAll();
 		brands=brandService.findAll();
 		return SUCCESS;
 	}
 	@Action("load")
 	public String load(){
 		types=typeService.findAll();
-		categories=categoryService.findTopAll();
+		categories=productCategoryService.findTopAll();
 		obj=productService.findProductById(id);
 		brands=brandService.findAll();
 		return SUCCESS;
@@ -177,11 +177,11 @@ public class ProductAction extends BasePageAction{
 	public void setTypeService(IProductTypeService typeService) {
 		this.typeService = typeService;
 	}
-	public IProductCategoryService getCategoryService() {
-		return categoryService;
+	public IProductCategoryService getProductCategoryService() {
+		return productCategoryService;
 	}
-	public void setCategoryService(IProductCategoryService categoryService) {
-		this.categoryService = categoryService;
+	public void setProductCategoryService(IProductCategoryService categoryService) {
+		this.productCategoryService = categoryService;
 	}
 	public List<ProductCategory> getCategories() {
 		return categories;

@@ -24,7 +24,7 @@ public class CategoryAction extends BasePageAction{
 	 */
 	private static final long serialVersionUID = 8190220809475487574L;
 	@Resource(name="productCategoryService")
-	private IProductCategoryService categoryService;
+	private IProductCategoryService productCategoryService;
 	private ProductCategory obj;
 	private List<Integer> ids;
 	private File image;
@@ -36,12 +36,12 @@ public class CategoryAction extends BasePageAction{
 	@Action("list")
 	public String list(){
 		PageParameter pp=this.getPageParameter();
-		int totalCount=(int)categoryService.findTotalCount();
+		int totalCount=(int)productCategoryService.findTotalCount();
 		pp.setCurrentPage(p);
 		pp.setTotalCount(totalCount);
 		pp.setSort("categoryId");
 		pp.setDir("desc");
-		List<ProductCategory> l=categoryService.findPage(pp);
+		List<ProductCategory> l=productCategoryService.findPage(pp);
 		this.getRequest().setAttribute("objs", l);
 		this.getRequest().setAttribute("page", pp);
 		return SUCCESS;
@@ -49,31 +49,31 @@ public class CategoryAction extends BasePageAction{
 	@Action("add")
 	public String add(){
 		obj=new ProductCategory();
-		topCategories=categoryService.findTopAll();
+		topCategories=productCategoryService.findTopAll();
 		return SUCCESS;
 	}
 	@Action("load")
 	public String load(){
-		obj=categoryService.findCategoryById(id);
-		topCategories=categoryService.findTopAll();
+		obj=productCategoryService.findCategoryById(id);
+		topCategories=productCategoryService.findTopAll();
 		return SUCCESS;
 	}
 	
 	@Action("delete")
 	public String delete(){
-		boolean i=categoryService.deleteCategory(id);
+		boolean i=productCategoryService.deleteCategory(id);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
 	@Action("children")
 	public String children(){
-		obj=categoryService.findCategoryById(id);
+		obj=productCategoryService.findCategoryById(id);
 		return SUCCESS;
 	}
 	@Action("deletes")
 	public String deletes(){
 		log.debug("Id size:"+ids.size());
-		boolean i=categoryService.deleteCategories(ids);
+		boolean i=productCategoryService.deleteCategories(ids);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
@@ -88,20 +88,20 @@ public class CategoryAction extends BasePageAction{
 			obj.setParent(null);
 		}
 		if(obj.getCategoryId()==0){
-			int i=categoryService.saveCategory(obj);
+			int i=productCategoryService.saveCategory(obj);
 			this.getRequest().setAttribute("success", i>0);
 		}else{
-			boolean i=categoryService.updateCategory(obj);
+			boolean i=productCategoryService.updateCategory(obj);
 			this.getRequest().setAttribute("success", i);
 		}
 		return SUCCESS;
 	}
 	
-	public IProductCategoryService getCategoryService() {
-		return categoryService;
+	public IProductCategoryService getProductCategoryService() {
+		return productCategoryService;
 	}
-	public void setCategoryService(IProductCategoryService categoryService) {
-		this.categoryService = categoryService;
+	public void setProductCategoryService(IProductCategoryService categoryService) {
+		this.productCategoryService = categoryService;
 	}
 	public List<Integer> getIds() {
 		return ids;

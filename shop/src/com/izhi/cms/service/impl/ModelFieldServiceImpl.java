@@ -12,7 +12,7 @@ import com.izhi.cms.dao.IModelFieldDao;
 import com.izhi.cms.model.ModelField;
 import com.izhi.cms.service.IModelFieldService;
 import com.izhi.platform.util.PageParameter;
-@Service("dataModelService")
+@Service("dataModelFieldService")
 public class ModelFieldServiceImpl implements IModelFieldService {
 
 	@Resource(name="modelFieldDao")
