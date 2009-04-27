@@ -10,8 +10,6 @@
 <script type="text/javascript" src="${base}/js/jquery.validate.js"></script>
 </head>
 <body style="">
-<@cms.tag name="user"/>
-
 	<form id="form1" action="${base}/member/register.jhtm" method="post">
 	<table width="100%" cellpadding="0" cellspacing="1" class="table_form">
 
@@ -21,7 +19,7 @@
 		<tr><td><font color="red">*</font>电子邮件：</td><td><input type="text" id="email" class="required" name="obj.email" class="required" email="true" title="email格式不正确！"></td></tr>
 		<tr><td><font color="red">*</font>密码问题：</td><td><input type="text" id="hintQuestion" class="required" name="obj.hintQuestion" title="密码问题不能为空！"></td></tr>
 		<tr><td><font color="red">*</font>密码答案：</td><td><input type="text" id="hintAnswer" class="required" name="obj.hintAnswer" title="密码答案不能为空！"></td></tr>
-		<tr valign="bottom"><td><font color="red">*</font>验证码：</td><td valign="bottom"><span><input type="text" id="code" name="code"  class="required" minlength=4 maxlength=4></span><span><img src="captcha.jpg"></span></td></tr>
+		<tr valign="bottom"><td><font color="red">*</font>验证码：</td><td valign="bottom"><span><input type="text" id="code" name="code"  class="required" minlength=4 maxlength=4 title="输入4位验证码！"></span><span><img src="captcha.jpg"></span></td></tr>
 		<tr><td colspan="2"><input type="submit" class="button_style" value="提交">&nbsp;&nbsp;<input type="reset"  class="button_style" value="重置"></td></tr>
 	</table>
 	</form>

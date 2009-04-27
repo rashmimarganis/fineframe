@@ -1,16 +1,12 @@
 package com.izhi.cms.tag;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 
-import org.hibernate.Query;
-
 import com.izhi.cms.model.ModelField;
 import com.izhi.cms.model.TemplateTag;
-import com.izhi.cms.service.ICmsService;
+import com.izhi.cms.service.CmsService;
 import com.izhi.cms.service.ITemplateTagService;
 
 import freemarker.core.Environment;
@@ -23,14 +19,14 @@ public class CmsTag extends BaseCmsTag {
 	public int doStartTag() throws JspException {
 		try {
 			ITemplateTagService service=(ITemplateTagService)this.getBean("templateTagService");
-			ICmsService dao=(ICmsService)this.getBean("cmsService");
+			CmsService dao=(CmsService)this.getBean("cmsService");
 			
 			TemplateTag obj=service.findTemplateTagByName(name);
-			
+			String moduleName=obj.getTemplate().getModule().getPackageName();
 			
 			Environment e=Environment.getCurrentEnvironment();
 			
-			Template myTemplate = e.getConfiguration().getTemplate("cms/"+obj.getTemplate().getFileName()+".ftl");
+			Template myTemplate = e.getConfiguration().getTemplate(moduleName+"/"+obj.getTemplate().getFileName()+".ftl");
 			
 			myTemplate.process(dao.findData(obj), pageContext.getOut());
 			/*pageContext.getOut().print(obj.getContent());*/

@@ -8,9 +8,9 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.izhi.cms.model.TemplateTag;
-import com.izhi.cms.service.ICmsService;
+import com.izhi.cms.service.CmsService;
 @Service(value="cmsService")
-public class CmsServiceImpl extends HibernateDaoSupport implements ICmsService {
+public class CmsServiceImpl extends HibernateDaoSupport implements CmsService {
 
 	/* (non-Javadoc)
 	 * @see com.izhi.cms.service.impl.ICmsService#findData(com.izhi.cms.model.TemplateTag)

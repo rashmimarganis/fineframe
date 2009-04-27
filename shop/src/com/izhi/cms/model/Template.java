@@ -26,6 +26,9 @@ public class Template implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="suit_id")
 	private TemplateSuit suit;
+	@ManyToOne
+	@JoinColumn(name="module_id")
+	private Module module;
 
 	public int getTemplateId() {
 		return templateId;
@@ -57,6 +60,14 @@ public class Template implements Serializable{
 
 	public void setSuit(TemplateSuit suit) {
 		this.suit = suit;
+	}
+
+	public Module getModule() {
+		return module;
+	}
+
+	public void setModule(Module module) {
+		this.module = module;
 	}
 	
 	

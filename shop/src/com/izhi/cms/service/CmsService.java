@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.izhi.cms.model.TemplateTag;
 
-public interface ICmsService {
+public interface CmsService {
 
 	public abstract Map<String, Object> findData(TemplateTag obj);
 
