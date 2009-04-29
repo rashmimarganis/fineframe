@@ -16,8 +16,8 @@ import com.izhi.shop.model.ProductCategory;
 import com.izhi.shop.service.IProductCategoryService;
 @Service
 @Scope(value="prototype")
-@Namespace("/category")
-public class CategoryAction extends BasePageAction{
+@Namespace("/productCategory")
+public class ProductCategoryAction extends BasePageAction{
 
 	/**
 	 * 
