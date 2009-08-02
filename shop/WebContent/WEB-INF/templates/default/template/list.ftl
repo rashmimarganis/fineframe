@@ -1,38 +1,35 @@
 <#compress>
 <table cellpadding="0" cellspacing="1" class="table_form">
-  <caption>品牌类别管理</caption>
+  <caption>模板管理</caption>
   <tr>
-    <td class="align_l"><a href="#" id="addBrand">添加品牌</a></td>
+    <td class="align_l"><a href="#" id="addTemplate">添加模板</a></td>
   </tr>
 </table>
 
 <table cellpadding="0" cellspacing="1" class="table_list">
-<caption>品牌类别管理</caption>
+<caption>模板管理</caption>
 <tr align="center">
 	<th width="35" class="align_c"><input type="checkbox" id="checkAll"></th>
-	<th width="10%">品牌编号</th>
-	<th width="10%">品牌名称</th>
-	<th>品牌Logo</th>
-	<th>官方网站</th>
-	<th>品牌介绍</th>
+	<th width="10%">模板编号</th>
+	<th width="10%">模板名称</th>
+	<th>所属方案</th>
 	<th width="100" class="align_c">操作</th>
 </tr>
 <#list objs as obj>
 	<tr>
-		<td class="align_c"><input type="checkbox" class="brand" name="brandId" value="${obj.brandId}"></td>
-		<td class="align_c">${obj.brandId}</td>
-		<td>${obj.brandName}</td>
-		<td class="align_c"><img src='${base+(obj.brandLogo)!""}' width="80" height="80"></td>
-		<td>${obj.brandUrl}</td>
-		<td>${obj.description}</td>
-		<td ><a href="#" class="brandEdit" id="${obj.brandId}">编辑</a>&nbsp;&nbsp;<a href="#" class="brandDelete" id="${obj.brandId}">删除</a></td>
+		<td class="align_c"><input type="checkbox" class="template" name="templateId" value="${obj.templateId}"></td>
+		<td class="align_c">${obj.templateId}</td>
+		<td>${obj.templateName}</td>
+		<td>${obj.suit.suitName}</td>
+	
+		<td ><a href="#" class="templateEdit" id="${obj.templateId}">编辑</a>&nbsp;&nbsp;<a href="#" class="templateDelete" id="${obj.templateId}">删除</a></td>
 	</tr>
 </#list>
 </table>
 <div class="button_box">
 		<a href="#" id="selectAll"onClick="javascript:selectAll('log');">全选</a>/<a href="#" id="cancelSel">取消</a>
         
-		<input type="submit" class="button_style" value="删除" id="deleteBrand">&nbsp;&nbsp;
+		<input type="submit" class="button_style" value="删除" id="deleteTemplate">&nbsp;&nbsp;
 </div>
 
 <div id="pages"><SPAN>总数：<b>${(page.totalCount)!}</b></SPAN>
@@ -44,31 +41,31 @@
 	var pageCount='${(page.totalPage)!}';
 	var limit=${(page.limit)!};
 	var cp='${(page.currentPage)!}';
-	var url='${base}/brand/list.jhtm?';
+	var url='${base}/template/list.jhtm?';
 	$('#checkAll').click(function(){
 		if($(this).attr('checked')){
-			selectAll('brand');
+			selectAll('template');
 		}else{
-			cancelSel('brand');
+			cancelSel('template');
 		}
 	});
 	
 	$('#selectAll').click(function(){
-		selectAll('brand');
+		selectAll('template');
 	});
-	$('#addBrand').click(function(){
-		loadPage('${base}/brand/add.jhtm');
+	$('#addTemplate').click(function(){
+		loadPage('${base}/template/add.jhtm');
 	});
 	$('#cancelSel').click(function(){
-		cancelSel('brand');
+		cancelSel('template');
 	});
 	
-	$('.brandEdit').click(function(){
-		loadPage("${base}/brand/load.jhtm?id="+$(this).attr("id"));
+	$('.templateEdit').click(function(){
+		loadPage("${base}/template/load.jhtm?id="+$(this).attr("id"));
 	});
-	$('.brandDelete').click(function(){
+	$('.templateDelete').click(function(){
 		if(confirm("确定要删除选中的品牌分类吗？")){
-			$.getJSON("${base}/brand/delete.jhtm?id="+$(this).attr("id"), function(o){
+			$.getJSON("${base}/template/delete.jhtm?id="+$(this).attr("id"), function(o){
 			  	if(o.success){
 			  		alert("删除成功！");
 			  		loadPage(url+'p='+cp);
@@ -80,14 +77,14 @@
 		}
 	});
 	
-	$("#deleteBrand").click(function(){
+	$("#deleteTemplate").click(function(){
 		deleteObj();
 	});
 	function deleteObj(){
-		if(!confirm("确定要删除品牌类别吗？")){
+		if(!confirm("确定要删除模板吗？")){
 			return;
 		}
-		$.post('${base}/brand/deletes.jhtm?'+getDelIds('brand','ids'),function(o){
+		$.post('${base}/template/deletes.jhtm?'+getDelIds('template','ids'),function(o){
 			eval("var o1="+o);
 			if(o1.success){
 				alert("删除成功！");
