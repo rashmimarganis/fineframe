@@ -1,4 +1,4 @@
-package com.izhi.cms.action;
+package com.izhi.framework.action;
 
 import java.util.List;
 
@@ -9,19 +9,19 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.cms.model.TemplateSuit;
-import com.izhi.cms.service.ITemplateSuitService;
+import com.izhi.framework.model.FrameTemplateFile;
+import com.izhi.framework.service.IFrameTemplateService;
 import com.izhi.platform.action.BasePageAction;
 import com.izhi.platform.util.PageParameter;
 @Service
 @Scope(value="prototype")
-@Namespace("/templatesuit")
-public class TemplateSuitAction extends BasePageAction{
+@Namespace("/frameTemplateFile")
+public class FrameTemplateAction extends BasePageAction{
 
 	private static final long serialVersionUID = 8190220809475487574L;
-	@Resource(name="templateSuitService")
-	private ITemplateSuitService templateSuitService;
-	private TemplateSuit obj;
+	@Resource(name="frameTemplateService")
+	private IFrameTemplateService templateService;
+	private FrameTemplateFile obj;
 	private List<Integer> ids;
 	
 	private int id;
@@ -30,37 +30,37 @@ public class TemplateSuitAction extends BasePageAction{
 	@Action("list")
 	public String list(){
 		PageParameter pp=this.getPageParameter();
-		int totalCount=(int)templateSuitService.findTotalCount();
+		int totalCount=(int)templateService.findTotalCount();
 		pp.setCurrentPage(p);
 		pp.setTotalCount(totalCount);
-		pp.setSort("templateSuitId");
+		pp.setSort("templateId");
 		pp.setDir("desc");
-		List<TemplateSuit> l=templateSuitService.findPage(pp);
+		List<FrameTemplateFile> l=templateService.findPage(pp);
 		this.getRequest().setAttribute("objs", l);
 		this.getRequest().setAttribute("page", pp);
 		return SUCCESS;
 	}
 	@Action("add")
 	public String add(){
-		obj=new TemplateSuit();
+		obj=new FrameTemplateFile();
 		return SUCCESS;
 	}
 	@Action("load")
 	public String load(){
-		obj=templateSuitService.findTemplateSuitById(id);
+		obj=templateService.findTemplateById(id);
 		return SUCCESS;
 	}
 	
 	@Action("delete")
 	public String delete(){
-		boolean i=templateSuitService.deleteTemplateSuit(id);
+		boolean i=templateService.deleteTemplate(id);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
 	@Action("deletes")
 	public String deletes(){
 		log.debug("Id size:"+ids.size());
-		boolean i=templateSuitService.deleteTemplateSuits(ids);
+		boolean i=templateService.deleteTemplates(ids);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
@@ -68,38 +68,42 @@ public class TemplateSuitAction extends BasePageAction{
 	@Action("save")
 	public String save(){
 		
-		if(obj.getSuitId()==0){
-			int i=templateSuitService.saveTemplateSuit(obj);
+		if(obj.getTemplateId()==0){
+			int i=templateService.saveTemplate(obj);
 			this.getRequest().setAttribute("success", i>0);
 		}else{
-			boolean i=templateSuitService.updateTemplateSuit(obj);
+			boolean i=templateService.updateTemplate(obj);
 			this.getRequest().setAttribute("success", i);
 		}
 		return SUCCESS;
 	}
 	
-	public ITemplateSuitService getTemplateSuitService() {
-		return templateSuitService;
-	}
-	public void setTemplateSuitService(ITemplateSuitService templateSuitService) {
-		this.templateSuitService = templateSuitService;
-	}
+	
 	public List<Integer> getIds() {
 		return ids;
 	}
 	public void setIds(List<Integer> ids) {
 		this.ids = ids;
 	}
-	public TemplateSuit getObj() {
-		return obj;
-	}
-	public void setObj(TemplateSuit obj) {
-		this.obj = obj;
-	}
+	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
+	public IFrameTemplateService getTemplateService() {
+		return templateService;
+	}
+	public void setTemplateService(IFrameTemplateService templateService) {
+		this.templateService = templateService;
+	}
+	public FrameTemplateFile getObj() {
+		return obj;
+	}
+	public void setObj(FrameTemplateFile obj) {
+		this.obj = obj;
+	}
+	
+	
 }

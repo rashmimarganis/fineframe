@@ -1,4 +1,4 @@
-package com.izhi.cms.action;
+package com.izhi.framework.action;
 
 import java.util.List;
 
@@ -9,19 +9,19 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.cms.model.TemplateSuit;
-import com.izhi.cms.service.ITemplateSuitService;
+import com.izhi.framework.model.FrameTemplateSuit;
+import com.izhi.framework.service.IFrameTemplateSuitService;
 import com.izhi.platform.action.BasePageAction;
 import com.izhi.platform.util.PageParameter;
 @Service
 @Scope(value="prototype")
-@Namespace("/templatesuit")
-public class TemplateSuitAction extends BasePageAction{
+@Namespace("/frameTemplateSuit")
+public class FrameTemplateSuitAction extends BasePageAction{
 
 	private static final long serialVersionUID = 8190220809475487574L;
-	@Resource(name="templateSuitService")
-	private ITemplateSuitService templateSuitService;
-	private TemplateSuit obj;
+	@Resource(name="frameTemplateSuitService")
+	private IFrameTemplateSuitService templateSuitService;
+	private FrameTemplateSuit obj;
 	private List<Integer> ids;
 	
 	private int id;
@@ -35,14 +35,14 @@ public class TemplateSuitAction extends BasePageAction{
 		pp.setTotalCount(totalCount);
 		pp.setSort("templateSuitId");
 		pp.setDir("desc");
-		List<TemplateSuit> l=templateSuitService.findPage(pp);
+		List<FrameTemplateSuit> l=templateSuitService.findPage(pp);
 		this.getRequest().setAttribute("objs", l);
 		this.getRequest().setAttribute("page", pp);
 		return SUCCESS;
 	}
 	@Action("add")
 	public String add(){
-		obj=new TemplateSuit();
+		obj=new FrameTemplateSuit();
 		return SUCCESS;
 	}
 	@Action("load")
@@ -78,28 +78,32 @@ public class TemplateSuitAction extends BasePageAction{
 		return SUCCESS;
 	}
 	
-	public ITemplateSuitService getTemplateSuitService() {
-		return templateSuitService;
-	}
-	public void setTemplateSuitService(ITemplateSuitService templateSuitService) {
-		this.templateSuitService = templateSuitService;
-	}
+	
 	public List<Integer> getIds() {
 		return ids;
 	}
 	public void setIds(List<Integer> ids) {
 		this.ids = ids;
 	}
-	public TemplateSuit getObj() {
-		return obj;
-	}
-	public void setObj(TemplateSuit obj) {
-		this.obj = obj;
-	}
+	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
+	public IFrameTemplateSuitService getTemplateSuitService() {
+		return templateSuitService;
+	}
+	public void setTemplateSuitService(IFrameTemplateSuitService templateSuitService) {
+		this.templateSuitService = templateSuitService;
+	}
+	public FrameTemplateSuit getObj() {
+		return obj;
+	}
+	public void setObj(FrameTemplateSuit obj) {
+		this.obj = obj;
+	}
+	
+	
 }

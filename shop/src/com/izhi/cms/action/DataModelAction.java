@@ -15,7 +15,7 @@ import com.izhi.platform.action.BasePageAction;
 import com.izhi.platform.util.PageParameter;
 @Service
 @Scope(value="prototype")
-@Namespace("/dataModel")
+@Namespace("/datamodel")
 public class DataModelAction extends BasePageAction{
 
 	private static final long serialVersionUID = 8190220809475487574L;

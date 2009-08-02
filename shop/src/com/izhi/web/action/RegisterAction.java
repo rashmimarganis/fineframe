@@ -19,6 +19,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.izhi.cms.tag.BlockTag;
+import com.izhi.cms.tag.TagDirective;
 import com.izhi.platform.webapp.security.captcha.JCaptchaServiceProxyImpl;
 import com.izhi.web.model.WebUser;
 import com.izhi.web.service.IUserWebService;
@@ -44,6 +46,8 @@ public class RegisterAction extends ActionSupport {
 
 	@Action(value="/register")
 	public String input(){
+		//this.getRequest().setAttribute("tag", new TagDirective());
+		//this.getRequest().setAttribute("block", new BlockTag());
 		
 		return SUCCESS;
 	}

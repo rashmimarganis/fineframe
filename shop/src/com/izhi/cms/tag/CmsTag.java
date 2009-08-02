@@ -8,6 +8,7 @@ import com.izhi.cms.model.ModelField;
 import com.izhi.cms.model.TemplateTag;
 import com.izhi.cms.service.CmsService;
 import com.izhi.cms.service.ITemplateTagService;
+import com.izhi.platform.util.SpringUtils;
 
 import freemarker.core.Environment;
 import freemarker.template.Template;
@@ -18,7 +19,9 @@ public class CmsTag extends BaseCmsTag {
 	private String name;
 	public int doStartTag() throws JspException {
 		try {
-			ITemplateTagService service=(ITemplateTagService)this.getBean("templateTagService");
+			//ITemplateTagService service=(ITemplateTagService)this.getBean("templateTagService");
+			
+			ITemplateTagService service=(ITemplateTagService)SpringUtils.getContext().getBean("templateTagService");
 			CmsService dao=(CmsService)this.getBean("cmsService");
 			
 			TemplateTag obj=service.findTemplateTagByName(name);
