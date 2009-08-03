@@ -19,19 +19,20 @@ public class ApplicationStartListener extends ContextLoaderListener implements
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
 		WebApplicationContext wac=WebApplicationContextUtils.getWebApplicationContext(event.getServletContext());
-		//IFunctionService resourceService=(IFunctionService)wac.getBean("functionService");
-		//resourceService.findAllUrl();
-		//event.getServletContext().setAttribute(Constants.APP_MANAGER_THEME,"default");
 		SpringUtils.setContext(wac);
-		tag=new TagDirective();
-		block=new BlockTag();
-		event.getServletContext().setAttribute("block", block);
-		
-		event.getServletContext().setAttribute("tag", tag);
-		
-		
+		initTag(event.getServletContext());
 	}
 	 public static void setupContext(ServletContext context) {
 		 
 	 }
+	 /*
+	  * Freemarker标签初始化
+	  */
+	 public void initTag(ServletContext app){
+		tag=new TagDirective();
+		block=new BlockTag();
+		app.setAttribute("block", block);
+		app.setAttribute("tag", tag);
+	 }
+	 
 }
