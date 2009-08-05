@@ -35,9 +35,9 @@ import com.izhi.platform.service.IUserService;
 
 public class UserCounterListener implements ServletContextListener,
 		HttpSessionAttributeListener {
-	public static final String COUNT_KEY = "Qesp_User_Counter";
-	public static final String USERS_KEY = "Qesp_User_Names";
-	public static final String USERS_SESSION = "Qesp_User_Sessions";
+	public static final String COUNT_KEY = "EntwinUser_Counter";
+	public static final String USERS_KEY = "EntwinUser_Names";
+	public static final String USERS_SESSION = "EntwinUser_Sessions";
 
 	public static final String EVENT_KEY = HttpSessionContextIntegrationFilter.ACEGI_SECURITY_CONTEXT_KEY;
 
