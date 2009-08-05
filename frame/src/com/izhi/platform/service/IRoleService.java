@@ -5,15 +5,15 @@ import java.util.Map;
 
 import org.acegisecurity.ConfigAttributeDefinition;
 
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.util.PageParameter;
 
 public interface IRoleService extends IBaseService<Role, Integer> {
-	ConfigAttributeDefinition findRolesByUrl(Shop org,String url);
+	ConfigAttributeDefinition findRolesByUrl(Org org,String url);
 	boolean findIsExist(String oldName);
-	Map<String,Object> findPage(PageParameter pp,Shop org);
-	Integer findTotalCount(Shop org);
+	Map<String,Object> findPage(PageParameter pp,Org org);
+	Integer findTotalCount(Org org);
 	Map<String,Object> findPage(PageParameter pp,int orgId,int userId );
 	Map<String,Object>  findRoleById(int id);
 	Role findObjById(int id);

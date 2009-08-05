@@ -72,7 +72,7 @@ public class User  implements UserDetails {
 	
 	@ManyToOne
 	@JoinColumn(name = "shop_id")
-	private Shop shop;
+	private Org org;
 	@Basic
 	private String realname;
 	@Basic
@@ -133,12 +133,12 @@ public class User  implements UserDetails {
 		this.realname = realname;
 	}
 
-	public Shop getShop() {
-		return shop;
+	public Org getShop() {
+		return org;
 	}
 
-	public void setShop(Shop shop) {
-		this.shop = shop;
+	public void setShop(Org org) {
+		this.org = org;
 	}
 
 	public String getHintQuestion() {

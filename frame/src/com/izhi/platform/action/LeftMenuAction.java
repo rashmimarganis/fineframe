@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.model.Function;
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IFunctionService;
@@ -36,8 +36,8 @@ public class LeftMenuAction extends BaseAction {
 	public String execute(){
 		if(SecurityUser.isOnline()){
 			User user=SecurityUser.getUser();
-			Shop org=SecurityUser.getShop(); 
-			nextFunctions=functionService.findNextFunctions(org.getShopId(),user.getUserId(), pid);
+			Org org=SecurityUser.getShop(); 
+			nextFunctions=functionService.findNextFunctions(org.getOrgId(),user.getUserId(), pid);
 		}else{
 			nextFunctions=new ArrayList<Function>();
 		}

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.izhi.platform.model.Function;
 import com.izhi.platform.model.Log;
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IFunctionService;
@@ -64,7 +64,7 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 	}
 
 	@Override
-	public void saveLogOperation(String url,Shop org) {
+	public void saveLogOperation(String url,Org org) {
 		if (SecurityUser.isOnline()) {
 			Log log = new Log();
 			log.setOperation(functionService.findFunctionByUrl(url).getFunctionTitle());
@@ -93,7 +93,7 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 		}
 		ConfigAttributeDefinition o=null;
 		
-		Shop org=null;
+		Org org=null;
 		if(SecurityUser.isOnline()){
 			org=SecurityUser.getShop();
 		}

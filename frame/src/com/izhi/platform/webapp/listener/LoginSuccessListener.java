@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.model.Log;
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.ILogService;
@@ -55,7 +55,7 @@ public class LoginSuccessListener implements ApplicationListener {
 			String ip=((WebAuthenticationDetails)obj).getRemoteAddress();
 			User user=(User)auth.getPrincipal();
 			user.setLastLoginIp(ip);
-			Shop org=SecurityUser.getShop();
+			Org org=SecurityUser.getShop();
 			Log spLog = new Log();
 			spLog.setIp(ip);
 			spLog.setUser(user);

@@ -12,16 +12,16 @@ import org.springframework.stereotype.Service;
 import org.springmodules.cache.annotations.CacheFlush;
 import org.springmodules.cache.annotations.Cacheable;
 
-import com.izhi.platform.dao.IShopDao;
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.dao.IOrgDao;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.service.BaseService;
 import com.izhi.platform.service.IShopService;
 import com.izhi.platform.util.PageParameter;
 
 @Service("shopService")
 public class ShopServiceImpl extends BaseService implements IShopService {
-	@Resource(name = "shopDao")
-	private IShopDao shopDao;
+	@Resource(name = "orgDao")
+	private IOrgDao orgDao;
 
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
@@ -31,14 +31,14 @@ public class ShopServiceImpl extends BaseService implements IShopService {
 
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
-	public void delete(Shop obj) {
-		shopDao.delete(obj);
+	public void delete(Org obj) {
+		orgDao.delete(obj);
 	}
 
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
 	public int delete(String ids, String id) {
-		return shopDao.delete(ids, id);
+		return orgDao.delete(ids, id);
 	}
 
 	@Override
@@ -50,68 +50,68 @@ public class ShopServiceImpl extends BaseService implements IShopService {
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
 	public void deleteAll() {
-		shopDao.deleteAll();
+		orgDao.deleteAll();
 	}
 
 	@Override
 	@Cacheable(modelId = "shopCaching")
-	public Shop findById(Integer id) {
-		if (shopDao.findIsExist(id)) {
-			return shopDao.findById(id);
+	public Org findById(Integer id) {
+		if (orgDao.findIsExist(id)) {
+			return orgDao.findById(id);
 		} else {
-			return new Shop();
+			return new Org();
 		}
 	}
 
 	@Override
 	
 	@Cacheable(modelId = "shopCaching")
-	public List<Shop> findPage(int firstResult, int maxResult, String sortField,
+	public List<Org> findPage(int firstResult, int maxResult, String sortField,
 			String sort) {
-		return shopDao.findPage(firstResult, maxResult, sortField, sort);
+		return orgDao.findPage(firstResult, maxResult, sortField, sort);
 	}
 
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
-	public Integer save(Shop obj) {
+	public Integer save(Org obj) {
 		return null;
 	}
 
-	public IShopDao getShopDao() {
-		return shopDao;
+	public IOrgDao getShopDao() {
+		return orgDao;
 	}
 
-	public void setShopDao(IShopDao dao) {
-		this.shopDao = dao;
+	public void setShopDao(IOrgDao dao) {
+		this.orgDao = dao;
 	}
 
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
-	public Integer save(Shop obj, String oldName) {
+	public Integer save(Org obj, String oldName) {
 		if (obj == null) {
 			return new Integer(-2);
 		}
 
 		// add
-		if (obj.getShopId() == 0) {
-			boolean exist = this.shopDao.findIsExist("name", obj.getShopName());
+		if (obj.getOrgId() == 0) {
+			boolean exist = this.orgDao.findIsExist("name", obj.getOrgName());
 			if (exist) {
 				// name exist
 				return new Integer(-1);
 			} else {
-				if (obj.getParent() == null || obj.getParent().getShopId() == 0) {
+				if (obj.getParent() == null || obj.getParent().getOrgId() == 0) {
 					obj.setParent(null);
 				}
-				return this.shopDao.save(obj);
+				return this.orgDao.save(obj);
 			}
 		} else {
 			// update
-			if (obj.getShopName().equals(oldName)) {
-				this.shopDao.update(obj);
+			if (obj.getOrgName().equals(oldName)) {
+				this.orgDao.update(obj);
 				// success
 				return new Integer(1);
-			} else if (!this.shopDao.findIsExist("name", obj.getShopName())) {
-				this.shopDao.update(obj);
+			} else if (!this.orgDao.findIsExist("name", obj.getOrgName())) {
+				this.orgDao.update(obj);
 				// success
 				return new Integer(1);
 			} else {
@@ -124,8 +124,8 @@ public class ShopServiceImpl extends BaseService implements IShopService {
 	@Override
 	
 	@Cacheable(modelId = "shopCaching")
-	public List<Shop> findChildren(Integer id) {
-		List<Shop> list = shopDao.findChildren(id);
+	public List<Org> findChildren(Integer id) {
+		List<Org> list = orgDao.findChildren(id);
 		return list;
 	}
 
@@ -133,54 +133,54 @@ public class ShopServiceImpl extends BaseService implements IShopService {
 	
 	@Cacheable(modelId = "shopCaching")
 	public String findChildNodes(Integer id) {
-		List<Map<String, Object>> list = shopDao.findChildNodes(id);
+		List<Map<String, Object>> list = orgDao.findChildNodes(id);
 		return JSONArray.fromObject(list).toString();
 	}
 
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
-	public boolean saveShop(Shop obj, String oldName) {
+	public boolean saveShop(Org obj, String oldName) {
 		int i=0;
-		if(this.findExist(obj.getShopName(), oldName)){
-			i=shopDao.updateShop(obj,oldName);
+		if(this.findExist(obj.getOrgName(), oldName)){
+			i=orgDao.updateShop(obj,oldName);
 		}
 		return i>0;
 	}
 
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
-	public boolean saveShop(Shop obj) {
-		return shopDao.saveShop(obj)>0;
+	public boolean saveShop(Org obj) {
+		return orgDao.saveShop(obj)>0;
 	}
 
 	@Override
 	
 	@Cacheable(modelId = "shopCaching")
 	public boolean findIsExist(String nameFiled, String name) {
-		return shopDao.findIsExist("name", name);
+		return orgDao.findIsExist("name", name);
 	}
 
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
-	public void update(Shop obj) {
-		shopDao.update(obj);
+	public void update(Org obj) {
+		orgDao.update(obj);
 
 	}
 
 	@Override
-	public List<Shop> find(String sql) {
+	public List<Org> find(String sql) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Shop> find(String sql, Object obj) {
+	public List<Org> find(String sql, Object obj) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Shop> find(String sql, String[] keys, Object[] objs) {
+	public List<Org> find(String sql, String[] keys, Object[] objs) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -188,50 +188,50 @@ public class ShopServiceImpl extends BaseService implements IShopService {
 	@Override
 	@Cacheable(modelId = "shopCaching")
 	public int findTotalCount() {
-		return shopDao.findTotalCount();
+		return orgDao.findTotalCount();
 	}
 
 
 	@Override
 	@Cacheable(modelId = "shopCaching")
 	public int findTotalCount(int parentId) {
-		return shopDao.findTotalCount(parentId);
+		return orgDao.findTotalCount(parentId);
 	}
 
 	@Override
 	@Cacheable(modelId = "shopCaching")
-	public List<Shop> findPage(PageParameter pp) {
-		return shopDao.findPage(pp);
+	public List<Org> findPage(PageParameter pp) {
+		return orgDao.findPage(pp);
 	}
 
 	@Override
 	@Cacheable(modelId = "shopCaching")
-	public List<Shop> findPage(PageParameter pp, int parentId) {
-		return shopDao.findPage(pp, parentId);
+	public List<Org> findPage(PageParameter pp, int parentId) {
+		return orgDao.findPage(pp, parentId);
 	}
 
 	@Override	
 	@Cacheable(modelId = "shopCaching")
-	public List<Shop> findTopPage(PageParameter pp) {
-		return shopDao.findTopPages(pp);
+	public List<Org> findTopPage(PageParameter pp) {
+		return orgDao.findTopPages(pp);
 	}
 
 	@Override
 	@Cacheable(modelId = "shopCaching")
 	public int findTopTotalCount() {
-		return shopDao.findTopTotalCount();
+		return orgDao.findTopTotalCount();
 	}
 
 	@Override
 	@Cacheable(modelId = "shopCaching")
 	public boolean findExist(String name, String oname) {
-		return shopDao.findExist(name, oname);
+		return orgDao.findExist(name, oname);
 	}
 
 	@Override
 	@CacheFlush(modelId = "shopFlushing")
 	public boolean deleteShops(List<Integer> ids) {
-		return shopDao.deleteShops(ids);
+		return orgDao.deleteShops(ids);
 	}
 
 }

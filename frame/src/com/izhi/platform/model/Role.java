@@ -34,7 +34,7 @@ public class Role implements Serializable,GrantedAuthority {
 	private String note;
 	@ManyToOne
 	@JoinColumn(name="shop_id")
-	private Shop shop;
+	private Org org;
 	
 	@ManyToMany( fetch = FetchType.LAZY)
 	@JoinTable(name = "p_user_roles", joinColumns = {@JoinColumn(name = "role_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "user_id",insertable=false,updatable=false))
@@ -61,11 +61,11 @@ public class Role implements Serializable,GrantedAuthority {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	public Shop getShop() {
-		return shop;
+	public Org getShop() {
+		return org;
 	}
-	public void setShop(Shop org) {
-		this.shop = org;
+	public void setShop(Org org) {
+		this.org = org;
 	}
 	public String getTitle() {
 		return title;

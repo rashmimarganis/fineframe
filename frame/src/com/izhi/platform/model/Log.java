@@ -33,7 +33,7 @@ public class Log implements Serializable {
 	private String ip;
 	@ManyToOne(cascade={CascadeType.REMOVE})
 	@JoinColumn(name="shop_id",insertable=true,updatable=false)
-	private Shop shop;
+	private Org org;
 	public int getLogId() {
 		return logId;
 	}
@@ -61,11 +61,11 @@ public class Log implements Serializable {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
-	public Shop getShop() {
-		return shop;
+	public Org getShop() {
+		return org;
 	}
-	public void setShop(Shop org) {
-		this.shop = org;
+	public void setShop(Org org) {
+		this.org = org;
 	}
 	public Date getTime() {
 		return time;

@@ -15,7 +15,7 @@ import org.apache.struts2.convention.annotation.Results;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IFunctionService;
@@ -82,7 +82,7 @@ public class RoleAction extends BasePageAction {
 	}
 	@Action(value="save")
 	public String save(){
-		if(obj==null||obj.getShop()==null||obj.getShop().getShopId()==0){
+		if(obj==null||obj.getShop()==null||obj.getShop().getOrgId()==0){
 			obj.setShop(SecurityUser.getShop());
 		}
 		int r=roleService.save(obj, oldName);
@@ -100,8 +100,8 @@ public class RoleAction extends BasePageAction {
 	}
 	@Action(value="page")
 	public String page(){
-		Shop org=null;
-		if(obj==null||obj.getShop()==null||obj.getShop().getShopId()==0){
+		Org org=null;
+		if(obj==null||obj.getShop()==null||obj.getShop().getOrgId()==0){
 			org=SecurityUser.getShop();
 		}else{
 			org=obj.getShop();

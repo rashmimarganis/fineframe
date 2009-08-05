@@ -17,7 +17,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 @Entity
 @Table(name="p_shops")
-public class Shop implements Serializable {
+public class Org implements Serializable {
 
 	/**
 	 * 
@@ -27,35 +27,35 @@ public class Shop implements Serializable {
 	@Basic(fetch=FetchType.EAGER)
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="shop_id")
-	private int shopId;
+	private int orgId;
 	@Column(length=32,name="shop_name")
-	private String shopName;
+	private String orgName;
 	@Column(length=32)
 	private String title;
 	private int type;
 	@ManyToOne(optional=true,fetch=FetchType.EAGER)
 	@NotFound(action=NotFoundAction.IGNORE)
 	@JoinColumn(name="parent_id",updatable=true,nullable=true)
-	private Shop parent;
+	private Org parent;
 	@Column
 	private int sort=0;
 
-	public int getShopId() {
-		return shopId;
+	public int getOrgId() {
+		return orgId;
 	}
-	public void setShopId(int id) {
-		this.shopId = id;
+	public void setOrgId(int id) {
+		this.orgId = id;
 	}
-	public String getShopName() {
-		return shopName;
+	public String getOrgName() {
+		return orgName;
 	}
-	public void setShopName(String name) {
-		this.shopName = name;
+	public void setOrgName(String name) {
+		this.orgName = name;
 	}
-	public Shop getParent() {
+	public Org getParent() {
 		return parent;
 	}
-	public void setParent(Shop parent) {
+	public void setParent(Org parent) {
 		this.parent = parent;
 	}
 	

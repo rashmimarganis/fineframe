@@ -13,7 +13,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IShopService;
 import com.izhi.platform.util.PageParameter;
@@ -28,7 +28,7 @@ public class ShopAction extends BasePageAction {
 	private static final long serialVersionUID = -3796085807778344395L;
 	@Resource(name="shopService")
 	private IShopService service;
-	private Shop obj;
+	private Org obj;
 	private int id=0;
 	
 	public int getId() {
@@ -62,7 +62,7 @@ public class ShopAction extends BasePageAction {
 	@Action(value="load")
 	public String load() {
 		if(id==0){
-			id=SecurityUser.getShop().getShopId();
+			id=SecurityUser.getShop().getOrgId();
 		}
 		obj = this.service.findById(id);
 		return SUCCESS;
@@ -76,7 +76,7 @@ public class ShopAction extends BasePageAction {
 		pp.setTotalCount(totalCount);
 		pp.setSort("shopId");
 		pp.setDir("desc");
-		List<Shop> l=service.findTopPage(pp);
+		List<Org> l=service.findTopPage(pp);
 		this.getRequest().setAttribute("objs", l);
 		this.getRequest().setAttribute("page", pp);
 		return SUCCESS;
@@ -90,7 +90,7 @@ public class ShopAction extends BasePageAction {
 		pp.setTotalCount(totalCount);
 		pp.setSort("shopId");
 		pp.setDir("desc");
-		List<Shop> l=service.findTopPage(pp);
+		List<Org> l=service.findTopPage(pp);
 		this.getRequest().setAttribute("objs", l);
 		this.getRequest().setAttribute("page", pp);
 		return SUCCESS;
@@ -99,7 +99,7 @@ public class ShopAction extends BasePageAction {
 	@Action(value="save")
 	public String save() {
 		boolean s=false;
-		if(obj.getShopId()==0){
+		if(obj.getOrgId()==0){
 			s=this.service.saveShop(obj);
 		}else{
 			s=this.service.saveShop(obj,oldName);
@@ -128,11 +128,11 @@ public class ShopAction extends BasePageAction {
 		this.service = service;
 	}
 
-	public Shop getObj() {
+	public Org getObj() {
 		return obj;
 	}
 
-	public void setObj(Shop obj) {
+	public void setObj(Org obj) {
 		this.obj = obj;
 	}
 

@@ -8,7 +8,7 @@ import org.acegisecurity.userdetails.UserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.User;
 
 public class SecurityUser {
@@ -138,8 +138,8 @@ public class SecurityUser {
 		return null;
 	}
 
-	public static Shop getShop() {
-		Shop org = null;
+	public static Org getShop() {
+		Org org = null;
 		User u = SecurityUser.getUser();
 		if (u != null) {
 			org = u.getShop();

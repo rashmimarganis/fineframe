@@ -27,7 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.izhi.platform.model.Log;
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.ILogService;
@@ -118,7 +118,7 @@ public class UserCounterListener implements ServletContextListener,
 			WebApplicationContext wac = WebApplicationContextUtils
 			.getWebApplicationContext(servletContext);
 			ILogService logService = (ILogService) wac.getBean("logService");
-			Shop org=SecurityUser.getShop();
+			Org org=SecurityUser.getShop();
 			Log spLog = new Log();
 			spLog.setOperation("成功退出系统");
 			spLog.setTime(new Date());

@@ -15,7 +15,7 @@ import org.springmodules.cache.annotations.Cacheable;
 
 import com.izhi.platform.dao.IFunctionDao;
 import com.izhi.platform.model.Function;
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.User;
 import com.izhi.platform.service.BaseService;
 import com.izhi.platform.service.IFunctionService;
@@ -158,13 +158,13 @@ public class FunctionServiceImpl extends BaseService implements
 
 	@Override
 	@Cacheable(modelId = "functionCaching")
-	public List<Function> findChildren(Shop org, User user, String parentName) {
+	public List<Function> findChildren(Org org, User user, String parentName) {
 		if (org == null || user == null || parentName == null
 				|| parentName.equals("")) {
 			return new ArrayList<Function>();
 		}
 		Integer userId = user.getUserId();
-		Integer orgId = org.getShopId();
+		Integer orgId = org.getOrgId();
 		String[] keys = new String[] { "orgId", "userId", "parentName" };
 		Object[] values = new Object[] { orgId, userId, parentName };
 		List<Function> nextMenus = functionDao.findChildren(keys, values);

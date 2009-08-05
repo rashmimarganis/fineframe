@@ -18,7 +18,7 @@ import org.springmodules.cache.annotations.CacheFlush;
 import org.springmodules.cache.annotations.Cacheable;
 
 import com.izhi.platform.dao.IUserDao;
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.User;
 import com.izhi.web.model.WebUser;
 import com.izhi.web.service.IUserWebService;
@@ -82,7 +82,7 @@ public class UserWebServiceImpl implements IUserWebService {
 		user.setLocked(false);
 		user.setConcurrentMax(10);
 		user.setEnabled(true);
-		Shop shop = new Shop();
+		Org org = new Org();
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("MD5");
@@ -96,8 +96,8 @@ public class UserWebServiceImpl implements IUserWebService {
 		u.setValidateCode(validate);
 		user.setValidateCode(validate);
 		user.setValidated(false);
-		shop.setShopId(1);
-		user.setShop(shop);
+		org.setOrgId(1);
+		user.setShop(org);
 		Integer id = userDao.save(user);
 		u.setUserId(id);
 		return u;

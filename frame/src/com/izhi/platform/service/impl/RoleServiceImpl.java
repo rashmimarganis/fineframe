@@ -21,7 +21,7 @@ import org.springmodules.cache.annotations.CacheFlush;
 import org.springmodules.cache.annotations.Cacheable;
 
 import com.izhi.platform.dao.IRoleDao;
-import com.izhi.platform.model.Shop;
+import com.izhi.platform.model.Org;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.security.support.Constants;
 import com.izhi.platform.security.support.SecurityUser;
@@ -73,7 +73,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Override
 	
 	@Cacheable(modelId = "roleCaching")
-	public ConfigAttributeDefinition findRolesByUrl(Shop org, String url) {
+	public ConfigAttributeDefinition findRolesByUrl(Org org, String url) {
 		List<String> urls = functionService.findAllUrl();
 		List<String> roles = new ArrayList<String>();
 		boolean matched = false;
@@ -238,8 +238,8 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Override
 	
 	@Cacheable(modelId = "roleCaching")
-	public Map<String, Object> findPage(PageParameter pp, Shop org) {
-		if (org == null || org.getShopId() == 0) {
+	public Map<String, Object> findPage(PageParameter pp, Org org) {
+		if (org == null || org.getOrgId() == 0) {
 			org = SecurityUser.getShop();
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -255,7 +255,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Override
 	
 	@Cacheable(modelId = "roleCaching")
-	public Integer findTotalCount(Shop org) {
+	public Integer findTotalCount(Org org) {
 		return roleDao.findTotalCount(org);
 	}
 
@@ -264,13 +264,13 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Cacheable(modelId = "roleCaching")
 	public Map<String, Object> findPage(PageParameter pp, int orgId, int userId) {
 		if (orgId == 0) {
-			orgId = SecurityUser.getShop().getShopId();
+			orgId = SecurityUser.getShop().getOrgId();
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (pp != null) {
 			List<Map<String, Object>> lp = roleDao.findPage(pp, orgId, userId);
-			Shop o = new Shop();
-			o.setShopId(orgId);
+			Org o = new Org();
+			o.setOrgId(orgId);
 			Integer tc = roleDao.findTotalCount(o);
 			map.put("totalCount", tc);
 			map.put("objs", lp);
