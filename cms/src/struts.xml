@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+        "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.convention.default.parent.package" value="crud-default" />
+	<constant name="struts.convention.package.locators" value="action" />
+	<constant name= "struts.convention.action.suffix" value= "Action" /> 
+	<!-- <constant name= "struts.convention.action.mapAllMatches" value= "true" /> -->
+	<constant name="struts.action.extension" value="jhtm" />	
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.enable.SlashesInActionNames" value="true" />
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<!-- <constant name="struts.freemarker.templatesCache" value="false" />-->
+	<constant name="struts.convention.result.path" value="/WEB-INF/templates/default/"/>
+	<!-- <constant name="struts.convention.result.path" value="/WEB-INF/templates/default/"/>
+	<constant name="struts.convention.action.name.separator" value="_"/> 
+	<constant name="struts.convention.action.includeJars" value="" /> 
+	<constant name="struts.convention.relative.result.types" value="freemarker,dispatcher,velocity"/> 
+	<constant name="struts.convention.result.flatLayout" value="true"/> 
+	 -->
+	<!-- <result-type name="freemarker"  class="org.apache.struts2.views.freemarker.FreemarkerResult" default="true"/> -->    
+	<!-- 用于CRUD Action的parent package -->
+	<package name="crud-default" extends="convention-default">
+		<!-- 基于paramsPrepareParamsStack,
+			增加store interceptor保证actionMessage在redirect后不会丢失 -->
+		<result-types>
+		   <result-type name="myfreemarker" class="com.izhi.platform.webapp.template.MyFreemarkerResult" />
+		</result-types>
+		<interceptors>
+			<interceptor-stack name="crudStack">
+				<interceptor-ref name="store">
+					<param name="operationMode">AUTOMATIC</param>
+				</interceptor-ref>
+				<interceptor-ref name="paramsPrepareParamsStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="crudStack" />
+		<!-- <default-action-ref name="main"/> -->
+		<global-results>
+            <result name="login" type="redirect">/login.jsp</result>
+            <result name="exception">/common/exception.jsp</result>
+        </global-results>
+		<global-exception-mappings>
+            <exception-mapping exception="java.sql.SQLException" result="SQLException"/>
+            <exception-mapping exception="java.lang.Exception" result="Exception"/>
+        </global-exception-mappings>
+	</package>
+
+	<!-- 
+		使用Convention插件,实现约定大于配置的零配置文件风格.
+	           特殊的Result路径在Action类中使用@Result设定. 
+	-->
+</struts>

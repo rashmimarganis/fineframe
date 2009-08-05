@@ -1,0 +1,1 @@
+{'success':<#if success>true<#else>false</#if>}

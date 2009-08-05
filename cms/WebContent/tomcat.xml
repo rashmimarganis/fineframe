@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+  <!--
+      Copyright 2004 camry.wu@gmail.com
+      Ant build environment for tomcat
+  -->
+  
+  <root>
+    <tomcat>
+      <!-- 配置 tomcat.home 位置 -->
+      <home value="D:/Tomcat6.0"/>
+      <!-- 配置 tomcat 的管理界面 -->
+      <manager>
+        <url>http://127.0.0.1:8080/manager</url>
+        <username>manager</username>
+        <password>tomcat</password>
+      </manager>
+    </tomcat>
+  
+    <path>
+      <!-- 配置发布的源 war 位置 -->
+      <war>war</war>
+      <!-- 发布到 tomcat 的 webapps 目录下 -->
+      <deploy>${tomcat.home}/webapps</deploy>
+    </path>
+  </root>
