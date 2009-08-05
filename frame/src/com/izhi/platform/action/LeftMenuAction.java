@@ -36,7 +36,7 @@ public class LeftMenuAction extends BaseAction {
 	public String execute(){
 		if(SecurityUser.isOnline()){
 			User user=SecurityUser.getUser();
-			Org org=SecurityUser.getShop(); 
+			Org org=SecurityUser.getOrg(); 
 			nextFunctions=functionService.findNextFunctions(org.getOrgId(),user.getUserId(), pid);
 		}else{
 			nextFunctions=new ArrayList<Function>();

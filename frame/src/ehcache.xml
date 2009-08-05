@@ -346,7 +346,7 @@
            overflowToDisk="true"
            memoryStoreEvictionPolicy="LFU"
     />
- 	<cache name="shopCache"
+ 	<cache name="orgCache"
            maxElementsInMemory="5000"
            maxElementsOnDisk="1000"
            eternal="true"

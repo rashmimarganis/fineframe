@@ -5,11 +5,11 @@ import java.util.List;
 import com.izhi.platform.model.Org;
 import com.izhi.platform.util.PageParameter;
 
-public interface IShopService extends IBaseService<Org, Integer> {
+public interface IOrgService extends IBaseService<Org, Integer> {
 	List<Org> findChildren(Integer id);
 	String findChildNodes(Integer id);
-	boolean saveShop(Org obj,String oldName); 
-	boolean saveShop(Org obj); 
+	boolean saveOrg(Org obj,String oldName); 
+	boolean saveOrg(Org obj); 
 	boolean findIsExist(String nameFiled,String name);
 	int findTotalCount();
 	int findTopTotalCount();
@@ -18,7 +18,7 @@ public interface IShopService extends IBaseService<Org, Integer> {
 	List<Org> findPage(PageParameter pp,int parentId);
 	int findTotalCount(int parentId);
 	boolean findExist(String name,String oname);
-	boolean deleteShops(List<Integer> ids);
+	boolean deleteOrgs(List<Integer> ids);
 	
 	
 }

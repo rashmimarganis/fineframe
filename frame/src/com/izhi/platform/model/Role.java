@@ -33,7 +33,7 @@ public class Role implements Serializable,GrantedAuthority {
 	@Column(length=100)
 	private String note;
 	@ManyToOne
-	@JoinColumn(name="shop_id")
+	@JoinColumn(name="org_id")
 	private Org org;
 	
 	@ManyToMany( fetch = FetchType.LAZY)
@@ -61,10 +61,10 @@ public class Role implements Serializable,GrantedAuthority {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	public Org getShop() {
+	public Org getOrg() {
 		return org;
 	}
-	public void setShop(Org org) {
+	public void setOrg(Org org) {
 		this.org = org;
 	}
 	public String getTitle() {

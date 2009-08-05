@@ -133,11 +133,11 @@ public class User  implements UserDetails {
 		this.realname = realname;
 	}
 
-	public Org getShop() {
+	public Org getOrg() {
 		return org;
 	}
 
-	public void setShop(Org org) {
+	public void setOrg(Org org) {
 		this.org = org;
 	}
 

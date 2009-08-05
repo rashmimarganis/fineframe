@@ -82,8 +82,8 @@ public class RoleAction extends BasePageAction {
 	}
 	@Action(value="save")
 	public String save(){
-		if(obj==null||obj.getShop()==null||obj.getShop().getOrgId()==0){
-			obj.setShop(SecurityUser.getShop());
+		if(obj==null||obj.getOrg()==null||obj.getOrg().getOrgId()==0){
+			obj.setOrg(SecurityUser.getOrg());
 		}
 		int r=roleService.save(obj, oldName);
 		this.out(""+r);
@@ -94,17 +94,17 @@ public class RoleAction extends BasePageAction {
 		roleService.delete(ids);
 		Map<String,Object> m=new HashMap<String, Object>();
 		m.put("success", true);
-		m.put("totalCount", roleService.findTotalCount(obj.getShop()));
+		m.put("totalCount", roleService.findTotalCount(obj.getOrg()));
 		this.out(JSONObject.fromObject(m).toString());
 		return null;
 	}
 	@Action(value="page")
 	public String page(){
 		Org org=null;
-		if(obj==null||obj.getShop()==null||obj.getShop().getOrgId()==0){
-			org=SecurityUser.getShop();
+		if(obj==null||obj.getOrg()==null||obj.getOrg().getOrgId()==0){
+			org=SecurityUser.getOrg();
 		}else{
-			org=obj.getShop();
+			org=obj.getOrg();
 		}
 		
 		this.out(JSONObject.fromObject(roleService.findPage(this.getPageParameter(),org)).toString());

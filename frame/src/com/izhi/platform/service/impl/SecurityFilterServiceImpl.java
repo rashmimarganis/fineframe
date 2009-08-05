@@ -72,7 +72,7 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 			User user = SecurityUser.getUser();
 			log.setUser(user);
 			log.setUrl(url);
-			log.setShop(org);
+			log.setOrg(org);
 			log.setIp(SecurityUser.getLoginIp());
 			logService.save(log);
 		}
@@ -95,7 +95,7 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 		
 		Org org=null;
 		if(SecurityUser.isOnline()){
-			org=SecurityUser.getShop();
+			org=SecurityUser.getOrg();
 		}
 		o=roleService.findRolesByUrl(org,url);
 		if(o!=null){

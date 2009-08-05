@@ -240,7 +240,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Cacheable(modelId = "roleCaching")
 	public Map<String, Object> findPage(PageParameter pp, Org org) {
 		if (org == null || org.getOrgId() == 0) {
-			org = SecurityUser.getShop();
+			org = SecurityUser.getOrg();
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (pp != null) {
@@ -264,7 +264,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Cacheable(modelId = "roleCaching")
 	public Map<String, Object> findPage(PageParameter pp, int orgId, int userId) {
 		if (orgId == 0) {
-			orgId = SecurityUser.getShop().getOrgId();
+			orgId = SecurityUser.getOrg().getOrgId();
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (pp != null) {

@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 @Entity
-@Table(name="p_shops")
+@Table(name="p_orgs")
 public class Org implements Serializable {
 
 	/**
@@ -26,9 +26,9 @@ public class Org implements Serializable {
 	@Id
 	@Basic(fetch=FetchType.EAGER)
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="shop_id")
+	@Column(name="org_id")
 	private int orgId;
-	@Column(length=32,name="shop_name")
+	@Column(length=32,name="org_name")
 	private String orgName;
 	@Column(length=32)
 	private String title;

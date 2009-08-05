@@ -41,7 +41,7 @@ public class LoginSuccessListener implements ApplicationListener {
 			Log spLog = new Log();
 			spLog.setIp(ip);
 			spLog.setUser(user);
-			spLog.setShop(user.getShop());
+			spLog.setOrg(user.getOrg());
 			spLog.setOperation("成功登录系统");
 			log.debug("User:"+user.getUsername()+" 成功登录系统");
 			spLog.setUrl("/login.jsp");
@@ -55,11 +55,11 @@ public class LoginSuccessListener implements ApplicationListener {
 			String ip=((WebAuthenticationDetails)obj).getRemoteAddress();
 			User user=(User)auth.getPrincipal();
 			user.setLastLoginIp(ip);
-			Org org=SecurityUser.getShop();
+			Org org=SecurityUser.getOrg();
 			Log spLog = new Log();
 			spLog.setIp(ip);
 			spLog.setUser(user);
-			spLog.setShop(org);
+			spLog.setOrg(org);
 			spLog.setOperation("切换组织");
 			spLog.setUrl("");
 			//logService.save(spLog);

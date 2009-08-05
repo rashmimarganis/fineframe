@@ -138,11 +138,11 @@ public class SecurityUser {
 		return null;
 	}
 
-	public static Org getShop() {
+	public static Org getOrg() {
 		Org org = null;
 		User u = SecurityUser.getUser();
 		if (u != null) {
-			org = u.getShop();
+			org = u.getOrg();
 		}
 		return org;
 	}

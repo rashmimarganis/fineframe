@@ -1,12 +1,8 @@
 package com.izhi.platform.action;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
-
-import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -15,19 +11,19 @@ import org.springframework.stereotype.Service;
 
 import com.izhi.platform.model.Org;
 import com.izhi.platform.security.support.SecurityUser;
-import com.izhi.platform.service.IShopService;
+import com.izhi.platform.service.IOrgService;
 import com.izhi.platform.util.PageParameter;
 @Service
 @Scope(value="prototype")
 @Namespace("/shop")
-public class ShopAction extends BasePageAction {
+public class OrgAction extends BasePageAction {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3796085807778344395L;
 	@Resource(name="shopService")
-	private IShopService service;
+	private IOrgService service;
 	private Org obj;
 	private int id=0;
 	
@@ -62,7 +58,7 @@ public class ShopAction extends BasePageAction {
 	@Action(value="load")
 	public String load() {
 		if(id==0){
-			id=SecurityUser.getShop().getOrgId();
+			id=SecurityUser.getOrg().getOrgId();
 		}
 		obj = this.service.findById(id);
 		return SUCCESS;
@@ -100,9 +96,9 @@ public class ShopAction extends BasePageAction {
 	public String save() {
 		boolean s=false;
 		if(obj.getOrgId()==0){
-			s=this.service.saveShop(obj);
+			s=this.service.saveOrg(obj);
 		}else{
-			s=this.service.saveShop(obj,oldName);
+			s=this.service.saveOrg(obj,oldName);
 		}
 		this.getRequest().setAttribute("success", s);
 		return SUCCESS;
@@ -120,11 +116,11 @@ public class ShopAction extends BasePageAction {
 		return SUCCESS;
 	}
 
-	public IShopService getService() {
+	public IOrgService getService() {
 		return service;
 	}
 
-	public void setService(IShopService service) {
+	public void setService(IOrgService service) {
 		this.service = service;
 	}
 

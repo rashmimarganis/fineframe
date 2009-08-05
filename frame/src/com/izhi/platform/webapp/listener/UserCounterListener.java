@@ -118,13 +118,13 @@ public class UserCounterListener implements ServletContextListener,
 			WebApplicationContext wac = WebApplicationContextUtils
 			.getWebApplicationContext(servletContext);
 			ILogService logService = (ILogService) wac.getBean("logService");
-			Org org=SecurityUser.getShop();
+			Org org=SecurityUser.getOrg();
 			Log spLog = new Log();
 			spLog.setOperation("成功退出系统");
 			spLog.setTime(new Date());
 			spLog.setUser(user);
 			spLog.setUrl("/logout.jsp");
-			spLog.setShop(org);
+			spLog.setOrg(org);
 			spLog.setIp(SecurityUser.getLoginIp());
 			logService.save(spLog);
 		}

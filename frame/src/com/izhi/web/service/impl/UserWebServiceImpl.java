@@ -97,7 +97,7 @@ public class UserWebServiceImpl implements IUserWebService {
 		user.setValidateCode(validate);
 		user.setValidated(false);
 		org.setOrgId(1);
-		user.setShop(org);
+		user.setOrg(org);
 		Integer id = userDao.save(user);
 		u.setUserId(id);
 		return u;

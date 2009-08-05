@@ -35,7 +35,7 @@ public class MainAction extends BaseAction {
 	public String execute(){
 		user=SecurityUser.getUser();
 		site.put("name", "FineCMS网站管理系统");
-		org=SecurityUser.getShop();
+		org=SecurityUser.getOrg();
 		topFunctions=functionService.findTopFunctions(org.getOrgId(), user.getUserId());
 		if(topFunctions==null){
 			topFunctions=new ArrayList<Function>();

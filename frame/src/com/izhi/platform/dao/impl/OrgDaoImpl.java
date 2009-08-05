@@ -42,7 +42,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 
 
 	@Override
-	public int saveShop(Org obj) {
+	public int saveOrg(Org obj) {
 		return (Integer)this.getHibernateTemplate().save(obj);
 	}
 	
@@ -131,7 +131,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 	}
 
 	@Override
-	public int updateShop(Org obj, String on) {
+	public int updateOrg(Org obj, String on) {
 		this.getHibernateTemplate().update(obj);
 		return 1;
 	}

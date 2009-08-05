@@ -83,7 +83,7 @@ public class FunctionAction extends BaseAction {
 	public String topFunctions() {
 		if (!SecurityUser.isAnonymous()) {
 			User user = SecurityUser.getUser();
-			Org org = SecurityUser.getShop();
+			Org org = SecurityUser.getOrg();
 			this.out(JSONObject.fromObject(service.findTopFunctions(org.getOrgId(), user.getUserId())).toString());
 		} else {
 			this.out("[]");
