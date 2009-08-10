@@ -27,30 +27,18 @@ public class MainAction extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	private Map<String,Object> site=new HashMap<String, Object>();
 	private User user;
-	private List<Function> topFunctions=new ArrayList<Function>();
 	private Org org;
-	@Resource(name="functionService")
-	private IFunctionService functionService;
 	@Action(value="main")
 	public String execute(){
 		user=SecurityUser.getUser();
 		site.put("name", "FineCMS网站管理系统");
-		org=SecurityUser.getOrg();
-		topFunctions=functionService.findTopFunctions(org.getOrgId(), user.getUserId());
-		if(topFunctions==null){
-			topFunctions=new ArrayList<Function>();
-		}
+		
 		return SUCCESS;
 	}
 	public User getUser() {
 		return user;
 	}
-	public List<Function> getTopFunctions() {
-		return topFunctions;
-	}
-	public void setFunctionService(IFunctionService functionService) {
-		this.functionService = functionService;
-	}
+	
 	public Org getOrg() {
 		return org;
 	}

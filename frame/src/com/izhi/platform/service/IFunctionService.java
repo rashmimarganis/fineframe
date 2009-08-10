@@ -25,4 +25,6 @@ public interface IFunctionService extends IBaseService<Function,Integer> {
 	List<String> findAllUrl();
 	List<String> findRolesByUrl( String url);
 	Function findFunctionByUrl(String url);
+	
+	List<Map<String,Object>> findMenus(int orgId, int userId, int pid);
 }

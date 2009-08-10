@@ -7,7 +7,7 @@
 	default-autowire="byType" default-lazy-init="true">
 	<jaxws:client id="userClient"
 		serviceClass="com.izhi.web.service.IUserWebService"
-		address="http://localhost:8080/lejia/service/UserService">
+		address="http://localhost:8080/frame/service/UserService">
 		<jaxws:outInterceptors>
 			<ref bean="wss4jOutConfiguration" />
 		</jaxws:outInterceptors>

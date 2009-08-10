@@ -18,5 +18,6 @@ public interface IFunctionDao extends IBaseDao<Function,Integer> {
 	List<Map<String,Object>> findTreeNodes(int fid);
 	List<Map<String,Object>> findChildren(int id,int roleId);
 	List<Function> findNextFunctions(int orgId, int userId, int pid);
+	List<Map<String,Object>> findMenus(int orgId, int userId, int pid);
 	
 }

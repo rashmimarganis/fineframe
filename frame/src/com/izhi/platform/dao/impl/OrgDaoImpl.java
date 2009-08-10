@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.izhi.platform.dao.IOrgDao;
 import com.izhi.platform.model.Org;
 import com.izhi.platform.util.PageParameter;
-@Service("shopDao")
+@Service("orgDao")
 public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 
 	@Override
@@ -77,7 +77,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 		int maxResult=pp.getLimit();
 		int firstResult=pp.getStart();
 		DetachedCriteria dc = DetachedCriteria.forClass(Org.class);
-		dc.add(Restrictions.eq("parent.shopId", parentId));
+		dc.add(Restrictions.eq("parent.orgId", parentId));
 		if (sort != null && sortField != null) {
 			sort = sort.toLowerCase();
 			if (sort.equals("desc")) {
@@ -95,7 +95,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 
 	@Override
 	public int findTotalCount(int parentId) {
-		String sql="select count(*) from Org o where o.parent.shopId=?";
+		String sql="select count(*) from Org o where o.parent.orgId=?";
 		List<Long> l=this.getHibernateTemplate().find(sql,parentId);
 		return (l.get(0)).intValue();
 	}
@@ -142,18 +142,18 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 		String sql=null;
 		List<Long> l=null;
 		if(oname==null){
-			sql="select count(*) from Org o where o.shopName=?";
+			sql="select count(*) from Org o where o.orgName=?";
 			l=this.getHibernateTemplate().find(sql, name);
 		}else{
-			sql="select count(*) from Org o where (o.shopName=? and o.shopName!=?) or (?=?)";
+			sql="select count(*) from Org o where (o.orgName=? and o.orgName!=?) or (?=?)";
 			l=this.getHibernateTemplate().find(sql, new Object[]{name,oname,name,oname});
 		}
 		return l.get(0)>0;
 	}
 
 	@Override
-	public boolean deleteShops(List<Integer> ids) {
-		String sql="delete from Org o where o.shopId in(:ids)";
+	public boolean deleteOrgs(List<Integer> ids) {
+		String sql="delete from Org o where o.orgId in(:ids)";
 		Query q=this.getSession().createQuery(sql);
 		q.setParameterList("ids", ids);
 		return q.executeUpdate()>0;

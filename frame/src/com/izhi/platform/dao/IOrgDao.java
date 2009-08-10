@@ -22,5 +22,5 @@ public interface IOrgDao extends IBaseDao<Org, Integer>{
 	
 	boolean findExist(String name,String oname);
 	
-	boolean deleteShops(List<Integer> ids);
+	boolean deleteOrgs(List<Integer> ids);
 } 

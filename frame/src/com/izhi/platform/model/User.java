@@ -71,7 +71,7 @@ public class User  implements UserDetails {
 	private String passwordCode;
 	
 	@ManyToOne
-	@JoinColumn(name = "shop_id")
+	@JoinColumn(name = "org_id")
 	private Org org;
 	@Basic
 	private String realname;

@@ -15,14 +15,14 @@ import com.izhi.platform.service.IOrgService;
 import com.izhi.platform.util.PageParameter;
 @Service
 @Scope(value="prototype")
-@Namespace("/shop")
+@Namespace("/org")
 public class OrgAction extends BasePageAction {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3796085807778344395L;
-	@Resource(name="shopService")
+	@Resource(name="orgService")
 	private IOrgService service;
 	private Org obj;
 	private int id=0;
@@ -70,7 +70,7 @@ public class OrgAction extends BasePageAction {
 		int totalCount=(int)service.findTopTotalCount();
 		pp.setCurrentPage(p);
 		pp.setTotalCount(totalCount);
-		pp.setSort("shopId");
+		pp.setSort("orgId");
 		pp.setDir("desc");
 		List<Org> l=service.findTopPage(pp);
 		this.getRequest().setAttribute("objs", l);
@@ -84,7 +84,7 @@ public class OrgAction extends BasePageAction {
 		int totalCount=(int)service.findTopTotalCount();
 		pp.setCurrentPage(p);
 		pp.setTotalCount(totalCount);
-		pp.setSort("shopId");
+		pp.setSort("orgId");
 		pp.setDir("desc");
 		List<Org> l=service.findTopPage(pp);
 		this.getRequest().setAttribute("objs", l);

@@ -302,4 +302,9 @@ public class FunctionServiceImpl extends BaseService implements
 		functionDao.update(obj);
 	}
 
+	@Override
+	public List<Map<String, Object>> findMenus(int orgId, int userId, int pid) {
+		return functionDao.findMenus(orgId, userId, pid);
+	}
+
 }

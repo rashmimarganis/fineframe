@@ -1,5 +1,6 @@
 package com.izhi.platform.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	
 	@Override
 	public List<Function> findTopFunctions(Integer orgId,Integer userId) {
-		String sql="select f from Function f join f.roles r join r.users u where  f.show=true and f.parent is null and u.shop.id=? and u.id=? order by f.sequence";
+		String sql="select f from Function f join f.roles r join r.users u where  f.show=true and f.parent is null and u.org.id=? and u.id=? order by f.sequence";
 		List<Function> list=this.getHibernateTemplate().find(sql, new Object[]{orgId,userId});
 		return list;
 	}
@@ -106,7 +107,7 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	@Override
 	public List<Function> findNextFunctions(int orgId, int userId,
 			int pid) {
-		String sql="select f from Function f join f.roles r join r.users u where u.shop.id=? and u.id=? and f.parent.functionId=? order by f.sequence desc";
+		String sql="select f from Function f join f.roles r join r.users u where u.org.id=? and u.id=? and f.parent.functionId=? order by f.sequence desc";
 		List<Function> list=this.getHibernateTemplate().find(sql, new Object[]{orgId,userId,pid});
 		/*for (Function m:list){
 			String pname=m.getFunctionName();
@@ -114,5 +115,21 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 			m.put("childeren", findNextFunctions(orgId,userId,pname));
 		}*/
 		return list;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> findMenus(int orgId, int userId, int pid) {
+		List<Map<String, Object>> childrens=new ArrayList<Map<String,Object>>();
+		String sql="select new map(f.functionId as id,f.functionTitle as text,f.url as url) from Function f join f.roles r join r.users u where u.org.id=? and u.id=? and f.parent.functionId=? order by f.sequence desc ";
+		childrens=this.getHibernateTemplate().find(sql, new Object[]{orgId,userId,pid});
+		for(Map<String,Object> c:childrens){
+			Integer id=(Integer)c.get("id");
+			List<Map<String, Object>> cc =findMenus(orgId,userId,id);
+			c.put("leaf", cc.size()==0);
+			c.put("children", cc);
+			c.put("id", "m"+id.toString());
+		}
+		return childrens;
 	}
 }

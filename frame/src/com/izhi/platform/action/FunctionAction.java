@@ -6,18 +6,17 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONObject;
+
+import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import net.sf.json.JSONObject;
-
 import com.izhi.platform.model.Function;
-import com.izhi.platform.model.Org;
-import com.izhi.platform.model.User;
-import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IFunctionService;
 @Service
 @Scope(value="prototype")
+@Namespace("/function")
 public class FunctionAction extends BaseAction {
 
 	private static final long serialVersionUID = -2424349622772191575L;
@@ -30,7 +29,7 @@ public class FunctionAction extends BaseAction {
 	private String ids;
 	private Integer roleId;
 	private List<Integer> functionIds;
-
+	
 	public IFunctionService getService() {
 		return service;
 	}
@@ -79,17 +78,7 @@ public class FunctionAction extends BaseAction {
 		return null;
 	}
 
-
-	public String topFunctions() {
-		if (!SecurityUser.isAnonymous()) {
-			User user = SecurityUser.getUser();
-			Org org = SecurityUser.getOrg();
-			this.out(JSONObject.fromObject(service.findTopFunctions(org.getOrgId(), user.getUserId())).toString());
-		} else {
-			this.out("[]");
-		}
-		return null;
-	}
+	
 
 
 	public String getOldName() {
