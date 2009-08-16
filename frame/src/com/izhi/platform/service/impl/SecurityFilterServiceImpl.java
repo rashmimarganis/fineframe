@@ -78,7 +78,6 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public ConfigAttributeDefinition lookupAttributes(String url) {
 		//String url="";

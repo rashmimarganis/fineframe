@@ -8,6 +8,9 @@ public class PageParameter implements Serializable{
 	public static final String ORDER_DESC="desc";
 	private static final long serialVersionUID = -5685164358480942334L;
 	private int start=0;
+	public void setStart(int start) {
+		this.start = start;
+	}
 	private int limit=10;
 	private String dir=ORDER_ASC;
 	private String sort;
@@ -16,11 +19,6 @@ public class PageParameter implements Serializable{
 	private int currentPage=0;
 	
 	public int getStart() {
-		if(currentPage>0&&currentPage<=getTotalPage()){
-			start=(currentPage-1)*limit;
-		}else{
-			start=0;
-		}
 		return start;
 	}
 

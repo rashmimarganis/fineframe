@@ -9,22 +9,21 @@ import org.hibernate.criterion.Order;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Service;
 
-import com.izhi.framework.dao.IFrameTemplateDao;
-import com.izhi.framework.model.FrameTemplate;
+import com.izhi.framework.dao.IFrameFieldDao;
+import com.izhi.framework.model.FrameField;
 import com.izhi.platform.util.PageParameter;
-@Service("frameTemplateDao")
-public class FrameTemplateDaoImpl extends HibernateDaoSupport implements IFrameTemplateDao {
-
+@Service("frameFieldDao")
+public class FrameFieldDaoImpl extends HibernateDaoSupport implements IFrameFieldDao{
 	@Override
-	public boolean deleteTemplate(int id) {
-		String sql="delete from FrameTemplate o where o.templateId=? ";
+	public boolean deleteField(int id) {
+		String sql="delete from FrameField o where o.projectId=? ";
 		int i=this.getHibernateTemplate().bulkUpdate(sql, id);
 		return i>0;
 	}
 
 	@Override
-	public boolean deleteTemplates(List<Integer> ids) {
-		String sql="delete from FrameTemplate o where o.templateId in(:ids)";
+	public boolean deleteFields(List<Integer> ids) {
+		String sql="delete from FrameField o where o.projectId in(:ids)";
 		Session session=this.getSession();
 		Query q=session.createQuery(sql);
 		q.setParameterList("ids", ids);
@@ -33,18 +32,18 @@ public class FrameTemplateDaoImpl extends HibernateDaoSupport implements IFrameT
 	}
 
 	@Override
-	public FrameTemplate findTemplateById(int id) {
-		return (FrameTemplate)this.getHibernateTemplate().load(FrameTemplate.class, id);
+	public FrameField findFieldById(int id) {
+		return (FrameField)this.getHibernateTemplate().load(FrameField.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<FrameTemplate> findPage(PageParameter pp) {
+	public List<FrameField> findPage(PageParameter pp) {
 		String sortField=pp.getSort();
 		String sort=pp.getDir();
 		int maxResult=pp.getLimit();
 		int firstResult=pp.getStart();
-		DetachedCriteria dc = DetachedCriteria.forClass(FrameTemplate.class);
+		DetachedCriteria dc = DetachedCriteria.forClass(FrameField.class);
 		if (sort != null && sortField != null) {
 			sort = sort.toLowerCase();
 			if (sort.equals("desc")) {
@@ -63,32 +62,31 @@ public class FrameTemplateDaoImpl extends HibernateDaoSupport implements IFrameT
 	@SuppressWarnings("unchecked")
 	@Override
 	public int findTotalCount() {
-		String sql="select count(*) from FrameTemplate";
+		String sql="select count(*) from FrameField";
 		List l=this.getHibernateTemplate().find(sql);
 		return ((Long)l.get(0)).intValue();
 	}
 
 	@Override
-	public int saveTemplate(FrameTemplate obj) {
+	public int saveField(FrameField obj) {
 		int i=(Integer)this.getHibernateTemplate().save(obj);
 		return i;
 	}
 
 	@Override
-	public boolean updateTemplate(FrameTemplate obj) {
+	public boolean updateField(FrameField obj) {
 		this.getHibernateTemplate().update(obj);
 		return true;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public FrameTemplate findTemplateByName(String name) {
-		String sql="from FrameTemplate o where o.name=?";
-		List<FrameTemplate> l=this.getHibernateTemplate().find(sql,name);
+	public FrameField findFieldByName(String name) {
+		String sql="from FrameField o where o.name=?";
+		List<FrameField> l=this.getHibernateTemplate().find(sql,name);
 		if(l.size()>0){
 			return l.get(0);
 		}
 		return null;
 	}
-
 }

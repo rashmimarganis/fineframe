@@ -133,7 +133,6 @@ public class UserCounterListener implements ServletContextListener,
 		decrementUserCounter();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void attributeAdded(HttpSessionBindingEvent event) {
 
 		if (!isAnonymous()) {
@@ -184,7 +183,6 @@ public class UserCounterListener implements ServletContextListener,
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void attributeRemoved(HttpSessionBindingEvent event) {
 		if (event.getName().equals(EVENT_KEY) && !isAnonymous()) {
 			SecurityContext securityContext = (SecurityContext) event.getValue();

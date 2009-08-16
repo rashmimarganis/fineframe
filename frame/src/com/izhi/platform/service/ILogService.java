@@ -11,4 +11,5 @@ public interface ILogService extends IBaseService<Log,Integer> {
 	long findTotalCount(int userId,int orgId,Date beginTime,Date endTime);
 	long findTotalCount();
 	Map<String,Object> findByUserId(int id,String beginTime,String endTime);
+	Map<String, Object> findPage(PageParameter pp);
 }

@@ -9,7 +9,7 @@ import org.springmodules.cache.annotations.CacheFlush;
 import org.springmodules.cache.annotations.Cacheable;
 
 import com.izhi.framework.dao.IFrameTemplateDao;
-import com.izhi.framework.model.FrameTemplateFile;
+import com.izhi.framework.model.FrameTemplate;
 import com.izhi.framework.service.IFrameTemplateService;
 import com.izhi.platform.util.PageParameter;
 @Service("frameTemplateService")
@@ -32,13 +32,13 @@ public class FrameTemplateServiceImpl implements IFrameTemplateService {
 
 	@Override
 	@Cacheable(modelId="frameTemplateCaching")
-	public FrameTemplateFile findTemplateById(int id) {
+	public FrameTemplate findTemplateById(int id) {
 		return frameTemplateDao.findTemplateById(id);
 	}
 
 	@Override
 	@Cacheable(modelId="frameTemplateCaching")
-	public List<FrameTemplateFile> findPage(PageParameter pp) {
+	public List<FrameTemplate> findPage(PageParameter pp) {
 		return frameTemplateDao.findPage(pp);
 	}
 
@@ -50,19 +50,19 @@ public class FrameTemplateServiceImpl implements IFrameTemplateService {
 
 	@Override
 	@CacheFlush(modelId="frameTemplateFlushing")
-	public int saveTemplate(FrameTemplateFile obj) {
+	public int saveTemplate(FrameTemplate obj) {
 		return frameTemplateDao.saveTemplate(obj);
 	}
 
 	@Override
 	@CacheFlush(modelId="frameTemplateFlushing")
-	public boolean updateTemplate(FrameTemplateFile obj) {
+	public boolean updateTemplate(FrameTemplate obj) {
 		return frameTemplateDao.updateTemplate(obj);
 	}
 
 	@Override
 	@Cacheable(modelId="frameTemplateCaching")
-	public FrameTemplateFile findTemplateByName(String name) {
+	public FrameTemplate findTemplateByName(String name) {
 		return frameTemplateDao.findTemplateByName(name);
 	}
 

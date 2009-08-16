@@ -48,6 +48,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 	
 	
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Org> findPage(PageParameter pp) {
 		String sortField=pp.getSort();
@@ -70,6 +71,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 				maxResult);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Org> findPage(PageParameter pp,int parentId) {
 		String sortField=pp.getSort();
@@ -93,6 +95,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 				maxResult);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int findTotalCount(int parentId) {
 		String sql="select count(*) from Org o where o.parent.orgId=?";
@@ -100,6 +103,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 		return (l.get(0)).intValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Org> findTopPages(PageParameter pp) {
 		String sortField=pp.getSort();
@@ -123,6 +127,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 				maxResult);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int findTopTotalCount() {
 		String sql="select count(*) from Org o where o.parent is null";

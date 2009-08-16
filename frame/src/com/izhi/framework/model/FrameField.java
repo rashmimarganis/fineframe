@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 @Entity
-@Table(name="f_field")
+@Table(name="frame_field")
 public class FrameField implements Serializable {
 
 	private static final long serialVersionUID = -8276606983944130551L;
@@ -28,12 +28,21 @@ public class FrameField implements Serializable {
 	private String title;
 	@Column(name="field_name")
 	private String name;
-	@Column(name="field_type")
-	private String fieldType;
+
+	@ManyToOne(optional=true)
+	@NotFound(action=NotFoundAction.IGNORE)
+	@JoinColumn(name="control_id",updatable=true,insertable=true,nullable=true)
+	private FrameControl control;
 	@Column(name="sql_type")
 	private String sqlType;
 	@Basic
 	private String note;
+	
+	@ManyToOne(optional=true)
+	@NotFound(action=NotFoundAction.IGNORE)
+	@JoinColumn(name="template_id",updatable=true,insertable=true,nullable=true)
+	private FrameTemplate template;
+	
 	
 	public String getNote() {
 		return note;
@@ -74,13 +83,7 @@ public class FrameField implements Serializable {
 		this.name = name;
 	}
 
-	public String getFieldType() {
-		return fieldType;
-	}
-
-	public void setFieldType(String fieldType) {
-		this.fieldType = fieldType;
-	}
+	
 
 	public int getLength() {
 		return length;
@@ -104,7 +107,22 @@ public class FrameField implements Serializable {
 	public void setSqlType(String sqlType) {
 		this.sqlType = sqlType;
 	}
-	
+
+	public FrameControl getControl() {
+		return control;
+	}
+
+	public void setControl(FrameControl control) {
+		this.control = control;
+	}
+
+	public FrameTemplate getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(FrameTemplate template) {
+		this.template = template;
+	}
 	
 
 }

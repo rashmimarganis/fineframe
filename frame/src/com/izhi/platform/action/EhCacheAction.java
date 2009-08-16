@@ -6,18 +6,18 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONObject;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import net.sf.json.JSONObject;
-
 import com.izhi.platform.service.IEhCacheService;
 @Service
 @Scope(value="prototype")
 @Namespace("/cache")
-public class EhCacheAction extends BasePageAction {
+public class EhCacheAction extends BaseAction {
 	/**
 	 * 
 	 */
@@ -28,8 +28,16 @@ public class EhCacheAction extends BasePageAction {
 	@Action("list")
 	public String list(){
 		List<Map<String,Object>> l= service.findAll();
-		this.getRequest().setAttribute("objs", l);
-		this.getRequest().setAttribute("totalCount", l.size());
+		Map<String,Object> str=new HashMap<String, Object>();
+		str.put("totalCount", l.size());
+		str.put("objs", l);
+		String json=JSONObject.fromObject(str).toString();
+		this.getRequest().setAttribute("jsonString", json);
+		return SUCCESS;
+	}
+	@Action("index")
+	public String index(){
+		
 		return SUCCESS;
 	}
 	@Action("clear")

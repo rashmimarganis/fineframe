@@ -9,9 +9,7 @@ import javax.annotation.Resource;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Namespace;
-import org.apache.struts2.convention.annotation.Results;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,6 @@ import com.izhi.platform.service.IRoleService;
 @Service
 @Scope(value="prototype")
 @Namespace("/role")
-@Results({@Result(name="success",location="success.ftl"),@Result(name="input",location="input.ftl")})
 public class RoleAction extends BasePageAction {
 
 	/**
@@ -76,7 +73,7 @@ public class RoleAction extends BasePageAction {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	@Action(value="index",results={@Result(name="success",type="myfreemarker")})
+	@Action(value="index")
 	public String execute(){
 		return SUCCESS;
 	}
@@ -110,7 +107,7 @@ public class RoleAction extends BasePageAction {
 		this.out(JSONObject.fromObject(roleService.findPage(this.getPageParameter(),org)).toString());
 		return null;
 	}
-	@Action(value="load",results={@Result(name="input",location="input.ftl",type="myfreemarker")})
+	@Action(value="load")
 	public String load(){
 		obj=roleService.findObjById(obj.getRoleId());
 		//this.out(JSONObject.fromObject(roleService.findRoleById(obj.getId())).toString());

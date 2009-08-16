@@ -1,27 +1,31 @@
 package com.izhi.framework.action;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+
+import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.framework.model.FrameTemplate;
-import com.izhi.framework.service.IFrameTemplateService;
+import com.izhi.framework.model.FrameField;
+import com.izhi.framework.service.IFrameFieldService;
 import com.izhi.platform.action.BasePageAction;
 import com.izhi.platform.util.PageParameter;
 @Service
 @Scope(value="prototype")
-@Namespace("/frame/template")
-public class FrameTemplateAction extends BasePageAction{
+@Namespace("/frame/field")
+public class FrameFieldAction extends BasePageAction{
 
 	private static final long serialVersionUID = 8190220809475487574L;
-	@Resource(name="frameTemplateService")
-	private IFrameTemplateService templateService;
-	private FrameTemplate obj;
+	@Resource(name="frameFieldService")
+	private IFrameFieldService fieldService;
+	private FrameField obj;
 	private List<Integer> ids;
 	
 	private int id;
@@ -30,37 +34,36 @@ public class FrameTemplateAction extends BasePageAction{
 	@Action("list")
 	public String list(){
 		PageParameter pp=this.getPageParameter();
-		int totalCount=(int)templateService.findTotalCount();
-		pp.setCurrentPage(p);
-		pp.setTotalCount(totalCount);
-		pp.setSort("templateId");
-		pp.setDir("desc");
-		List<FrameTemplate> l=templateService.findPage(pp);
-		this.getRequest().setAttribute("objs", l);
-		this.getRequest().setAttribute("page", pp);
+		int totalCount=(int)fieldService.findTotalCount();
+		List<FrameField> l=fieldService.findPage(pp);
+		Map<String,Object> map =new HashMap<String, Object>();
+		map.put("objs", l);
+		map.put("totalCount",totalCount);
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
 	@Action("add")
 	public String add(){
-		obj=new FrameTemplate();
+		obj=new FrameField();
 		return SUCCESS;
 	}
 	@Action("load")
 	public String load(){
-		obj=templateService.findTemplateById(id);
+		obj=fieldService.findFieldById(id);
 		return SUCCESS;
 	}
 	
 	@Action("delete")
 	public String delete(){
-		boolean i=templateService.deleteTemplate(id);
+		boolean i=fieldService.deleteField(id);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
 	@Action("deletes")
 	public String deletes(){
 		log.debug("Id size:"+ids.size());
-		boolean i=templateService.deleteTemplates(ids);
+		boolean i=fieldService.deleteFields(ids);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
@@ -68,11 +71,11 @@ public class FrameTemplateAction extends BasePageAction{
 	@Action("save")
 	public String save(){
 		
-		if(obj.getTemplateId()==0){
-			int i=templateService.saveTemplate(obj);
+		if(obj.getFieldId()==0){
+			int i=fieldService.saveField(obj);
 			this.getRequest().setAttribute("success", i>0);
 		}else{
-			boolean i=templateService.updateTemplate(obj);
+			boolean i=fieldService.updateField(obj);
 			this.getRequest().setAttribute("success", i);
 		}
 		return SUCCESS;
@@ -92,16 +95,16 @@ public class FrameTemplateAction extends BasePageAction{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public IFrameTemplateService getTemplateService() {
-		return templateService;
+	public IFrameFieldService getFieldService() {
+		return fieldService;
 	}
-	public void setTemplateService(IFrameTemplateService templateService) {
-		this.templateService = templateService;
+	public void setFieldService(IFrameFieldService templateService) {
+		this.fieldService = templateService;
 	}
-	public FrameTemplate getObj() {
+	public FrameField getObj() {
 		return obj;
 	}
-	public void setObj(FrameTemplate obj) {
+	public void setObj(FrameField obj) {
 		this.obj = obj;
 	}
 	

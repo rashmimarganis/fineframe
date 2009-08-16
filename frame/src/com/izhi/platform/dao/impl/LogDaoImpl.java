@@ -39,6 +39,18 @@ public class LogDaoImpl extends BaseDaoImpl<Log, Integer> implements ILogDao {
 		q.setFirstResult(pp.getStart());
 		return q.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> findPage(PageParameter pp) {
+		String sql="select new map(o.id as id,o.ip as ip,o.time as time,o.operation as operation,o.org.title as orgTitle,o.user.username as username) from Log o";
+		sql+=" order by o."+pp.getSort()+" "+pp.getDir();
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setMaxResults(pp.getLimit());
+		q.setFirstResult(pp.getStart());
+		
+		return q.list();
+	}
 	@Override
 	public Integer save(Log obj){
 		obj.setTime(new Date());

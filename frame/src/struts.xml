@@ -20,21 +20,34 @@
 	 -->
 	<!-- <result-type name="freemarker"  class="org.apache.struts2.views.freemarker.FreemarkerResult" default="true"/> -->    
 	<!-- 用于CRUD Action的parent package -->
-	<package name="crud-default" extends="convention-default">
+	<package name="crud-default" extends="struts-default">
 		<!-- 基于paramsPrepareParamsStack,
 			增加store interceptor保证actionMessage在redirect后不会丢失 -->
-		<result-types>
-		   <result-type name="myfreemarker" class="com.izhi.platform.webapp.template.MyFreemarkerResult" />
-		</result-types>
+		
+		
+		<interceptors>
+            <interceptor-stack name="crudStack">
+              <interceptor-ref name="checkbox" />
+                <interceptor-ref name="params" />
+        		<interceptor-ref name="staticParams" />
+        		<interceptor-ref name="store">
+					<param name="operationMode">AUTOMATIC</param>
+				</interceptor-ref>
+				<interceptor-ref name="paramsPrepareParamsStack" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+		<!-- 
 		<interceptors>
 			<interceptor-stack name="crudStack">
 				<interceptor-ref name="store">
 					<param name="operationMode">AUTOMATIC</param>
 				</interceptor-ref>
 				<interceptor-ref name="paramsPrepareParamsStack" />
+				<interceptor-ref name="defaultStack"/>  
 			</interceptor-stack>
 		</interceptors>
-
+ -->
 		<default-interceptor-ref name="crudStack" />
 		<!-- <default-action-ref name="main"/> -->
 		<global-results>

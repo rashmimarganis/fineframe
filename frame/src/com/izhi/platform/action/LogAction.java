@@ -1,7 +1,6 @@
 package com.izhi.platform.action;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -13,7 +12,6 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.platform.model.Log;
 import com.izhi.platform.service.ILogService;
 import com.izhi.platform.util.PageParameter;
 @Service
@@ -48,17 +46,14 @@ public class LogAction extends BasePageAction {
 		this.out("{'success':"+success+"}");
 		return null;
 	}
+	@Action(value="index")
+	public String index(){
+		return SUCCESS;
+	}
 	@Action(value="list")
 	public String list(){
-		PageParameter pp=this.getPageParameter();
-		int totalCount=(int)service.findTotalCount();
-		pp.setCurrentPage(p);
-		pp.setTotalCount(totalCount);
-		pp.setSort("id");
-		pp.setDir("desc");
-		List<Log> l=service.findPage(pp.getStart(), pp.getLimit(), pp.getSort(), pp.getDir());
-		this.getRequest().setAttribute("objs", l);
-		this.getRequest().setAttribute("page", pp);
+		Map<String,Object> map =service.findPage(pp);
+		this.getRequest().setAttribute("result", JSONObject.fromObject(map).toString());
 		return SUCCESS;
 	}
 	public String find(){

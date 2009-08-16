@@ -19,7 +19,7 @@ public class ApplicationStartListener extends ContextLoaderListener implements
 		super.contextInitialized(event);
 		WebApplicationContext wac=WebApplicationContextUtils.getWebApplicationContext(event.getServletContext());
 		SpringUtils.setContext(wac);
-		initTag(event.getServletContext());
+//		initTag(event.getServletContext());
 	}
 	 public static void setupContext(ServletContext context) {
 		 

@@ -7,14 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 @Entity
-@Table(name="f_project")
+@Table(name="frame_project")
 public class FrameProject implements Serializable{
 
 	private static final long serialVersionUID = 2966389089541539271L;
@@ -22,8 +17,6 @@ public class FrameProject implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="project_id")
 	private int projectId;
-	@Column(name="title")
-	private String title;
 	@Column(name="name")
 	private String name;
 	@Column(name="base_path")
@@ -32,30 +25,18 @@ public class FrameProject implements Serializable{
 	private String packageName;
 	@Column(name="encode")
 	private String encode;
+	@Column(name="source_path")
+	private String sourcePath;
+	@Column(name="web_path")
+	private String webPath;
 	
-	@ManyToOne(optional=true)
-	@NotFound(action=NotFoundAction.IGNORE)
-	@JoinColumn(name="template_suit_id",updatable=true,insertable=true,nullable=true)
-	private FrameTemplateSuit templateSuit;
-	
-	public FrameTemplateSuit getTemplateSuit() {
-		return templateSuit;
-	}
-	public void setTemplateSuit(FrameTemplateSuit templateSuit) {
-		this.templateSuit = templateSuit;
-	}
 	public int getProjectId() {
 		return projectId;
 	}
 	public void setProjectId(int projectId) {
 		this.projectId = projectId;
 	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
+
 	public String getName() {
 		return name;
 	}
@@ -79,6 +60,18 @@ public class FrameProject implements Serializable{
 	}
 	public void setEncode(String encode) {
 		this.encode = encode;
+	}
+	public String getSourcePath() {
+		return sourcePath;
+	}
+	public void setSourcePath(String sourcePath) {
+		this.sourcePath = sourcePath;
+	}
+	public String getWebPath() {
+		return webPath;
+	}
+	public void setWebPath(String webPath) {
+		this.webPath = webPath;
 	}
 	
 	

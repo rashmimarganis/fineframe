@@ -1,25 +1,23 @@
 package com.izhi.platform.action;
 
+import org.apache.struts2.convention.annotation.Action;
+
 import com.izhi.platform.util.PageParameter;
 
 public class BasePageAction extends BaseAction {
 
 	private static final long serialVersionUID = -1813480563281107682L;
 	
-	private PageParameter pp=null;
+	protected PageParameter pp;
 	protected int p=1;
 	public String init(){
 		return "success";
 	}
 	
-	
+	public BasePageAction(){
+		pp=new PageParameter();
+	}
 	public PageParameter getPageParameter() {
-		if(pp==null){
-			pp=new PageParameter();
-			pp.setDir("asc");
-			pp.setLimit(10);
-			
-		}
 		return pp;
 	}
 
@@ -27,13 +25,10 @@ public class BasePageAction extends BaseAction {
 		this.pp = pp;
 	}
 	public void setCurrentPage(int cp){
-		this.getPageParameter().setCurrentPage(cp);
+		pp.setCurrentPage(cp);
 	}
 	public PageParameter getPp() {
 		return pp;
-	}
-	public void setPp(PageParameter pp) {
-		this.pp = pp;
 	}
 
 	public String getSort() {
@@ -52,16 +47,18 @@ public class BasePageAction extends BaseAction {
 		pp.setDir(dir);
 	}
 
-	public Integer getStart() {
+	public int getStart() {
 		return pp.getStart();
 	}
 
-
-	public Integer getLimit() {
+	public void setStart(int start) {
+		pp.setStart(start);
+	}
+	public int getLimit() {
 		return pp.getLimit();
 	}
 
-	public void setLimit(Integer limit) {
+	public void setLimit(int limit) {
 		pp.setLimit(limit);
 	}
 
@@ -73,6 +70,11 @@ public class BasePageAction extends BaseAction {
 
 	public void setP(int p) {
 		this.p = p;
+	}
+	
+	@Action("index")
+	public String index(){
+		return SUCCESS;
 	}
 
 }

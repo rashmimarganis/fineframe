@@ -116,6 +116,7 @@ public abstract class BaseDaoImpl<T, Id extends Serializable> extends
 				maxResult);
 	}
 
+	
 	@SuppressWarnings("unchecked")
 	public Id save(T obj) {
 		return (Id) this.getHibernateTemplate().save(obj);

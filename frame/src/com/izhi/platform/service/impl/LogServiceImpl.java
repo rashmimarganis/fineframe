@@ -12,11 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.izhi.platform.dao.ILogDao;
 import com.izhi.platform.model.Log;
-import com.izhi.platform.service.BaseService;
 import com.izhi.platform.service.ILogService;
 import com.izhi.platform.util.PageParameter;
 @Service("logService")
-public class LogServiceImpl extends BaseService implements ILogService {
+public class LogServiceImpl  implements ILogService {
 	@Resource(name="logDao")
 	private ILogDao logDao;
 	@Override
@@ -79,6 +78,12 @@ public class LogServiceImpl extends BaseService implements ILogService {
 		return logDao.findPage(firstResult, maxResult, sortField, sort);
 	}
 
+	public Map<String,Object> findPage(PageParameter pp){
+		Map<String,Object> m=new HashMap<String, Object>();
+		m.put("totalCount", this.findTotalCount());
+		m.put("objs", logDao.findPage(pp));
+		return m;
+	}
 	@Override
 	@Transactional
 	public Integer save(Log obj) {
@@ -109,7 +114,6 @@ public class LogServiceImpl extends BaseService implements ILogService {
 		m.put("objs", logDao.findPage(userId, orgId, beginTime, endTime,pp));
 		return m;
 	}
-
 	@Override
 	@Transactional(readOnly=true)
 	public long findTotalCount(int userId, int orgId, Date beginTime,

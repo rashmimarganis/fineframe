@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
-@Table(name="f_template_suit")
+@Table(name="frame_template_suit")
 public class FrameTemplateSuit implements Serializable{
 
 	private static final long serialVersionUID = -2658670253707058593L;
