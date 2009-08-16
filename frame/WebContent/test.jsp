@@ -11,9 +11,14 @@
 <%@page import="java.util.List"%>
 <%@page import="com.izhi.platform.model.Function"%>
 
-<%@page import="com.izhi.shop.service.IBrandService"%>
 <%@page import="com.izhi.platform.util.PageParameter"%>
-<%@page import="com.izhi.shop.model.Brand"%><html>
+<%@page import="com.izhi.platform.service.ILogService"%>
+<%@page import="java.util.Map"%>
+<%@page import="com.izhi.platform.dao.ILogDao"%>
+<%@page import="com.izhi.framework.dao.IFrameProjectDao"%>
+<%@page import="com.izhi.framework.model.FrameProject"%>
+<%@page import="net.sf.json.JSONArray"%>
+<%@page import="com.izhi.framework.service.IFrameProjectService"%><html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
@@ -22,19 +27,20 @@
 <%
 	WebApplicationContext wac = WebApplicationContextUtils
 			.getRequiredWebApplicationContext(this.getServletContext());
-	IBrandService fs = (IBrandService) wac.getBean("brandService");
-	User u = SecurityUser.getUser();
-	PageParameter pp = new PageParameter();
-	pp.setLimit(10);
-	pp.setSort("brandId");
+IFrameProjectService service=(IFrameProjectService) wac.getBean("frameProjectService");
+	PageParameter pp=new PageParameter();
 	pp.setDir("desc");
-	pp.setCurrentPage(1);
-	List<Brand> s = fs.findPage(pp);
-	out.println(s);
-	out.println(s.size());
-	for (Brand f : s) {
-		out.println(f.getBrandName() + " " + f.getBrandUrl());
+	pp.setSort("projectId");
+	pp.setStart(0);
+	pp.setLimit(10);
+	List map=service.findPage(pp);
+	out.println(service.findTotalCount());
+
+	for(int i=0;i<map.size();i++){
+		Map m=(Map)map.get(i);
+		out.println(m.get("id")+" "+m.get("basePath")+"dddddddddddddddddddd<br>");
 	}
+	out.println(JSONArray.fromObject(map).toString()+"ddddddddddd");
 	/*
 	 WebApplicationContext wac=WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
 	 UserWebService client = (UserWebService) wac.getBean("userClient"); 

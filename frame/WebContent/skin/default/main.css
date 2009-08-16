@@ -1,13 +1,4 @@
 /* begin overall style */
-body
-{
-	margin: 0;
-	padding: 0;
-	background: white;
-	color: #444;
-	font: normal 10pt Arial,Helvetica,sans-serif;
-	background:white url(bg.gif) repeat-x left top;
-}
 
 #page
 {
