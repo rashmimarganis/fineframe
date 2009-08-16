@@ -4,7 +4,7 @@ var ProjectApp= function(){
 	var grid;
 	var sm;
 	var pageSize=18;
-
+	var infoDlg;
 	return {
 		init:function(){
 			ProjectApp.initStore();
@@ -13,7 +13,6 @@ var ProjectApp= function(){
 		}
 		,
 		initStore:function(){
-
 			store = new Ext.data.Store({
 		        proxy: new Ext.data.HttpProxy({
 		            url: 'frame/project/list.jhtm'
@@ -95,7 +94,7 @@ var ProjectApp= function(){
 				  	text: '添加项目',
 		            iconCls: 'x-btn-text-icon add',
 		            scope: this,
-					handler:ProjectApp.deleteInfo
+					handler:ProjectApp.showInfoDlg
 				 },'-',{
 				  	text: '修改项目',
 		            iconCls: 'x-btn-text-icon edit',
@@ -104,6 +103,16 @@ var ProjectApp= function(){
 				 },'-',{
 				  	text: '删除项目',
 		            iconCls: 'x-btn-text-icon delete',
+		            scope: this,
+					handler:ProjectApp.deleteInfo
+				 }, '->',{
+				  	text: '生成代码',
+		            iconCls: 'x-btn-text-icon generate',
+		            scope: this,
+					handler:ProjectApp.deleteInfo
+				 },'-', {
+				  	text: '运行测试',
+		            iconCls: 'x-btn-text-icon server',
 		            scope: this,
 					handler:ProjectApp.deleteInfo
 				 }],
@@ -120,7 +129,6 @@ var ProjectApp= function(){
 				renderTo:'projectGrid'
 		    });
 		    grid.render();
-			
 		},
 		initLayout:function(){
 			
@@ -132,7 +140,7 @@ var ProjectApp= function(){
 				contentEl:'projectGrid',
 				items:[grid]
 		    });
-	     	mainPanel.add(center);
+	     	mainPanel.add(grid);
 	     	
 	     	//
 			store.load({params:{start:0, limit:pageSize}});
@@ -192,6 +200,83 @@ var ProjectApp= function(){
 					}
 			}
 			return ids;
+			
+		},
+		showInfoDlg:function(){
+			if(!infoDlg){
+				var store = new Ext.data.SimpleStore({
+			        fields: ['name', 'label', 'tip'],
+			        data : Ext.ux.encoding // from states.js
+			    });
+			    var combo = new Ext.form.ComboBox({
+			        store: store,
+			        fieldLabel: '文件编码',
+			        displayField:'label',
+			        valueField:'name',
+			        typeAhead: true,
+			        mode: 'local',
+			        value:'utf-8',
+			        triggerAction: 'all',
+			        emptyText:'请选择编码...',
+			        selectOnFocus:true
+			    });
+				var form = new Ext.form.FormPanel({
+			        baseCls: 'x-plain',
+			        layout:'form',
+			        url:'frame/project/save.jhtm',
+			        defaultType: 'textfield',
+			        defaults: {width: 220},
+			        labelAlign: 'left',
+			        items: [{
+	                    fieldLabel: '项目名称',
+	                    name: 'obj.name',
+	                    allowBlank:false
+	                    
+	                },combo,{
+	                    fieldLabel: '项目目录',
+	                    name: 'obj.packagePath',
+	                    allowBlank:false
+	                },{
+	                    fieldLabel: '源码目录',
+	                    name: 'obj.sourcePath',
+	                    allowBlank:false
+	                },{
+	                    fieldLabel: '页面目录',
+	                    name: 'obj.webPath',
+	                    allowBlank:false
+	                }]
+			    });
+
+			    infoDlg = new Ext.Window({
+			        title: '项目信息',
+			        width: 400,
+			        height:220,
+			        minWidth: 300,
+			        minHeight: 200,
+			        layout: 'fit',
+			        plain:true,
+			        modal:true,
+			        bodyStyle:'padding:5px;',
+			        buttonAlign:'center',
+			        items: form,
+
+			        buttons: [{
+			            text: '保存',
+			            handler: function(){
+			        		form.getForm().submit({url:'frame/project/save.jhtm', waitMsg:'正在保存数据...'});
+			        	}
+			        },{
+			            text: '取消',
+			            handler:function(){
+			        		infoDlg.hide();
+			        	}
+			        }
+			        ]
+			    });
+			    
+			}
+			infoDlg.show();
+			
 			
 		}
 	};
