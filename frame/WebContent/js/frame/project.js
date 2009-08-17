@@ -235,13 +235,13 @@ var ProjectApp= function(){
 			        fieldLabel: '文件编码',
 			        displayField:'label',
 			        valueField:'name',
-			        name:'obj.encode',
 			        typeAhead: true,
 			        mode: 'local',
 			        value:'utf-8',
 			        triggerAction: 'all',
 			        emptyText:'请选择编码...',
-			        selectOnFocus:true
+			        selectOnFocus:true,
+			        hiddenName: 'obj.encode'
 			    });
 				form = new Ext.form.FormPanel({
 			        baseCls: 'x-plain',
@@ -257,6 +257,7 @@ var ProjectApp= function(){
 			        }, [
 			            {name: 'obj.projectId', mapping:'projectId'}, // custom mapping
 			            {name: 'obj.name', mapping:'name'},
+			            {name: 'obj.encode', mapping:'encode'},
 			            {name: 'obj.basePath', mapping:'basePath'},
 			            {name: 'obj.packageName', mapping:'packageName'},
 			            {name: 'obj.sourcePath', mapping:'sourcePath'},

@@ -1,9 +1,9 @@
 Ext.namespace('Ext.ux.encoding');
 
 Ext.ux.encoding = [
-        ['gbk', 'GBK', 'GBK'],
-        ['iso-8859-1', 'ISO-8859-1', 'ISO-8859-1'],
-        ['utf-8', 'UTF-8', 'UTF-8']
+        ['GBK', 'GBK', 'GBK'],
+        ['ISO8859-1', 'ISO8859-1', 'ISO8859-1'],
+        ['UTF-8', 'UTF-8', 'UTF-8']
     ];
 Ext.namespace('Ext.ux.templateType');
 

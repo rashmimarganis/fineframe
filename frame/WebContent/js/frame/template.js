@@ -69,7 +69,16 @@ var TemplateApp= function(){
 	        },{
 	           header: "类型",
 	           dataIndex: 'type',
-	           width: 150
+	           width: 150,
+	           renderer:function(v){
+	        		if(v=='source'){
+	        			return '源码模板';
+	        		}else if(v=='page'){
+	        			return '控件模板';
+	        		}else if(v=='control'){
+	        			return '控件模板';
+	        		}
+	        	}
 	        }]);
 	
 		    cm.defaultSortable = true;
@@ -205,20 +214,21 @@ var TemplateApp= function(){
 			if(!infoDlg){
 				var store = new Ext.data.SimpleStore({
 			        fields: ['name', 'label', 'tip'],
-			        data : Ext.ux.templateType // from states.js
+			        data : Ext.ux.templateType 
 			    });
 			    var combo = new Ext.form.ComboBox({
 			        store: store,
 			        fieldLabel: '模板类型',
 			        displayField:'label',
 			        valueField:'name',
-			        name:'obj.type',
+			        readOnly:true,
 			        typeAhead: true,
 			        mode: 'local',
 			        value:'source',
 			        triggerAction: 'all',
 			        emptyText:'请选择类型...',
-			        selectOnFocus:true
+			        selectOnFocus:true,
+			        hiddenName: 'obj.type'
 			    });
 				form = new Ext.form.FormPanel({
 			        baseCls: 'x-plain',
