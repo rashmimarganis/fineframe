@@ -27,7 +27,7 @@ public class FrameProjectAction extends BasePageAction{
 	private IFrameProjectService projectService;
 	private FrameProject obj;
 	private List<Integer> ids;
-	
+	private boolean success;
 	private int id;
 	
 	
@@ -50,33 +50,37 @@ public class FrameProjectAction extends BasePageAction{
 	}
 	@Action("load")
 	public String load(){
-		obj=projectService.findProjectById(id);
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("data", projectService.findJsonById(id));
+		String result=JSONObject.fromObject(map).toString();
+		log.debug("result:"+result);
+		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
 	
 	@Action("delete")
 	public String delete(){
 		boolean i=projectService.deleteProject(id);
-		this.getRequest().setAttribute("success", i);
+		success=i;
 		return SUCCESS;
 	}
 	@Action("deletes")
 	public String deletes(){
 		log.debug("Id size:"+ids.size());
-		boolean i=projectService.deleteProjects(ids);
-		this.getRequest().setAttribute("success", i);
+		success=projectService.deleteProjects(ids);
+		
 		return SUCCESS;
 	}
 	
 	@Action("save")
 	public String save(){
-		
 		if(obj.getProjectId()==0){
 			int i=projectService.saveProject(obj);
-			this.getRequest().setAttribute("success", i>0);
+			success= i>0;
 		}else{
-			boolean i=projectService.updateProject(obj);
-			this.getRequest().setAttribute("success", i);
+			success=projectService.updateProject(obj);
+			
 		}
 		return SUCCESS;
 	}
@@ -106,6 +110,12 @@ public class FrameProjectAction extends BasePageAction{
 	}
 	public void setObj(FrameProject obj) {
 		this.obj = obj;
+	}
+	public boolean isSuccess() {
+		return success;
+	}
+	public void setSuccess(boolean success) {
+		this.success = success;
 	}
 	
 	

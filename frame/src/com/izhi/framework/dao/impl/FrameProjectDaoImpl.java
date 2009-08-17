@@ -84,5 +84,20 @@ public class FrameProjectDaoImpl  extends HibernateDaoSupport implements IFrameP
 			return null;
 		}
 
+		@SuppressWarnings("unchecked")
+		@Override
+		public List<Map<String,Object>> findJsonById(int id) {
+			String sql="select new map(o.projectId as projectId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath) from FrameProject o where o.projectId=:id";
+			
+			
+			Session s=this.getSession();
+			
+			Query q=s.createQuery(sql);
+			q.setInteger("id", id);
+			List<Map<String,Object>> l=q.list();
+			
+			return l;
+		}
+
 	
 }

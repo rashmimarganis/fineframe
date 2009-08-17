@@ -12,6 +12,7 @@ public interface IFrameProjectService {
 	boolean deleteProject(int id);
 	boolean deleteProjects(List<Integer> ids) ;
 	FrameProject findProjectById(int id);
+	List<Map<String,Object>> findJsonById(int id);
 	FrameProject findProjectByName(String name);
 	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();

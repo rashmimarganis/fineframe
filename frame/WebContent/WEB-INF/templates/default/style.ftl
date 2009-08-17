@@ -157,4 +157,17 @@ html, body {
 	.down {
 		background-image: url(js/resources/images/arrow-down.gif) !important;
 	}
+	.server {
+		background-image: url(js/resources/images/server_started.gif) !important;
+	}
+	.generate {
+		background-image: url(js/resources/images/generate.gif) !important;
+	}
+	.next {
+		background-image: url(js/resources/images/next.gif) !important;
+	}
+	.prev {
+		background-image: url(js/resources/images/prev.gif) !important;
+	}
+	
 	

@@ -5,6 +5,8 @@ var ProjectApp= function(){
 	var sm;
 	var pageSize=18;
 	var infoDlg;
+	var saveBtn;
+	var form;
 	return {
 		init:function(){
 			ProjectApp.initStore();
@@ -22,7 +24,7 @@ var ProjectApp= function(){
 		            totalProperty: 'totalCount',
 		            id: 'projectId',
 		            fields: [
-		                'projectId', 'name','encode','basePath','sourcePath','webPath'
+		                'projectId','packageName' ,'name','encode','basePath','sourcePath','webPath'
 		            ]
 		        }),
 		        remoteSort: true
@@ -69,6 +71,10 @@ var ProjectApp= function(){
 	           dataIndex: 'basePath',
 	           width: 150
 	        },{
+	           header: "基础包名",
+	           dataIndex: 'packageName',
+	           width: 150
+	        },{
 	           header: "Java目录",
 	           dataIndex: 'sourcePath',
 	           width: 150
@@ -99,7 +105,7 @@ var ProjectApp= function(){
 				  	text: '修改项目',
 		            iconCls: 'x-btn-text-icon edit',
 		            scope: this,
-					handler:ProjectApp.deleteInfo
+					handler:ProjectApp.loadInfo
 				 },'-',{
 				  	text: '删除项目',
 		            iconCls: 'x-btn-text-icon delete',
@@ -147,21 +153,29 @@ var ProjectApp= function(){
 			center.syncSize();
 			mainPanel.doLayout();
     	},
+    	loadInfo:function(){
+    		ProjectApp.showInfoDlg();
+    		form.getForm().load({url:'frame/project/load.jhtm?id=1', waitMsg:'Loading'});
+    	}
+    	,
 		deleteInfo : function(){
 			if(sm.getSelected==null){
-				alert("请先选择一个项目！");
+				Ext.Msg.alert("删除项目","请先选择一个项目！");
 				return;
+			}else{
+				var s=Ext.Msg.confirm("删除项目","确定要删除选中的项目吗？",function(o){
+					if(o=='yes'){
+						var url='frame/project/deletes.jhtm?'+ProjectApp.getSelectedIds();
+						Ext.Ajax.request({
+							url:url,
+							success:success,
+							failure:failure
+						});
+					}else{
+						return;
+					}
+				});
 			}
-			if(!confirm("确定要删除选中的项目吗？")){
-				return;
-			}
-			var url='frame/project/delete.jhtm?ids='+ProjectApp.getSelectedIds();
-		
-			Ext.Ajax.request({
-				url:url,
-				success:success,
-				failure:failure
-			});
 			function success(rep){
 				eval("var result="+rep.responseText);
 				var _success=result.success;
@@ -175,9 +189,9 @@ var ProjectApp= function(){
 					}else{
 						store.load({params:{start:start, limit:pageSize}});
 					}
-					alert("删除成功！");
+					Ext.Msg.alert("删除项目","删除项目成功！");
 				}else{
-					alert("删除失败！");
+					Ext.Msg.alert("删除项目","删除项目失败！");
 				}
 				
 			}
@@ -194,9 +208,9 @@ var ProjectApp= function(){
 			for(var i=0;i<size;i++){
 					var r=selections[i];
 					if(ids.length==0){
-						ids=r.get("id");
+						ids='ids='+r.get("projectId");
 					}else{
-						ids+=","+r.get("id");
+						ids+="&ids="+r.get("projectId");
 					}
 			}
 			return ids;
@@ -213,6 +227,7 @@ var ProjectApp= function(){
 			        fieldLabel: '文件编码',
 			        displayField:'label',
 			        valueField:'name',
+			        name:'obj.encode',
 			        typeAhead: true,
 			        mode: 'local',
 			        value:'utf-8',
@@ -220,37 +235,86 @@ var ProjectApp= function(){
 			        emptyText:'请选择编码...',
 			        selectOnFocus:true
 			    });
-				var form = new Ext.form.FormPanel({
+				form = new Ext.form.FormPanel({
 			        baseCls: 'x-plain',
 			        layout:'form',
+			        clientValidation: true,
 			        url:'frame/project/save.jhtm',
 			        defaultType: 'textfield',
 			        defaults: {width: 220},
 			        labelAlign: 'left',
+			        reader : new Ext.data.JsonReader({
+			        	root  : 'data',
+			        	successProperty: 'success'
+			        }, [
+			            {name: 'obj.projectId', mapping:'projectId'}, // custom mapping
+			            {name: 'obj.name', mapping:'name'},
+			            {name: 'obj.basePath', mapping:'basePath'},
+			            {name: 'obj.packageName', mapping:'packageName'},
+			            {name: 'obj.sourcePath', mapping:'sourcePath'},
+			            {name: 'obj.webPath', mapping:'webPath'}
+			        ]),
 			        items: [{
+			        	name:'obj.projectId',
+			        	xtype:'hidden',
+			        	value:0
+			        	
+			        },
+			        {
 	                    fieldLabel: '项目名称',
 	                    name: 'obj.name',
 	                    allowBlank:false
 	                    
 	                },combo,{
 	                    fieldLabel: '项目目录',
-	                    name: 'obj.packagePath',
+	                    name: 'obj.basePath',
+	                    allowBlank:false
+	                },{
+	                    fieldLabel: '基础包名',
+	                    name: 'obj.packageName',
 	                    allowBlank:false
 	                },{
 	                    fieldLabel: '源码目录',
 	                    name: 'obj.sourcePath',
-	                    allowBlank:false
+	                    allowBlank:false,
+	                    value:'src'
 	                },{
 	                    fieldLabel: '页面目录',
 	                    name: 'obj.webPath',
-	                    allowBlank:false
+	                    allowBlank:false,
+	                    value:'webcontent'
 	                }]
 			    });
-
+				
+				form.on({
+					actioncomplete: function(form, action){
+						FrameMsg.msg("保存项目",action.result.msg);
+		               
+						saveBtn.enable();
+						form.reset();
+						ProjectApp.reload();
+		        	},
+		        	actionfailed: function(form, action){
+		                saveBtn.enable();
+		                FrameMsg.msg("保存项目",action.result.msg);
+		        	}
+				});
+				saveBtn=form.addButton({
+			        text: '保存',
+			        handler: function(){
+						if(form.getForm().isValid()){
+							form.getForm().submit({url:'frame/project/save.jhtm', waitMsg:'正在保存数据...'});
+							saveBtn.disable();
+						}else{
+							Ext.Msg.alert("保存项目","请把项目信息填写完整！");
+						}
+			        }
+			    });
+				
 			    infoDlg = new Ext.Window({
 			        title: '项目信息',
 			        width: 400,
-			        height:220,
+			        height:275,
 			        minWidth: 300,
 			        minHeight: 200,
 			        layout: 'fit',
@@ -259,13 +323,18 @@ var ProjectApp= function(){
 			        bodyStyle:'padding:5px;',
 			        buttonAlign:'center',
 			        items: form,
-
-			        buttons: [{
-			            text: '保存',
-			            handler: function(){
-			        		form.getForm().submit({url:'frame/project/save.jhtm', waitMsg:'正在保存数据...'});
-			        	}
-			        },{
+			        tbar:[{
+					  	text: '上一条',
+			            iconCls: 'x-btn-text-icon prev',
+			            scope: this,
+						handler:ProjectApp.showInfoDlg
+					 },'-',{
+					  	text: '下一条',
+			            iconCls: 'x-btn-text-icon next',
+			            scope: this,
+						handler:ProjectApp.loadInfo
+					 }],
+			        buttons: [saveBtn,{
 			            text: '取消',
 			            handler:function(){
 			        		infoDlg.hide();
@@ -276,8 +345,12 @@ var ProjectApp= function(){
 			    
 			}
 			infoDlg.show();
-			
-			
+			form.getForm().findField("obj.name").focus(true);
+		},
+		reload:function(){
+			var lastO= store.lastOptions.params;
+			var start=lastO.start;
+			store.load({params:{start:start, limit:pageSize}});
 		}
 	};
 }();

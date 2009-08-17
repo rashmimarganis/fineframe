@@ -15,4 +15,5 @@ public interface IFrameProjectDao {
 	FrameProject findProjectByName(String name);
 	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();
+	List<Map<String,Object>> findJsonById(int id);
 }

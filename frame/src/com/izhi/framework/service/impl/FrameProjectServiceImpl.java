@@ -75,4 +75,9 @@ public class FrameProjectServiceImpl implements IFrameProjectService {
 		this.frameProjectDao = frameProjectDao;
 	}
 
+	@Override
+	public List<Map<String,Object>> findJsonById(int id) {
+		return frameProjectDao.findJsonById(id);
+	}
+
 }
