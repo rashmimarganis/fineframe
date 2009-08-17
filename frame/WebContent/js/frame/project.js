@@ -1,4 +1,4 @@
-var ProjectApp= function(){
+var FrameProjectApp= function(){
 	var store;
     var xg = Ext.grid;
 	var grid;
@@ -9,9 +9,9 @@ var ProjectApp= function(){
 	var form;
 	return {
 		init:function(){
-			ProjectApp.initStore();
-			ProjectApp.initGridPanel();
-			ProjectApp.initLayout();
+			FrameProjectApp.initStore();
+			FrameProjectApp.initGridPanel();
+			FrameProjectApp.initLayout();
 		}
 		,
 		initStore:function(){
@@ -100,27 +100,27 @@ var ProjectApp= function(){
 				  	text: '添加项目',
 		            iconCls: 'x-btn-text-icon add',
 		            scope: this,
-					handler:ProjectApp.showInfoDlg
+					handler:FrameProjectApp.showInfoDlg
 				 },'-',{
 				  	text: '修改项目',
 		            iconCls: 'x-btn-text-icon edit',
 		            scope: this,
-					handler:ProjectApp.loadInfo
+					handler:FrameProjectApp.loadInfo
 				 },'-',{
 				  	text: '删除项目',
 		            iconCls: 'x-btn-text-icon delete',
 		            scope: this,
-					handler:ProjectApp.deleteInfo
+					handler:FrameProjectApp.deleteInfo
 				 }, '->',{
 				  	text: '生成代码',
 		            iconCls: 'x-btn-text-icon generate',
 		            scope: this,
-					handler:ProjectApp.deleteInfo
+					handler:FrameProjectApp.deleteInfo
 				 },'-', {
 				  	text: '运行测试',
 		            iconCls: 'x-btn-text-icon server',
 		            scope: this,
-					handler:ProjectApp.deleteInfo
+					handler:FrameProjectApp.deleteInfo
 				 }],
 				bbar: new Ext.PagingToolbar({
 		            pageSize: pageSize,
@@ -134,6 +134,7 @@ var ProjectApp= function(){
 		        },
 				renderTo:'projectGrid'
 		    });
+		    grid.on('rowdblclick',FrameProjectApp.loadInfo);
 		    grid.render();
 		},
 		initLayout:function(){
@@ -158,10 +159,10 @@ var ProjectApp= function(){
 				Ext.Msg.alert("删除项目","请先选择一个项目！");
 				return;
 			}else{
-				ProjectApp.showInfoDlg();
+				FrameProjectApp.showInfoDlg();
 	    		var select=sm.getSelected();
 	    		var id=select.get('projectId');
-	    		form.getForm().load({url:'frame/project/load.jhtm?id='+id, waitMsg:'Loading'});
+	    		form.getForm().load({url:'frame/project/load.jhtm?id='+id, waitMsg:'正在加载数据...'});
 			}
     		
     	}
@@ -173,7 +174,7 @@ var ProjectApp= function(){
 			}else{
 				var s=Ext.Msg.confirm("删除项目","确定要删除选中的项目吗？",function(o){
 					if(o=='yes'){
-						var url='frame/project/deletes.jhtm?'+ProjectApp.getSelectedIds();
+						var url='frame/project/deletes.jhtm?'+FrameProjectApp.getSelectedIds();
 						Ext.Ajax.request({
 							url:url,
 							success:success,
@@ -255,7 +256,7 @@ var ProjectApp= function(){
 			        	root  : 'data',
 			        	successProperty: 'success'
 			        }, [
-			            {name: 'obj.projectId', mapping:'projectId'}, // custom mapping
+			            {name: 'obj.projectId', mapping:'projectId'}, 
 			            {name: 'obj.name', mapping:'name'},
 			            {name: 'obj.encode', mapping:'encode'},
 			            {name: 'obj.basePath', mapping:'basePath'},
@@ -301,7 +302,7 @@ var ProjectApp= function(){
 		               
 						saveBtn.enable();
 						form.reset();
-						ProjectApp.reload();
+						FrameProjectApp.reload();
 		        	},
 		        	actionfailed: function(form, action){
 		                saveBtn.enable();
@@ -336,12 +337,12 @@ var ProjectApp= function(){
 					  	text: '上一条',
 			            iconCls: 'x-btn-text-icon prev',
 			            scope: this,
-						handler:ProjectApp.showInfoDlg
+						handler:FrameProjectApp.showInfoDlg
 					 },'-',{
 					  	text: '下一条',
 			            iconCls: 'x-btn-text-icon next',
 			            scope: this,
-						handler:ProjectApp.loadInfo
+						handler:FrameProjectApp.loadInfo
 					 }],
 			        buttons: [saveBtn,{
 			            text: '取消',
@@ -363,4 +364,4 @@ var ProjectApp= function(){
 		}
 	};
 }();
-ProjectApp.init();
+FrameProjectApp.init();

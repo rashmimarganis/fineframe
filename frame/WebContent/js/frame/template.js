@@ -1,4 +1,4 @@
-var TemplateApp= function(){
+var FrameTemplateApp= function(){
 	var store;
     var xg = Ext.grid;
 	var grid;
@@ -9,9 +9,9 @@ var TemplateApp= function(){
 	var form;
 	return {
 		init:function(){
-			TemplateApp.initStore();
-			TemplateApp.initGridPanel();
-			TemplateApp.initLayout();
+			FrameTemplateApp.initStore();
+			FrameTemplateApp.initGridPanel();
+			FrameTemplateApp.initLayout();
 		}
 		,
 		initStore:function(){
@@ -97,17 +97,17 @@ var TemplateApp= function(){
 				  	text: '添加模板',
 		            iconCls: 'x-btn-text-icon add',
 		            scope: this,
-					handler:TemplateApp.showInfoDlg
+					handler:FrameTemplateApp.showInfoDlg
 				 },'-',{
 				  	text: '修改模板',
 		            iconCls: 'x-btn-text-icon edit',
 		            scope: this,
-					handler:TemplateApp.loadInfo
+					handler:FrameTemplateApp.loadInfo
 				 },'-',{
 				  	text: '删除模板',
 		            iconCls: 'x-btn-text-icon delete',
 		            scope: this,
-					handler:TemplateApp.deleteInfo
+					handler:FrameTemplateApp.deleteInfo
 				 }],
 				bbar: new Ext.PagingToolbar({
 		            pageSize: pageSize,
@@ -121,6 +121,7 @@ var TemplateApp= function(){
 		        },
 				renderTo:'templateGrid'
 		    });
+		    grid.on('rowdblclick',FrameTemplateApp.loadInfo);
 		    grid.render();
 		},
 		initLayout:function(){
@@ -145,10 +146,10 @@ var TemplateApp= function(){
 				Ext.Msg.alert("删除模板","请先选择一个模板！");
 				return;
 			}else{
-	    		TemplateApp.showInfoDlg();
+	    		FrameTemplateApp.showInfoDlg();
 	    		var select=sm.getSelected();
 	    		var id=select.get('templateId');
-	    		form.getForm().load({url:'frame/template/load.jhtm?id='+id, waitMsg:'Loading'});
+	    		form.getForm().load({url:'frame/template/load.jhtm?id='+id, waitMsg:'正在加载数据...'});
 			}
     	}
     	,
@@ -159,7 +160,7 @@ var TemplateApp= function(){
 			}else{
 				var s=Ext.Msg.confirm("删除模板","确定要删除选中的模板吗？",function(o){
 					if(o=='yes'){
-						var url='frame/template/deletes.jhtm?'+TemplateApp.getSelectedIds();
+						var url='frame/template/deletes.jhtm?'+FrameTemplateApp.getSelectedIds();
 						Ext.Ajax.request({
 							url:url,
 							success:success,
@@ -280,7 +281,7 @@ var TemplateApp= function(){
 		               
 						saveBtn.enable();
 						form.reset();
-						TemplateApp.reload();
+						FrameTemplateApp.reload();
 		        	},
 		        	actionfailed: function(form, action){
 		                saveBtn.enable();
@@ -315,12 +316,12 @@ var TemplateApp= function(){
 					  	text: '上一条',
 			            iconCls: 'x-btn-text-icon prev',
 			            scope: this,
-						handler:TemplateApp.showInfoDlg
+						handler:FrameTemplateApp.showInfoDlg
 					 },'-',{
 					  	text: '下一条',
 			            iconCls: 'x-btn-text-icon next',
 			            scope: this,
-						handler:TemplateApp.loadInfo
+						handler:FrameTemplateApp.loadInfo
 					 }],
 			        buttons: [saveBtn,{
 			            text: '取消',
@@ -342,4 +343,4 @@ var TemplateApp= function(){
 		}
 	};
 }();
-TemplateApp.init();
+FrameTemplateApp.init();
