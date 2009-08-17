@@ -1,6 +1,7 @@
 package com.izhi.framework.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.izhi.framework.model.FrameTemplate;
 import com.izhi.platform.util.PageParameter;
@@ -12,6 +13,8 @@ public interface IFrameTemplateDao {
 	boolean deleteTemplates(List<Integer> ids) ;
 	FrameTemplate findTemplateById(int id);
 	FrameTemplate findTemplateByName(String name);
-	List<FrameTemplate> findPage(PageParameter pp);
+	FrameTemplate findTemplateByFileName(String name);
+	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();
+	List<Map<String,Object>> findJsonById(int id);
 }

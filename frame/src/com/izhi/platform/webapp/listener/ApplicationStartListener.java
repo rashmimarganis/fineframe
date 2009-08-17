@@ -10,6 +10,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.izhi.framework.plugin.JsonString;
 import com.izhi.platform.util.SpringUtils;
+import com.izhi.platform.util.WebUtils;
 
 public class ApplicationStartListener extends ContextLoaderListener implements
 		ServletContextListener {
@@ -19,6 +20,8 @@ public class ApplicationStartListener extends ContextLoaderListener implements
 		super.contextInitialized(event);
 		WebApplicationContext wac=WebApplicationContextUtils.getWebApplicationContext(event.getServletContext());
 		SpringUtils.setContext(wac);
+		String webRoot=event.getServletContext().getRealPath("/");
+		WebUtils.setWebRoot(webRoot);
 //		initTag(event.getServletContext());
 	}
 	 public static void setupContext(ServletContext context) {

@@ -74,6 +74,7 @@ public class BasePageAction extends BaseAction {
 	
 	@Action("index")
 	public String index(){
+
 		return SUCCESS;
 	}
 

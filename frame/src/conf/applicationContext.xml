@@ -52,6 +52,7 @@
 		<property name="defaultAutoCommit" value="false" />
 	</bean>
 
+	<bean id="frameTemplatePath" class="java.lang.String" ><constructor-arg type="java.lang.String" value="WEB-INF/frame"></constructor-arg></bean>
 	<!-- 数据源配置,使用应用服务器的数据库连接池 -->
 	<!--
 		<jee:jndi-lookup id="dataSource"

@@ -1,11 +1,10 @@
 package com.izhi.framework.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Order;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Service;
 
@@ -39,25 +38,19 @@ public class FrameTemplateDaoImpl extends HibernateDaoSupport implements IFrameT
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<FrameTemplate> findPage(PageParameter pp) {
+	public List<Map<String,Object>> findPage(PageParameter pp) {
+		String sql="select new map(o.templateId as templateId,o.name as name,o.fileName as fileName,o.type as type) from FrameTemplate o where 1=1";
+		
 		String sortField=pp.getSort();
 		String sort=pp.getDir();
-		int maxResult=pp.getLimit();
-		int firstResult=pp.getStart();
-		DetachedCriteria dc = DetachedCriteria.forClass(FrameTemplate.class);
-		if (sort != null && sortField != null) {
-			sort = sort.toLowerCase();
-			if (sort.equals("desc")) {
-				dc.addOrder(Order.desc(sortField));
-			} else if (sort.equals("asc")) {
-				dc.addOrder(Order.asc(sortField));
-			}
-		}
-		if(maxResult==0){
-			maxResult=10;
-		}
-		return this.getHibernateTemplate().findByCriteria(dc, firstResult,
-				maxResult);
+		sql+=" order by o."+sortField+" "+sort;
+		Session s=this.getSession();
+		
+		Query q=s.createQuery(sql);
+		q.setMaxResults(pp.getLimit());
+		q.setFirstResult(pp.getStart());
+		
+		return q.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -84,6 +77,29 @@ public class FrameTemplateDaoImpl extends HibernateDaoSupport implements IFrameT
 	@Override
 	public FrameTemplate findTemplateByName(String name) {
 		String sql="from FrameTemplate o where o.name=?";
+		List<FrameTemplate> l=this.getHibernateTemplate().find(sql,name);
+		if(l.size()>0){
+			return l.get(0);
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String,Object>> findJsonById(int id) {
+		String sql="select new map(o.templateId as templateId,o.name as name,o.fileName as fileName,o.type as type) from FrameTemplate o where o.templateId=:id";
+		
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setInteger("id", id);
+		List<Map<String,Object>> l=q.list();
+		
+		return l;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public FrameTemplate findTemplateByFileName(String name) {
+		String sql="from FrameTemplate o where o.fileName=?";
 		List<FrameTemplate> l=this.getHibernateTemplate().find(sql,name);
 		if(l.size()>0){
 			return l.get(0);

@@ -1,8 +1,12 @@
 package com.izhi.framework.action;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+
+import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -23,7 +27,7 @@ public class FrameTemplateAction extends BasePageAction{
 	private IFrameTemplateService templateService;
 	private FrameTemplate obj;
 	private List<Integer> ids;
-	
+	private boolean success;
 	private int id;
 	
 	
@@ -31,13 +35,12 @@ public class FrameTemplateAction extends BasePageAction{
 	public String list(){
 		PageParameter pp=this.getPageParameter();
 		int totalCount=(int)templateService.findTotalCount();
-		pp.setCurrentPage(p);
-		pp.setTotalCount(totalCount);
-		pp.setSort("templateId");
-		pp.setDir("desc");
-		List<FrameTemplate> l=templateService.findPage(pp);
-		this.getRequest().setAttribute("objs", l);
-		this.getRequest().setAttribute("page", pp);
+		List<Map<String,Object>> l=templateService.findPage(pp);
+		Map<String,Object> map =new HashMap<String, Object>();
+		map.put("objs", l);
+		map.put("totalCount",totalCount);
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
 	@Action("add")
@@ -47,33 +50,34 @@ public class FrameTemplateAction extends BasePageAction{
 	}
 	@Action("load")
 	public String load(){
-		obj=templateService.findTemplateById(id);
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("data", templateService.findJsonById(id));
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
 	
 	@Action("delete")
 	public String delete(){
 		boolean i=templateService.deleteTemplate(id);
-		this.getRequest().setAttribute("success", i);
+		success=i;
 		return SUCCESS;
 	}
 	@Action("deletes")
 	public String deletes(){
-		log.debug("Id size:"+ids.size());
-		boolean i=templateService.deleteTemplates(ids);
-		this.getRequest().setAttribute("success", i);
+		success=templateService.deleteTemplates(ids);
 		return SUCCESS;
 	}
 	
 	@Action("save")
 	public String save(){
-		
 		if(obj.getTemplateId()==0){
 			int i=templateService.saveTemplate(obj);
-			this.getRequest().setAttribute("success", i>0);
+			success= i>0;
 		}else{
-			boolean i=templateService.updateTemplate(obj);
-			this.getRequest().setAttribute("success", i);
+			success=templateService.updateTemplate(obj);
+			
 		}
 		return SUCCESS;
 	}
@@ -103,6 +107,12 @@ public class FrameTemplateAction extends BasePageAction{
 	}
 	public void setObj(FrameTemplate obj) {
 		this.obj = obj;
+	}
+	public boolean isSuccess() {
+		return success;
+	}
+	public void setSuccess(boolean success) {
+		this.success = success;
 	}
 	
 	

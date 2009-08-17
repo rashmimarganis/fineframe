@@ -1,4 +1,4 @@
-var ProjectApp= function(){
+var TemplateApp= function(){
 	var store;
     var xg = Ext.grid;
 	var grid;
@@ -9,27 +9,27 @@ var ProjectApp= function(){
 	var form;
 	return {
 		init:function(){
-			ProjectApp.initStore();
-			ProjectApp.initGridPanel();
-			ProjectApp.initLayout();
+			TemplateApp.initStore();
+			TemplateApp.initGridPanel();
+			TemplateApp.initLayout();
 		}
 		,
 		initStore:function(){
 			store = new Ext.data.Store({
 		        proxy: new Ext.data.HttpProxy({
-		            url: 'frame/project/list.jhtm'
+		            url: 'frame/template/list.jhtm'
 		        }),
 		        reader: new Ext.data.JsonReader({
 		            root: 'objs',
 		            totalProperty: 'totalCount',
-		            id: 'projectId',
+		            id: 'templateId',
 		            fields: [
-		                'projectId','packageName' ,'name','encode','basePath','sourcePath','webPath'
+		                'templateId','fileName' ,'name','type'
 		            ]
 		        }),
 		        remoteSort: true
 		    });
-		    store.setDefaultSort('projectId', 'desc');
+		    store.setDefaultSort('templateId', 'desc');
 			store.on('load',function(s,r,o){
 				if(s.getTotalCount()>0){
 					sm.selectFirstRow();
@@ -53,9 +53,9 @@ var ProjectApp= function(){
 			}
 			sm = new xg.CheckboxSelectionModel();
 			var cm = new Ext.grid.ColumnModel([sm,{
-	           id: 'projectId', 
+	           id: 'templateId', 
 	           header: "ID",
-	           dataIndex: 'projectId',
+	           dataIndex: 'templateId',
 	           width: 40
 	        },{
 	           id: 'name', 
@@ -63,26 +63,14 @@ var ProjectApp= function(){
 	           dataIndex: 'name',
 	           width: 100
 	        },{
-	           header: "编码",
-	           dataIndex: 'encode',
+	           header: "文件名",
+	           dataIndex: 'fileName',
 	           width: 150
 	        },{
-	           header: "项目目录",
-	           dataIndex: 'basePath',
+	           header: "类型",
+	           dataIndex: 'type',
 	           width: 150
-	        },{
-	           header: "基础包名",
-	           dataIndex: 'packageName',
-	           width: 150
-	        },{
-	           header: "Java目录",
-	           dataIndex: 'sourcePath',
-	           width: 150
-	        },{
-		           header: "页面目录",
-		           dataIndex: 'webPath',
-		           width: 150
-		        }]);
+	        }]);
 	
 		    cm.defaultSortable = true;
 		    
@@ -97,30 +85,20 @@ var ProjectApp= function(){
 		        autoScroll:true,
 		        loadMask: true,
 				tbar:[{
-				  	text: '添加项目',
+				  	text: '添加模板',
 		            iconCls: 'x-btn-text-icon add',
 		            scope: this,
-					handler:ProjectApp.showInfoDlg
+					handler:TemplateApp.showInfoDlg
 				 },'-',{
-				  	text: '修改项目',
+				  	text: '修改模板',
 		            iconCls: 'x-btn-text-icon edit',
 		            scope: this,
-					handler:ProjectApp.loadInfo
+					handler:TemplateApp.loadInfo
 				 },'-',{
-				  	text: '删除项目',
+				  	text: '删除模板',
 		            iconCls: 'x-btn-text-icon delete',
 		            scope: this,
-					handler:ProjectApp.deleteInfo
-				 }, '->',{
-				  	text: '生成代码',
-		            iconCls: 'x-btn-text-icon generate',
-		            scope: this,
-					handler:ProjectApp.deleteInfo
-				 },'-', {
-				  	text: '运行测试',
-		            iconCls: 'x-btn-text-icon server',
-		            scope: this,
-					handler:ProjectApp.deleteInfo
+					handler:TemplateApp.deleteInfo
 				 }],
 				bbar: new Ext.PagingToolbar({
 		            pageSize: pageSize,
@@ -132,7 +110,7 @@ var ProjectApp= function(){
            			showPreview:true,
 		            forceFit:true
 		        },
-				renderTo:'projectGrid'
+				renderTo:'templateGrid'
 		    });
 		    grid.render();
 		},
@@ -141,9 +119,9 @@ var ProjectApp= function(){
 			var center= new Ext.Panel({
 		        collapsible:false,
 				layout:'fit',
-		        el: 'projectCenter',
+		        el: 'templateCenter',
 				region:'center',
-				contentEl:'projectGrid',
+				contentEl:'templateGrid',
 				items:[grid]
 		    });
 	     	mainPanel.add(grid);
@@ -155,25 +133,24 @@ var ProjectApp= function(){
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){
-				Ext.Msg.alert("删除项目","请先选择一个项目！");
+				Ext.Msg.alert("删除模板","请先选择一个模板！");
 				return;
 			}else{
-				ProjectApp.showInfoDlg();
+	    		TemplateApp.showInfoDlg();
 	    		var select=sm.getSelected();
-	    		var id=select.get('projectId');
-	    		form.getForm().load({url:'frame/project/load.jhtm?id='+id, waitMsg:'Loading'});
+	    		var id=select.get('templateId');
+	    		form.getForm().load({url:'frame/template/load.jhtm?id='+id, waitMsg:'Loading'});
 			}
-    		
     	}
     	,
 		deleteInfo : function(){
 			if(sm.getSelected==null){
-				Ext.Msg.alert("删除项目","请先选择一个项目！");
+				Ext.Msg.alert("删除模板","请先选择一个模板！");
 				return;
 			}else{
-				var s=Ext.Msg.confirm("删除项目","确定要删除选中的项目吗？",function(o){
+				var s=Ext.Msg.confirm("删除模板","确定要删除选中的模板吗？",function(o){
 					if(o=='yes'){
-						var url='frame/project/deletes.jhtm?'+ProjectApp.getSelectedIds();
+						var url='frame/template/deletes.jhtm?'+TemplateApp.getSelectedIds();
 						Ext.Ajax.request({
 							url:url,
 							success:success,
@@ -197,9 +174,9 @@ var ProjectApp= function(){
 					}else{
 						store.load({params:{start:start, limit:pageSize}});
 					}
-					Ext.Msg.alert("删除项目","删除项目成功！");
+					Ext.Msg.alert("删除模板","删除模板成功！");
 				}else{
-					Ext.Msg.alert("删除项目","删除项目失败！");
+					Ext.Msg.alert("删除模板","删除模板失败！");
 				}
 				
 			}
@@ -216,9 +193,9 @@ var ProjectApp= function(){
 			for(var i=0;i<size;i++){
 					var r=selections[i];
 					if(ids.length==0){
-						ids='ids='+r.get("projectId");
+						ids='ids='+r.get("templateId");
 					}else{
-						ids+="&ids="+r.get("projectId");
+						ids+="&ids="+r.get("templateId");
 					}
 			}
 			return ids;
@@ -228,26 +205,26 @@ var ProjectApp= function(){
 			if(!infoDlg){
 				var store = new Ext.data.SimpleStore({
 			        fields: ['name', 'label', 'tip'],
-			        data : Ext.ux.encoding // from states.js
+			        data : Ext.ux.templateType // from states.js
 			    });
 			    var combo = new Ext.form.ComboBox({
 			        store: store,
-			        fieldLabel: '文件编码',
+			        fieldLabel: '模板类型',
 			        displayField:'label',
 			        valueField:'name',
-			        name:'obj.encode',
+			        name:'obj.type',
 			        typeAhead: true,
 			        mode: 'local',
-			        value:'utf-8',
+			        value:'source',
 			        triggerAction: 'all',
-			        emptyText:'请选择编码...',
+			        emptyText:'请选择类型...',
 			        selectOnFocus:true
 			    });
 				form = new Ext.form.FormPanel({
 			        baseCls: 'x-plain',
 			        layout:'form',
 			        clientValidation: true,
-			        url:'frame/project/save.jhtm',
+			        url:'frame/template/save.jhtm',
 			        defaultType: 'textfield',
 			        defaults: {width: 220},
 			        labelAlign: 'left',
@@ -255,74 +232,67 @@ var ProjectApp= function(){
 			        	root  : 'data',
 			        	successProperty: 'success'
 			        }, [
-			            {name: 'obj.projectId', mapping:'projectId'}, // custom mapping
+			            {name: 'obj.templateId', mapping:'templateId'}, // custom mapping
 			            {name: 'obj.name', mapping:'name'},
-			            {name: 'obj.basePath', mapping:'basePath'},
-			            {name: 'obj.packageName', mapping:'packageName'},
-			            {name: 'obj.sourcePath', mapping:'sourcePath'},
-			            {name: 'obj.webPath', mapping:'webPath'}
+			            {name: 'obj.type', mapping:'type'},
+			            {name: 'obj.fileName', mapping:'fileName'},
+			            {name: 'obj.content', mapping:'content'}
 			        ]),
 			        items: [{
-			        	name:'obj.projectId',
+			        	name:'obj.templateId',
 			        	xtype:'hidden',
 			        	value:0
 			        	
 			        },
 			        {
-	                    fieldLabel: '项目名称',
+	                    fieldLabel: '模板名称',
 	                    name: 'obj.name',
 	                    allowBlank:false
 	                    
 	                },combo,{
-	                    fieldLabel: '项目目录',
-	                    name: 'obj.basePath',
+	                    fieldLabel: '文件名称',
+	                    name: 'obj.fileName',
 	                    allowBlank:false
 	                },{
-	                    fieldLabel: '基础包名',
-	                    name: 'obj.packageName',
-	                    allowBlank:false
-	                },{
-	                    fieldLabel: '源码目录',
-	                    name: 'obj.sourcePath',
+	                	hideLabel:true,
+	                	fieldLabel: '模板内容',
+	                    name: 'obj.content',
+	                    xtype:'textarea',
 	                    allowBlank:false,
-	                    value:'src'
-	                },{
-	                    fieldLabel: '页面目录',
-	                    name: 'obj.webPath',
-	                    allowBlank:false,
-	                    value:'webcontent'
+	                    height:200,
+	                    anchor:'98%'
 	                }]
 			    });
 				
 				form.on({
 					actioncomplete: function(form, action){
-						FrameMsg.msg("保存项目",action.result.msg);
+						FrameMsg.msg("保存模板",action.result.msg);
 		               
 						saveBtn.enable();
 						form.reset();
-						ProjectApp.reload();
+						TemplateApp.reload();
 		        	},
 		        	actionfailed: function(form, action){
 		                saveBtn.enable();
-		                FrameMsg.msg("保存项目",action.result.msg);
+		                FrameMsg.msg("保存模板",action.result.msg);
 		        	}
 				});
 				saveBtn=form.addButton({
 			        text: '保存',
 			        handler: function(){
 						if(form.getForm().isValid()){
-							form.getForm().submit({url:'frame/project/save.jhtm', waitMsg:'正在保存数据...'});
+							form.getForm().submit({url:'frame/template/save.jhtm', waitMsg:'正在保存数据...'});
 							saveBtn.disable();
 						}else{
-							Ext.Msg.alert("保存项目","请把项目信息填写完整！");
+							Ext.Msg.alert("保存模板","请把模板信息填写完整！");
 						}
 			        }
 			    });
 				
 			    infoDlg = new Ext.Window({
-			        title: '项目信息',
-			        width: 400,
-			        height:275,
+			        title: '模板信息',
+			        width: 500,
+			        height:400,
 			        minWidth: 300,
 			        minHeight: 200,
 			        layout: 'fit',
@@ -335,12 +305,12 @@ var ProjectApp= function(){
 					  	text: '上一条',
 			            iconCls: 'x-btn-text-icon prev',
 			            scope: this,
-						handler:ProjectApp.showInfoDlg
+						handler:TemplateApp.showInfoDlg
 					 },'-',{
 					  	text: '下一条',
 			            iconCls: 'x-btn-text-icon next',
 			            scope: this,
-						handler:ProjectApp.loadInfo
+						handler:TemplateApp.loadInfo
 					 }],
 			        buttons: [saveBtn,{
 			            text: '取消',
@@ -362,4 +332,4 @@ var ProjectApp= function(){
 		}
 	};
 }();
-ProjectApp.init();
+TemplateApp.init();

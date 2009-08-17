@@ -1,6 +1,7 @@
 package com.izhi.framework.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.izhi.framework.model.FrameTemplate;
 import com.izhi.platform.util.PageParameter;
@@ -12,6 +13,13 @@ public interface IFrameTemplateService {
 	boolean deleteTemplates(List<Integer> ids) ;
 	FrameTemplate findTemplateById(int id);
 	FrameTemplate findTemplateByName(String name);
-	List<FrameTemplate> findPage(PageParameter pp);
+	List<Map<String,Object>> findJsonById(int id);
+	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();
+	
+	String loadFile(FrameTemplate obj);
+	String loadFile(String path);
+	boolean saveFile(String path,String content);
+	
+	boolean isTemplateNameExist(FrameTemplate obj);
 }

@@ -25,10 +25,11 @@
 </head>
 <body>
 <%
-	WebApplicationContext wac = WebApplicationContextUtils
-			.getRequiredWebApplicationContext(this.getServletContext());
-IFrameProjectService service=(IFrameProjectService) wac.getBean("frameProjectService");
-	PageParameter pp=new PageParameter();
+String url=Thread.currentThread().getContextClassLoader().getResource(".").getPath();
+out.println(url);
+out.println(this.getServletContext().getRealPath("/"));
+/*
+PageParameter pp=new PageParameter();
 	pp.setDir("desc");
 	pp.setSort("projectId");
 	pp.setStart(0);
@@ -41,6 +42,7 @@ IFrameProjectService service=(IFrameProjectService) wac.getBean("frameProjectSer
 		out.println(m.get("id")+" "+m.get("basePath")+"dddddddddddddddddddd<br>");
 	}
 	out.println(JSONArray.fromObject(map).toString()+"ddddddddddd");
+	*/
 	/*
 	 WebApplicationContext wac=WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
 	 UserWebService client = (UserWebService) wac.getBean("userClient"); 
