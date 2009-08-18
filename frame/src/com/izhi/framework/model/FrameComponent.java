@@ -20,8 +20,11 @@ public class FrameComponent implements Serializable{
 	private static final long serialVersionUID = 4120780168537312804L;
 	
 	public final static String TYPE_JAVA="java";
-	public final static String TYPE_PAGE="page";
-	public final static String TYPE_CONFIG="config";
+	public final static String TYPE_JSP="jsp";
+	public final static String TYPE_FTL="ftl";
+	public final static String TYPE_CONFIG="xml";
+	public final static String TYPE_PROPERTY="properties";
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="component_id")
@@ -103,6 +106,7 @@ public class FrameComponent implements Serializable{
 	public void setComponentId(int componentId) {
 		this.componentId = componentId;
 	}
+
 	
 	
 }

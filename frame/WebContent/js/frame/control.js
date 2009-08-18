@@ -316,7 +316,7 @@ var FrameControlApp= function(){
 			    infoDlg = new Ext.Window({
 			        title: '控件信息',
 			        width: 400,
-			        height:275,
+			        height:200,
 			        minWidth: 300,
 			        minHeight: 200,
 			        layout: 'fit',

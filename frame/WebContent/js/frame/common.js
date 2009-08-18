@@ -9,6 +9,19 @@ Ext.namespace('Ext.ux.templateType');
 
 Ext.ux.templateType = [
         ['control', '控件模板', '控件模板'],
-        ['source', '源码模板', '源码模板'],
-        ['page', '页面模板', '页面模板']
+        ['component', '组件模板', '组件模板']
     ];
+Ext.ux.ComponentType = [
+                       ['java', 'Java文件(.java)', 'Java文件'],
+                       ['jsp', 'Jsp文件(.jsp)', 'Jsp文件'],
+                       ['ftl', 'Ftl文件(.ftl)', 'Ftl文件'],
+                       ['properties', 'Property文件(.properties)', 'Property文件'],
+                       ['xml', '配置文件(.xml)', '配置文件']
+                   ];
+Ext.ux.FileSuffixType = [
+                        ['.java', 'Java文件', 'Java文件'],
+                        ['.jsp', 'Jsp文件', 'Jsp文件'],
+                        ['.ftl', 'Ftl文件', 'Ftl文件'],
+                        ['.property', 'Property文件', 'Property文件'],
+                        ['.xml', '配置文件', '配置文件']
+                    ];
