@@ -34,7 +34,7 @@ public class FrameControlAction extends BasePageAction{
 	public String list(){
 		PageParameter pp=this.getPageParameter();
 		int totalCount=(int)controlService.findTotalCount();
-		List<FrameControl> l=controlService.findPage(pp);
+		List<Map<String,Object>> l=controlService.findPage(pp);
 		Map<String,Object> map =new HashMap<String, Object>();
 		map.put("objs", l);
 		map.put("totalCount",totalCount);
@@ -49,7 +49,12 @@ public class FrameControlAction extends BasePageAction{
 	}
 	@Action("load")
 	public String load(){
-		obj=controlService.findControlById(id);
+		
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("data", controlService.findJsonById(id));
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
 	

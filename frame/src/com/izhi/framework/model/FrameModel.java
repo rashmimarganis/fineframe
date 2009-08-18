@@ -17,6 +17,8 @@ import javax.persistence.Table;
 @Table(name="frame_model")
 public class FrameModel implements Serializable {
 
+	public final static String TYPE_HIBERNATE="class";
+	public final static String TYPE_SQL="table";
 	private static final long serialVersionUID = -4278569909316098477L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,6 +30,9 @@ public class FrameModel implements Serializable {
 	private String title;
 	@Column(name="model_note")
 	private String note;
+	
+	@Column(name="type")
+	private String type;
 	
 	@ManyToMany( fetch = FetchType.EAGER)
 	@JoinTable(name = "frame_model_relation", joinColumns = {@JoinColumn(name = "model_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "parent_id"))
@@ -64,6 +69,12 @@ public class FrameModel implements Serializable {
 	}
 	public void setModelId(int modelId) {
 		this.modelId = modelId;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

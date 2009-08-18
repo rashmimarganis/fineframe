@@ -30,6 +30,8 @@ public class FrameTemplateAction extends BasePageAction{
 	private boolean success;
 	private int id;
 	
+	private String type;
+	
 	
 	@Action("list")
 	public String list(){
@@ -77,12 +79,17 @@ public class FrameTemplateAction extends BasePageAction{
 			success= i>0;
 		}else{
 			success=templateService.updateTemplate(obj);
-			
 		}
 		return SUCCESS;
 	}
-	
-	
+	@Action("listByType")
+	public String listByType(){
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("objs", templateService.findJsonByType(type));
+		map.put("totalCount", templateService.findTotalCountByType(type));
+		this.getRequest().setAttribute("result", JSONObject.fromObject(map).toString());
+		return SUCCESS;
+	}
 	public List<Integer> getIds() {
 		return ids;
 	}
@@ -113,6 +120,12 @@ public class FrameTemplateAction extends BasePageAction{
 	}
 	public void setSuccess(boolean success) {
 		this.success = success;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

@@ -35,7 +35,7 @@ public class FrameModelAction extends BasePageAction{
 	public String list(){
 		PageParameter pp=this.getPageParameter();
 		int totalCount=(int)modelService.findTotalCount();
-		List<FrameModel> l=modelService.findPage(pp);
+		List<Map<String,Object>> l=modelService.findPage(pp);
 		Map<String,Object> map =new HashMap<String, Object>();
 		map.put("objs", l);
 		map.put("totalCount",totalCount);
@@ -62,7 +62,6 @@ public class FrameModelAction extends BasePageAction{
 	}
 	@Action("deletes")
 	public String deletes(){
-		log.debug("Id size:"+ids.size());
 		boolean i=modelService.deleteModels(ids);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
