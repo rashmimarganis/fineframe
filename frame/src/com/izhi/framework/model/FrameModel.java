@@ -12,13 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 @Entity
 @Table(name="frame_model")
 public class FrameModel implements Serializable {
 
-	public final static String TYPE_HIBERNATE="class";
-	public final static String TYPE_SQL="table";
 	private static final long serialVersionUID = -4278569909316098477L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,19 +28,19 @@ public class FrameModel implements Serializable {
 	private int modelId;
 	@Column(name="model_name")
 	private String name;
-	@Column(name="model_title")
-	private String title;
+	@Column(name="model_label")
+	private String label;
 	@Column(name="model_note")
 	private String note;
-	
-	@Column(name="type")
-	private String type;
 	
 	@ManyToMany( fetch = FetchType.EAGER)
 	@JoinTable(name = "frame_model_relation", joinColumns = {@JoinColumn(name = "model_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "parent_id"))
 	private Set<FrameModel> parents;
 	
-	
+	@ManyToOne(optional=true)
+	@NotFound(action=NotFoundAction.IGNORE)
+	@JoinColumn(name="project_id",updatable=true,insertable=true,nullable=true)
+	private FrameProject project;
 	
 	public String getName() {
 		return name;
@@ -46,12 +48,7 @@ public class FrameModel implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
+	
 	public String getNote() {
 		return note;
 	}
@@ -70,11 +67,18 @@ public class FrameModel implements Serializable {
 	public void setModelId(int modelId) {
 		this.modelId = modelId;
 	}
-	public String getType() {
-		return type;
+	public String getLabel() {
+		return label;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setLabel(String label) {
+		this.label = label;
 	}
+	public FrameProject getProject() {
+		return project;
+	}
+	public void setProject(FrameProject project) {
+		this.project = project;
+	}
+	
 
 }

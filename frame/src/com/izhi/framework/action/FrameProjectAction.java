@@ -43,6 +43,18 @@ public class FrameProjectAction extends BasePageAction{
 		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
+	
+	@Action("all")
+	public String findAll(){
+		int totalCount=(int)projectService.findTotalCount();
+		List<Map<String,Object>> l=projectService.findAll();
+		Map<String,Object> map =new HashMap<String, Object>();
+		map.put("objs", l);
+		map.put("totalCount",totalCount);
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
 	@Action("add")
 	public String add(){
 		obj=new FrameProject();

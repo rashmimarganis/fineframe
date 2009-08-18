@@ -99,5 +99,14 @@ public class FrameProjectDaoImpl  extends HibernateDaoSupport implements IFrameP
 			return l;
 		}
 
+		@SuppressWarnings("unchecked")
+		@Override
+		public List<Map<String, Object>> findAll() {
+			String sql="select new map(o.projectId as projectId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath) from FrameProject o order by o.projectId desc";
+			Session s=this.getSession();
+			Query q=s.createQuery(sql);			
+			return q.list();
+		}
+
 	
 }

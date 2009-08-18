@@ -38,7 +38,7 @@ public class FrameModelDaoImpl extends HibernateDaoSupport implements IFrameMode
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String,Object>> findPage(PageParameter pp) {
-		String sql="select new map(o.modelId as modelId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath) from FrameModel o where 1=1";
+		String sql="select new map(o.modelId as modelId,o.name as name,o.label as label,o.project.projectId as projectId,o.project.name as projectName) from FrameModel o where 1=1";
 		
 		String sortField=pp.getSort();
 		String sort=pp.getDir();
@@ -86,7 +86,7 @@ public class FrameModelDaoImpl extends HibernateDaoSupport implements IFrameMode
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String,Object>> findJsonById(int id) {
-		String sql="select new map(o.modelId as modelId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath) from FrameModel o where o.modelId=:id";
+		String sql="select new map(o.modelId as modelId,o.name as name,o.label as label,o.project.projectId as projectId,o.project.name as projectName) from FrameModel o where o.modelId=:id";
 		Session s=this.getSession();
 		Query q=s.createQuery(sql);
 		q.setInteger("id", id);

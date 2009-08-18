@@ -15,4 +15,5 @@ public interface IFrameModelService {
 	FrameModel findModelByName(String name);
 	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();
+	List<Map<String,Object>> findJsonById(int id);
 }

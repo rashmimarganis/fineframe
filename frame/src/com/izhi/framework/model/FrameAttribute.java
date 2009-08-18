@@ -15,18 +15,18 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 @Entity
-@Table(name="frame_field")
-public class FrameField implements Serializable {
+@Table(name="frame_attribute")
+public class FrameAttribute implements Serializable {
 
 	private static final long serialVersionUID = -8276606983944130551L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="field_id")
-	private int fieldId;
-	@Column(name="field_title")
-	private String title;
-	@Column(name="field_name")
+	@Column(name="attribute_id")
+	private int attributeId;
+	@Column(name="attribute_label")
+	private String label;
+	@Column(name="attribute_name")
 	private String name;
 
 	@ManyToOne(optional=true)
@@ -37,20 +37,6 @@ public class FrameField implements Serializable {
 	private String sqlType;
 	@Basic
 	private String note;
-	
-	@ManyToOne(optional=true)
-	@NotFound(action=NotFoundAction.IGNORE)
-	@JoinColumn(name="template_id",updatable=true,insertable=true,nullable=true)
-	private FrameTemplate template;
-	
-	
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}
 
 	@Column(name="length")
 	private int length;
@@ -59,22 +45,15 @@ public class FrameField implements Serializable {
 	@JoinColumn(name="model_id",updatable=true,insertable=true,nullable=true)
 	private FrameModel model;
 
-	public int getFieldId() {
-		return fieldId;
+	public int getAttributeId() {
+		return attributeId;
 	}
 
-	public void setFieldId(int fieldId) {
-		this.fieldId = fieldId;
+	public void setAttributeId(int attributeId) {
+		this.attributeId = attributeId;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -116,13 +95,21 @@ public class FrameField implements Serializable {
 		this.control = control;
 	}
 
-	public FrameTemplate getTemplate() {
-		return template;
+	
+	public String getNote() {
+		return note;
 	}
 
-	public void setTemplate(FrameTemplate template) {
-		this.template = template;
+	public void setNote(String note) {
+		this.note = note;
 	}
-	
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
 }

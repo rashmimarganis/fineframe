@@ -76,8 +76,15 @@ public class FrameProjectServiceImpl implements IFrameProjectService {
 	}
 
 	@Override
+	@Cacheable(modelId="frameProjectCaching")
 	public List<Map<String,Object>> findJsonById(int id) {
 		return frameProjectDao.findJsonById(id);
+	}
+	
+	@Override
+	@Cacheable(modelId="frameProjectCaching")
+	public List<Map<String, Object>> findAll() {
+		return frameProjectDao.findAll();
 	}
 
 }

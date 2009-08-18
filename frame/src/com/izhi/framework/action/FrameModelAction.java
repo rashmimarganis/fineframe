@@ -50,7 +50,12 @@ public class FrameModelAction extends BasePageAction{
 	}
 	@Action("load")
 	public String load(){
-		obj=modelService.findModelById(id);
+		
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("data", modelService.findJsonById(id));
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
 	

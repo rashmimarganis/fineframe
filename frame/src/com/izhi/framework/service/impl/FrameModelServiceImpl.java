@@ -75,4 +75,9 @@ public class FrameModelServiceImpl implements IFrameModelService {
 		this.frameModelDao = frameModelDao;
 	}
 
+	@Override
+	public List<Map<String, Object>> findJsonById(int id) {
+		return frameModelDao.findJsonById(id);
+	}
+
 }

@@ -107,9 +107,14 @@
 				    	mainPanel.syncSize();
 				    },
 				    text: "正在加载...",
-				    timeout: 120,
+				    timeout: 80,
 				    scripts: true
 				});
+			},
+			addFunctionPanel:function(p){
+				mainPanel.removeAll();
+				mainPanel.add(p);
+				mainPanel.doLayout();
 			}
 			
 		};

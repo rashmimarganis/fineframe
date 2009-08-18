@@ -138,21 +138,9 @@ var FrameProjectApp= function(){
 		    grid.render();
 		},
 		initLayout:function(){
-			
-			var center= new Ext.Panel({
-		        collapsible:false,
-				layout:'fit',
-		        el: 'projectCenter',
-				region:'center',
-				contentEl:'projectGrid',
-				items:[grid]
-		    });
-	     	mainPanel.add(grid);
-	     	
-	     	//
 			store.load({params:{start:0, limit:pageSize}});
-			center.syncSize();
-			mainPanel.doLayout();
+	     	FineCmsMain.addFunctionPanel(grid);
+	     	grid.syncSize();
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){

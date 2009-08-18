@@ -1,3 +1,154 @@
+var FrameModelFormPanel = function() {
+	this.idField = {
+		xtype : 'hidden',
+		fieldLabel : "id",
+		name : "obj.modelId",
+		value:'0'
+	};
+	this.nameField = {
+		xtype : 'textfield',
+		fieldLabel : "英文名称",
+		allowBlank : false,
+		name : "obj.name"
+	};
+	this.labelField = {
+		xtype : 'textfield',
+		fieldLabel : "中文名称",
+		allowBlank : false,
+		name : "obj.label"
+	};
+	
+	var RecordDef = Ext.data.Record.create([    
+            {name: 'projectId'},{name: 'name'}                   
+    ]); 
+    this.projectStore=new Ext.data.Store({    
+        //设定读取的地址 
+        proxy: new Ext.data.HttpProxy({url: 'frame/project/all.jhtm'}),    
+        //设定读取的格式    
+        reader: new Ext.data.JsonReader({    
+            id:"projectId",totalProperty:'totalCount',root:'objs' 
+        }, RecordDef),    
+        remoteSort: true,
+        autoLoad:true
+    }); 
+
+    this.projectField = new Ext.form.ComboBox({
+        store: this.projectStore,
+        fieldLabel: '所属项目',
+        displayField:'name',
+        valueField:'projectId',
+        typeAhead: true,
+        mode: 'local',
+        triggerAction: 'all',
+        emptyText:'请选择项目...',
+        blankText:'请选择项目...',
+        selectOnFocus:true,
+        allowBlank:false,
+        hiddenName: 'obj.project.projectId'
+    });
+	
+	FrameModelFormPanel.superclass.constructor.call(this, {
+		bodyStyle : 'padding:2px 2px 0',
+		frame : true,
+		reader : new Ext.data.JsonReader( {
+			root : 'data',
+			successProperty : 'success',
+			totalProperty : 'totalCount',
+			id : 'modelId'
+		}, [
+		    {name:'obj.modelId', mapping:'modelId'},
+		    {name:'obj.name',mapping:'name'}, 
+		    {name:'obj.label',mapping:'label'},
+		    {name:'obj.project.projectId',mapping:'projectId'}
+		    ]
+		),
+		items : [this.idField, this.nameField, this.labelField,this.projectField]
+	});
+};
+Ext.extend(FrameModelFormPanel, Ext.form.FormPanel, {
+	loadData : function(id) {
+		var url = 'frame/model/load.jhtm?id=' + id;
+		this.getForm().load( {
+			url : url,
+			waitMsg : '正在加载数据....',
+			failure : function(form, action) {
+				var json = action.response.responseText;
+				var o = eval("(" + json + ")");
+				Ext.MessageBox.show( {
+					title : '出现错误',
+					msg : o.message,
+					buttons : Ext.MessageBox.OK,
+					icon : Ext.MessageBox.ERROR
+				});
+			}
+		});
+	}
+});
+
+var FrameModelWindow = function() {
+	var _win = this;
+	this.formPanel = new FrameModelFormPanel();
+	var _form = this.formPanel.getForm();
+	FrameModelWindow.superclass.constructor.call(this, {
+		title : '模型信息',
+		width : 320,
+		height : 180,
+		resizable : true,
+		plain : false,
+		border : false,
+		modal : true,
+		autoScroll : true,
+		layout : 'fit',
+		closeAction : 'hide',
+		items : this.formPanel,
+		buttons : [ {
+			text : '保存',
+			handler : function() {
+				if (_form.isValid()) {
+					_form.submit( {
+						waitMsg : '正在保存数据...',
+						url : 'frame/model/save.jhtm',
+						failure : function(form, action) {
+							var json = action.response.responseText;
+							var o = eval("(" + json + ")");
+							Ext.MessageBox.show( {
+								title : '出现错误',
+								msg : o.message,
+								buttons : Ext.MessageBox.OK,
+								icon : Ext.MessageBox.ERROR
+							});
+						},
+						success : function(form1, action) {
+							FrameModelApp.reload();
+							
+						}
+					});
+				}
+			}
+		}, {
+			text : '取消',
+			handler : function() {
+				_win.hide();
+			},
+			tooltip : '关闭窗口'
+		}]
+	});
+}
+Ext.extend(FrameModelWindow, Ext.Window, {
+	loadData : function(id) {
+		this.formPanel.loadData(id);
+	}
+});
+
+
+
+
+
+
+
+
+
+
 var FrameModelApp= function(){
 	var store;
     var xg = Ext.grid;
@@ -17,19 +168,19 @@ var FrameModelApp= function(){
 		initStore:function(){
 			store = new Ext.data.Store({
 		        proxy: new Ext.data.HttpProxy({
-		            url: 'frame/template/list.jhtm'
+		            url: 'frame/model/list.jhtm'
 		        }),
 		        reader: new Ext.data.JsonReader({
 		            root: 'objs',
 		            totalProperty: 'totalCount',
-		            id: 'templateId',
+		            id: 'modelId',
 		            fields: [
-		                'templateId','fileName' ,'name','type'
+		                'modelId','name' ,'label','projectId','projectName'
 		            ]
 		        }),
 		        remoteSort: true
 		    });
-		    store.setDefaultSort('templateId', 'desc');
+		    store.setDefaultSort('modelId', 'desc');
 			store.on('load',function(s,r,o){
 				if(s.getTotalCount()>0){
 					sm.selectFirstRow();
@@ -53,58 +204,58 @@ var FrameModelApp= function(){
 			}
 			sm = new xg.CheckboxSelectionModel();
 			var cm = new Ext.grid.ColumnModel([sm,{
-	           id: 'templateId', 
+	           id: 'modelId', 
 	           header: "ID",
-	           dataIndex: 'templateId',
+	           dataIndex: 'modelId',
 	           width: 40
 	        },{
 	           id: 'name', 
-	           header: "名称",
+	           header: "英文名称",
 	           dataIndex: 'name',
 	           width: 100
 	        },{
-	           header: "文件名",
-	           dataIndex: 'fileName',
-	           width: 150
-	        },{
-	           header: "类型",
-	           dataIndex: 'type',
+		           id: 'label', 
+		           header: "中文名称",
+		           dataIndex: 'label',
+		           width: 100
+		        },{
+	           header: "所属项目",
+	           dataIndex: 'projectName',
 	           width: 150,
-	           renderer:function(v){
-	        		if(v=='source'){
-	        			return '源码模板';
-	        		}else if(v=='page'){
-	        			return '控件模板';
-	        		}else if(v=='control'){
-	        			return '控件模板';
-	        		}
-	        	}
-	        }]);
+	           sortable: false
+	        },{
+		           header: "项目ID",
+		           dataIndex: 'projectId',
+		           width: 150,
+		           sortable: false,
+		           hidden:true
+		        }]);
 	
 		    cm.defaultSortable = true;
 		    
-			var mainHeight=FineCmsMain.getMainPanelHeight()-1;	 
+			
 		    grid = new Ext.grid.GridPanel({
 		        store: store,
 		        cm: cm,
 				sm: sm,
+				region:'west',
+				width:'300',
 		        trackMouseOver:true,
 		        frame:false,
-		        height:mainHeight,
 		        autoScroll:true,
 		        loadMask: true,
 				tbar:[{
-				  	text: '添加模板',
+				  	text: '添加模型',
 		            iconCls: 'x-btn-text-icon add',
 		            scope: this,
-					handler:FrameModelApp.showInfoDlg
+					handler:FrameModelApp.addInfo
 				 },'-',{
-				  	text: '修改模板',
+				  	text: '修改模型',
 		            iconCls: 'x-btn-text-icon edit',
 		            scope: this,
 					handler:FrameModelApp.loadInfo
 				 },'-',{
-				  	text: '删除模板',
+				  	text: '删除模型',
 		            iconCls: 'x-btn-text-icon delete',
 		            scope: this,
 					handler:FrameModelApp.deleteInfo
@@ -119,48 +270,59 @@ var FrameModelApp= function(){
            			showPreview:true,
 		            forceFit:true
 		        },
-				renderTo:'templateGrid'
+				renderTo:'modelGrid'
 		    });
 		    grid.on('rowdblclick',FrameModelApp.loadInfo);
 		    grid.render();
 		},
-		initLayout:function(){
+		
+		addInfo:function(){
+			FrameModelApp.showInfoDlg();
+			form.reset();
 			
+		},
+		initLayout:function(){
+			var mainHeight=FineCmsMain.getMainPanelHeight()-1;	 
 			var center= new Ext.Panel({
 		        collapsible:false,
-				layout:'fit',
-		        el: 'templateCenter',
+				layout:'border',
+		        el: 'modelCenter',
+		        height:mainHeight,
 				region:'center',
-				contentEl:'templateGrid',
 				items:[grid]
 		    });
-	     	mainPanel.add(grid);
+			FineCmsMain.addFunctionPanel(grid);
+	     	//mainPanel.add(center);
 	     	
 	     	//
 			store.load({params:{start:0, limit:pageSize}});
 			center.syncSize();
-			mainPanel.doLayout();
+			//mainPanel.doLayout();
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){
-				Ext.Msg.alert("删除模板","请先选择一个模板！");
+				Ext.Msg.alert("编辑模型","请先选择一个模型！");
 				return;
 			}else{
-	    		FrameModelApp.showInfoDlg();
+				FrameModelApp.showInfoDlg();
+				//infoDlg.show();
 	    		var select=sm.getSelected();
-	    		var id=select.get('templateId');
-	    		form.getForm().load({url:'frame/template/load.jhtm?id='+id, waitMsg:'正在加载数据...'});
+	    		var id=select.get('modelId');
+	    		//infoDlg.formPanel.getForm().loadData(id);
+	    		//infoDlg.show();
+	    		infoDlg.loadData(id);
 			}
+    		
     	}
     	,
 		deleteInfo : function(){
 			if(sm.getSelected==null){
-				Ext.Msg.alert("删除模板","请先选择一个模板！");
+				Ext.Msg.alert("删除模型","请先选择一个模型！");
 				return;
 			}else{
-				var s=Ext.Msg.confirm("删除模板","确定要删除选中的模板吗？",function(o){
+				var s=Ext.Msg.confirm("删除模型","确定要删除选中的模型吗？",function(o){
 					if(o=='yes'){
-						var url='frame/template/deletes.jhtm?'+FrameModelApp.getSelectedIds();
+						var url='frame/model/deletes.jhtm?'+FrameModelApp.getSelectedIds();
 						Ext.Ajax.request({
 							url:url,
 							success:success,
@@ -184,9 +346,9 @@ var FrameModelApp= function(){
 					}else{
 						store.load({params:{start:start, limit:pageSize}});
 					}
-					Ext.Msg.alert("删除模板","删除模板成功！");
+					Ext.Msg.alert("删除模型","删除模型成功！");
 				}else{
-					Ext.Msg.alert("删除模板","删除模板失败！");
+					Ext.Msg.alert("删除模型","删除模型失败！");
 				}
 				
 			}
@@ -203,9 +365,9 @@ var FrameModelApp= function(){
 			for(var i=0;i<size;i++){
 					var r=selections[i];
 					if(ids.length==0){
-						ids='ids='+r.get("templateId");
+						ids='ids='+r.get("modelId");
 					}else{
-						ids+="&ids="+r.get("templateId");
+						ids+="&ids="+r.get("modelId");
 					}
 			}
 			return ids;
@@ -213,128 +375,10 @@ var FrameModelApp= function(){
 		},
 		showInfoDlg:function(){
 			if(!infoDlg){
-				var store = new Ext.data.SimpleStore({
-			        fields: ['name', 'label', 'tip'],
-			        data : Ext.ux.templateType 
-			    });
-			    var combo = new Ext.form.ComboBox({
-			        store: store,
-			        fieldLabel: '模板类型',
-			        displayField:'label',
-			        valueField:'name',
-			        readOnly:true,
-			        typeAhead: true,
-			        mode: 'local',
-			        value:'source',
-			        triggerAction: 'all',
-			        emptyText:'请选择类型...',
-			        selectOnFocus:true,
-			        hiddenName: 'obj.type'
-			    });
-				form = new Ext.form.FormPanel({
-			        baseCls: 'x-plain',
-			        layout:'form',
-			        clientValidation: true,
-			        url:'frame/template/save.jhtm',
-			        defaultType: 'textfield',
-			        defaults: {width: 220},
-			        labelAlign: 'left',
-			        reader : new Ext.data.JsonReader({
-			        	root  : 'data',
-			        	successProperty: 'success'
-			        }, [
-			            {name: 'obj.templateId', mapping:'templateId'}, // custom mapping
-			            {name: 'obj.name', mapping:'name'},
-			            {name: 'obj.type', mapping:'type'},
-			            {name: 'obj.fileName', mapping:'fileName'},
-			            {name: 'obj.content', mapping:'content'}
-			        ]),
-			        items: [{
-			        	name:'obj.templateId',
-			        	xtype:'hidden',
-			        	value:0
-			        	
-			        },
-			        {
-	                    fieldLabel: '模板名称',
-	                    name: 'obj.name',
-	                    allowBlank:false
-	                    
-	                },combo,{
-	                    fieldLabel: '文件名称',
-	                    name: 'obj.fileName',
-	                    allowBlank:false
-	                },{
-	                	hideLabel:true,
-	                	fieldLabel: '模板内容',
-	                    name: 'obj.content',
-	                    xtype:'textarea',
-	                    allowBlank:false,
-	                    height:200,
-	                    anchor:'98%'
-	                }]
-			    });
-				
-				form.on({
-					actioncomplete: function(form, action){
-						FrameMsg.msg("保存模板",action.result.msg);
-		               
-						saveBtn.enable();
-						form.reset();
-						FrameModelApp.reload();
-		        	},
-		        	actionfailed: function(form, action){
-		                saveBtn.enable();
-		                FrameMsg.msg("保存模板",action.result.msg);
-		        	}
-				});
-				saveBtn=form.addButton({
-			        text: '保存',
-			        handler: function(){
-						if(form.getForm().isValid()){
-							form.getForm().submit({url:'frame/template/save.jhtm', waitMsg:'正在保存数据...'});
-							saveBtn.disable();
-						}else{
-							Ext.Msg.alert("保存模板","请把模板信息填写完整！");
-						}
-			        }
-			    });
-				
-			    infoDlg = new Ext.Window({
-			        title: '模板信息',
-			        width: 500,
-			        height:400,
-			        minWidth: 300,
-			        minHeight: 200,
-			        layout: 'fit',
-			        plain:true,
-			        modal:true,
-			        bodyStyle:'padding:5px;',
-			        buttonAlign:'center',
-			        items: form,
-			        tbar:[{
-					  	text: '上一条',
-			            iconCls: 'x-btn-text-icon prev',
-			            scope: this,
-						handler:FrameModelApp.showInfoDlg
-					 },'-',{
-					  	text: '下一条',
-			            iconCls: 'x-btn-text-icon next',
-			            scope: this,
-						handler:FrameModelApp.loadInfo
-					 }],
-			        buttons: [saveBtn,{
-			            text: '取消',
-			            handler:function(){
-			        		infoDlg.hide();
-			        	}
-			        }
-			        ]
-			    });
-			    
+				infoDlg=new FrameModelWindow();
 			}
 			infoDlg.show();
-			form.getForm().findField("obj.name").focus(true);
+			//form.getForm().findField("obj.name").focus(true);
 		},
 		reload:function(){
 			var lastO= store.lastOptions.params;

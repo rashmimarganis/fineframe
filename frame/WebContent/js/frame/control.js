@@ -102,16 +102,6 @@ var FrameControlApp= function(){
 		            iconCls: 'x-btn-text-icon delete',
 		            scope: this,
 					handler:FrameControlApp.deleteInfo
-				 }, '->',{
-				  	text: '生成代码',
-		            iconCls: 'x-btn-text-icon generate',
-		            scope: this,
-					handler:FrameControlApp.deleteInfo
-				 },'-', {
-				  	text: '运行测试',
-		            iconCls: 'x-btn-text-icon server',
-		            scope: this,
-					handler:FrameControlApp.deleteInfo
 				 }],
 				bbar: new Ext.PagingToolbar({
 		            pageSize: pageSize,
@@ -144,12 +134,10 @@ var FrameControlApp= function(){
 				contentEl:'controlGrid',
 				items:[grid]
 		    });
-	     	mainPanel.add(grid);
-	     	
+	     	FineCmsMain.addFunctionPanel(grid);
 	     	//
 			store.load({params:{start:0, limit:pageSize}});
 			center.syncSize();
-			mainPanel.doLayout();
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){

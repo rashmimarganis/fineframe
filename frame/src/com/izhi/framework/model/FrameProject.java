@@ -30,6 +30,21 @@ public class FrameProject implements Serializable{
 	@Column(name="web_path")
 	private String webPath;
 	
+	@Column(name="database_type")
+	private String databaseType;
+	@Column(name="database_class")
+	private String driverClass;
+	@Column(name="database_url")
+	private String databaseUrl;
+	@Column(name="database_user")
+	private String databaseUser;
+	@Column(name="database_password")
+	private String databasePassword;
+	@Column(name="database_name")
+	private String databaseName;
+	@Column(name="table_prefix")
+	private String tablePrefix;
+	
 	public int getProjectId() {
 		return projectId;
 	}
@@ -72,6 +87,48 @@ public class FrameProject implements Serializable{
 	}
 	public void setWebPath(String webPath) {
 		this.webPath = webPath;
+	}
+	public String getDatabaseType() {
+		return databaseType;
+	}
+	public void setDatabaseType(String databaseType) {
+		this.databaseType = databaseType;
+	}
+	public String getDriverClass() {
+		return driverClass;
+	}
+	public void setDriverClass(String driverClass) {
+		this.driverClass = driverClass;
+	}
+	public String getDatabaseUrl() {
+		return databaseUrl;
+	}
+	public void setDatabaseUrl(String databaseUrl) {
+		this.databaseUrl = databaseUrl;
+	}
+	public String getDatabaseUser() {
+		return databaseUser;
+	}
+	public void setDatabaseUser(String databaseUser) {
+		this.databaseUser = databaseUser;
+	}
+	public String getDatabasePassword() {
+		return databasePassword;
+	}
+	public void setDatabasePassword(String databasePassword) {
+		this.databasePassword = databasePassword;
+	}
+	public String getDatabaseName() {
+		return databaseName;
+	}
+	public void setDatabaseName(String databaseName) {
+		this.databaseName = databaseName;
+	}
+	public String getTablePrefix() {
+		return tablePrefix;
+	}
+	public void setTablePrefix(String tablePrefix) {
+		this.tablePrefix = tablePrefix;
 	}
 	
 	

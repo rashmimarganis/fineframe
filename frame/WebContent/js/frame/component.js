@@ -148,12 +148,10 @@ var FrameComponentApp= function(){
 				contentEl:'componentGrid',
 				items:[grid]
 		    });
-	     	mainPanel.add(grid);
-	     	
+	     	FineCmsMain.addFunctionPanel(grid);
 	     	//
 			store.load({params:{start:0, limit:pageSize}});
 			center.syncSize();
-			mainPanel.doLayout();
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){
