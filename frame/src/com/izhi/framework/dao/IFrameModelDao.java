@@ -1,6 +1,7 @@
 package com.izhi.framework.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.izhi.framework.model.FrameModel;
 import com.izhi.platform.util.PageParameter;
@@ -12,6 +13,7 @@ public interface IFrameModelDao {
 	boolean deleteModels(List<Integer> ids) ;
 	FrameModel findModelById(int id);
 	FrameModel findModelByName(String name);
-	List<FrameModel> findPage(PageParameter pp);
+	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();
+	List<Map<String,Object>> findJsonById(int id);
 }

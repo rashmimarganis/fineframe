@@ -22,4 +22,6 @@ public interface IFrameTemplateService {
 	boolean saveFile(String path,String content);
 	
 	boolean isTemplateNameExist(FrameTemplate obj);
+	List<Map<String,Object>> findJsonByType(String type);
+	int findTotalCountByType(String type);
 }

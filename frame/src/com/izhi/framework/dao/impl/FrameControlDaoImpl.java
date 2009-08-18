@@ -1,11 +1,10 @@
 package com.izhi.framework.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Order;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +15,14 @@ import com.izhi.platform.util.PageParameter;
 public class FrameControlDaoImpl extends HibernateDaoSupport implements IFrameControlDao{
 	@Override
 	public boolean deleteControl(int id) {
-		String sql="delete from FrameControl o where o.projectId=? ";
+		String sql="delete from FrameControl o where o.controlId=? ";
 		int i=this.getHibernateTemplate().bulkUpdate(sql, id);
 		return i>0;
 	}
 
 	@Override
 	public boolean deleteControls(List<Integer> ids) {
-		String sql="delete from FrameControl o where o.projectId in(:ids)";
+		String sql="delete from FrameControl o where o.controlId in(:ids)";
 		Session session=this.getSession();
 		Query q=session.createQuery(sql);
 		q.setParameterList("ids", ids);
@@ -38,25 +37,18 @@ public class FrameControlDaoImpl extends HibernateDaoSupport implements IFrameCo
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<FrameControl> findPage(PageParameter pp) {
+	public List<Map<String,Object>> findPage(PageParameter pp) {
+		String sql="select new map(o.controlId as controlId,o.name as name,o.template.id as templateId,o.template.name as templateName) from FrameControl o where 1=1";
 		String sortField=pp.getSort();
 		String sort=pp.getDir();
-		int maxResult=pp.getLimit();
-		int firstResult=pp.getStart();
-		DetachedCriteria dc = DetachedCriteria.forClass(FrameControl.class);
-		if (sort != null && sortField != null) {
-			sort = sort.toLowerCase();
-			if (sort.equals("desc")) {
-				dc.addOrder(Order.desc(sortField));
-			} else if (sort.equals("asc")) {
-				dc.addOrder(Order.asc(sortField));
-			}
-		}
-		if(maxResult==0){
-			maxResult=10;
-		}
-		return this.getHibernateTemplate().findByCriteria(dc, firstResult,
-				maxResult);
+		sql+=" order by o."+sortField+" "+sort;
+		Session s=this.getSession();
+		
+		Query q=s.createQuery(sql);
+		q.setMaxResults(pp.getLimit());
+		q.setFirstResult(pp.getStart());
+		
+		return q.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -88,5 +80,18 @@ public class FrameControlDaoImpl extends HibernateDaoSupport implements IFrameCo
 			return l.get(0);
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> findJsonById(int id) {
+		String sql="select new map(o.controlId as controlId,o.name as name,o.label as label,o.template.id as templateId) from FrameControl o where o.controlId=:id";
+		
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setInteger("id", id);
+		List<Map<String,Object>> l=q.list();
+		
+		return l;
 	}
 }

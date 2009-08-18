@@ -1,6 +1,7 @@
 package com.izhi.framework.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.izhi.framework.model.FrameControl;
 import com.izhi.platform.util.PageParameter;
@@ -12,6 +13,7 @@ public interface IFrameControlService {
 	boolean deleteControls(List<Integer> ids) ;
 	FrameControl findControlById(int id);
 	FrameControl findControlByName(String name);
-	List<FrameControl> findPage(PageParameter pp);
+	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();
+	List<Map<String,Object>> findJsonById(int id);
 }

@@ -1,6 +1,7 @@
 package com.izhi.framework.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -38,7 +39,7 @@ public class FrameControlServiceImpl implements IFrameControlService {
 
 	@Override
 	@Cacheable(modelId="frameControlCaching")
-	public List<FrameControl> findPage(PageParameter pp) {
+	public List<Map<String,Object>> findPage(PageParameter pp) {
 		return frameControlDao.findPage(pp);
 	}
 
@@ -72,6 +73,11 @@ public class FrameControlServiceImpl implements IFrameControlService {
 
 	public void setFrameControlDao(IFrameControlDao frameControlDao) {
 		this.frameControlDao = frameControlDao;
+	}
+
+	@Override
+	public List<Map<String, Object>> findJsonById(int id) {
+		return frameControlDao.findJsonById(id);
 	}
 
 }

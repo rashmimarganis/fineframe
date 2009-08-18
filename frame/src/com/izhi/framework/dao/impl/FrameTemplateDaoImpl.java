@@ -107,4 +107,20 @@ public class FrameTemplateDaoImpl extends HibernateDaoSupport implements IFrameT
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> findJsonByType(String type) {
+		String sql="select new map(o.templateId as templateId,o.name as name,o.fileName as fileName)from FrameTemplate o where o.type=?";
+		List<Map<String,Object>> l=this.getHibernateTemplate().find(sql,type);
+		return l;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public int findTotalCountByType(String type) {
+		String sql="select count(*) from FrameTemplate o where o.type=?";
+		List<Long> l=this.getHibernateTemplate().find(sql,type);
+		return l.get(0).intValue();
+	}
+
 }

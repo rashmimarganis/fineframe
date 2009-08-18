@@ -17,4 +17,7 @@ public interface IFrameTemplateDao {
 	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();
 	List<Map<String,Object>> findJsonById(int id);
+	
+	List<Map<String,Object>> findJsonByType(String type);
+	int findTotalCountByType(String type);
 }

@@ -1,6 +1,7 @@
 package com.izhi.framework.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -38,7 +39,7 @@ public class FrameModelServiceImpl implements IFrameModelService {
 
 	@Override
 	@Cacheable(modelId="frameModelCaching")
-	public List<FrameModel> findPage(PageParameter pp) {
+	public List<Map<String,Object>> findPage(PageParameter pp) {
 		return frameModelDao.findPage(pp);
 	}
 

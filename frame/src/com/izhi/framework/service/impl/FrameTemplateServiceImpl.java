@@ -12,8 +12,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springmodules.cache.annotations.CacheFlush;
 import org.springmodules.cache.annotations.Cacheable;
@@ -21,12 +19,12 @@ import org.springmodules.cache.annotations.Cacheable;
 import com.izhi.framework.dao.IFrameTemplateDao;
 import com.izhi.framework.model.FrameTemplate;
 import com.izhi.framework.service.IFrameTemplateService;
+import com.izhi.platform.service.BaseService;
 import com.izhi.platform.util.PageParameter;
 import com.izhi.platform.util.WebUtils;
 @Service("frameTemplateService")
-public class FrameTemplateServiceImpl implements IFrameTemplateService {
+public class FrameTemplateServiceImpl extends BaseService implements IFrameTemplateService {
 
-	private final static Logger log=LoggerFactory.getLogger(FrameTemplateServiceImpl.class);
 	@Resource(name="frameTemplateDao")
 	private IFrameTemplateDao frameTemplateDao;
 	@Resource(name="frameTemplatePath")
@@ -188,5 +186,15 @@ public class FrameTemplateServiceImpl implements IFrameTemplateService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public List<Map<String, Object>> findJsonByType(String type) {
+		return frameTemplateDao.findJsonByType(type);
+	}
+
+	@Override
+	public int findTotalCountByType(String type) {
+		return frameTemplateDao.findTotalCountByType(type);
 	}
 }
