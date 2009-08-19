@@ -5,6 +5,16 @@ Ext.ux.encoding = [
         ['ISO8859-1', 'ISO8859-1', 'ISO8859-1'],
         ['UTF-8', 'UTF-8', 'UTF-8']
     ];
+
+Ext.namespace('Ext.ux.JavaClassType');
+
+Ext.ux.JavaClassType = [
+                        ['Integer', 'Integer', 'Integer'],
+                        ['String', 'String', 'String'],
+                        ['Float', 'Float', 'Float'],
+                         ['Double', 'Double', 'Double'],
+                         ['Boolean', 'Boolean', 'Boolean']
+    ];
 Ext.namespace('Ext.ux.templateType');
 
 Ext.ux.templateType = [

@@ -4,10 +4,12 @@
 	var menuPanel;
 	var viewport;
 	var mainPanelHeight;
+	//Ext.reg('checkbox', Ext.form.Checkbox);
+	
 	var FineCmsMain=function(){
 		return {
 			init:function(){
-				Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+				//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 				FineCmsMain.initMenu();
 				FineCmsMain.initMainPanel();
 				viewport = new Ext.Viewport({
@@ -28,7 +30,7 @@
 		        });
 		       viewport.doLayout();
 		       FrameMsg.init();
-		       FrameMsg.msg("AAAA","AAAAAAAAAAAAAAAAAA");
+		       //FrameMsg.msg("AAAA","AAAAAAAAAAAAAAAAAA");
 			},
 			initMenu:function(){
 				menuPanel=new Ext.Panel({
@@ -113,8 +115,10 @@
 			},
 			addFunctionPanel:function(p){
 				mainPanel.removeAll();
+				p.setHeight(FineCmsMain.getMainPanelHeight()-1);
 				mainPanel.add(p);
-				mainPanel.doLayout();
+				mainPanel.syncSize();
+				//mainPanel.doLayout(true);
 			}
 			
 		};
@@ -206,8 +210,7 @@ Cookies.get = function(name){
 
 Cookies.clear = function(name) {
   if(Cookies.get(name)){
-    document.cookie = name + "=" +
-    "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+    document.cookie = name + "=" + "; expires=Thu, 01-Jan-70 00:00:01 GMT";
   }
 };
 
@@ -218,4 +221,20 @@ Cookies.getCookieVal = function(offset){
    }
    return unescape(document.cookie.substring(offset, endstr));
 };
+
+function renderDate(v) {
+	if (v == null) {
+		return '';
+	}
+	var month = v.month * 1 + 1;
+	var year = v.year * 1 + 1900;
+	var date = v.date;
+	var hours = v.hours;
+	var minutes = v.minutes;
+	var seconds = v.seconds;
+
+	return year + '-' + month + '-' + date + ' ' + hours + ':'
+			+ minutes + ':' + seconds;
+
+}
 </#compress>

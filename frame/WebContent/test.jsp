@@ -15,19 +15,39 @@
 <%@page import="com.izhi.platform.service.ILogService"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.izhi.platform.dao.ILogDao"%>
-<%@page import="com.izhi.framework.dao.IFrameProjectDao"%>
+<%@page import="com.izhi.framework.dao.IFrameModelDao"%>
 <%@page import="com.izhi.framework.model.FrameProject"%>
 <%@page import="net.sf.json.JSONArray"%>
-<%@page import="com.izhi.framework.service.IFrameProjectService"%><html>
+<%@page import="com.izhi.framework.service.IFrameProjectService"%>
+<%@page import="com.izhi.framework.service.IFrameTemplateService"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="net.sf.json.JSONObject"%>
+<%@page import="com.izhi.framework.service.IFrameModelService"%>
+<%@page import="java.util.ArrayList"%><html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 </head>
 <body>
 <%
-String url=Thread.currentThread().getContextClassLoader().getResource(".").getPath();
-out.println(url);
-out.println(this.getServletContext().getRealPath("/"));
+	WebApplicationContext wac=WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
+	IFrameTemplateService templateService = (IFrameTemplateService) wac.getBean("frameTemplateService"); 
+	Map<String,Object> map=new HashMap<String, Object>();
+	map.put("objs", templateService.findJsonByType("control"));
+	map.put("totalCount", templateService.findTotalCountByType("control"));
+	out.println(JSONObject.fromObject(map).toString());
+	IFrameModelDao modelService=(IFrameModelDao)wac.getBean("frameModelDao");
+	List<Integer> l=new ArrayList<Integer>();
+	PageParameter pp=new PageParameter();
+	pp.setDir("desc");
+	pp.setSort("modelId");
+	pp.setStart(0);
+	pp.setLimit(10);
+	List<Map<String,Object>> map1=modelService.findPage(pp);
+	for(Map<String,Object> m:map1){
+		out.println(m);
+	}
+	out.println(modelService.findPage(pp).size());
 /*
 PageParameter pp=new PageParameter();
 	pp.setDir("desc");

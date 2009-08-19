@@ -38,7 +38,7 @@ public class FrameControlDaoImpl extends HibernateDaoSupport implements IFrameCo
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String,Object>> findPage(PageParameter pp) {
-		String sql="select new map(o.controlId as controlId,o.name as name,o.template.id as templateId,o.template.name as templateName) from FrameControl o where 1=1";
+		String sql="select new map(o.controlId as controlId,o.name as name,o.label as label,o.template.id as templateId,o.template.name as templateName) from FrameControl o where 1=1";
 		String sortField=pp.getSort();
 		String sort=pp.getDir();
 		sql+=" order by o."+sortField+" "+sort;

@@ -15,14 +15,14 @@ import com.izhi.platform.util.PageParameter;
 public class FrameAttributeDaoImpl extends HibernateDaoSupport implements IFrameAttributeDao{
 	@Override
 	public boolean deleteAttribute(int id) {
-		String sql="delete from FrameAttribute o where o.projectId=? ";
+		String sql="delete from FrameAttribute o where o.attributeId=? ";
 		int i=this.getHibernateTemplate().bulkUpdate(sql, id);
 		return i>0;
 	}
 
 	@Override
 	public boolean deleteAttributes(List<Integer> ids) {
-		String sql="delete from FrameAttribute o where o.projectId in(:ids)";
+		String sql="delete from FrameAttribute o where o.attributeId in(:ids)";
 		Session session=this.getSession();
 		Query q=session.createQuery(sql);
 		q.setParameterList("ids", ids);
@@ -38,7 +38,7 @@ public class FrameAttributeDaoImpl extends HibernateDaoSupport implements IFrame
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String,Object>> findPage(PageParameter pp) {
-		String sql="select new map(o.attributeId as attributeId,o.name as name,o.packageName as packageName,o.type as type,o.template.id as templateId,o.template.name as templateName) from FrameComponent o where 1=1";
+		String sql="select new map(o.attributeId as attributeId,o.name as name,o.label as label,o.length as length,o.javaClass as javaClass,o.isKey as isKey,o.required as required,o.control.controlId as controlId,o.control.label as controlLabel,o.model.modelId as modelId,o.model.label as modelLabel,o.control.controlId as controlId,o.control.label as controlLabel) from FrameAttribute o where 1=1";
 		String sortField=pp.getSort();
 		String sort=pp.getDir();
 		sql+=" order by o."+sortField+" "+sort;
@@ -82,9 +82,14 @@ public class FrameAttributeDaoImpl extends HibernateDaoSupport implements IFrame
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql="select new map(o.attributeId as attributeId,o.name as name,o.label as label,o.length as length,o.javaClass as javaClass,o.isKey as isKey,o.required as required,o.control.controlId as controlId,o.control.label as controlLabel,o.model.modelId as modelId,o.model.label as modelLabel,o.control.controlId as controlId,o.control.label as controlLabel) from FrameAttribute o  where o.attributeId=:id";
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setInteger("id", id);
+		List<Map<String,Object>> l=q.list();
+		return l;
 	}
 }

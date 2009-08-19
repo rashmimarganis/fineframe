@@ -50,7 +50,11 @@ public class FrameAttributeAction extends BasePageAction{
 	}
 	@Action("load")
 	public String load(){
-		obj=attributeService.findAttributeById(id);
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("data", attributeService.findJsonById(id));
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
 	

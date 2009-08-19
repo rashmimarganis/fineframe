@@ -34,6 +34,12 @@ public class FrameModelAction extends BasePageAction{
 	@Action("list")
 	public String list(){
 		PageParameter pp=this.getPageParameter();
+		if(pp.getSort()==null){
+			pp.setSort("modelId");
+		}
+		if(pp.getDir()==null){
+			pp.setDir("desc");
+		}
 		int totalCount=(int)modelService.findTotalCount();
 		List<Map<String,Object>> l=modelService.findPage(pp);
 		Map<String,Object> map =new HashMap<String, Object>();

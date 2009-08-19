@@ -24,7 +24,7 @@ var FrameControlApp= function(){
 		            totalProperty: 'totalCount',
 		            id: 'controlId',
 		            fields: [
-		                'controlId','name' ,'templateId','templateName'
+		                'controlId','name','label','templateId','templateName'
 		            ]
 		        }),
 		        remoteSort: true
@@ -37,20 +37,6 @@ var FrameControlApp= function(){
 			});
 		},
 		initGridPanel:function(){	
-			function renderDate(v){
-				if(v==null){
-					return '';
-				}
-				var month=v.month*1+1;
-				var year=v.year*1+1900;
-				var date=v.date;
-				var hours=v.hours;
-				var minutes=v.minutes;
-				var seconds=v.seconds;
-				
-				return year+'-'+month+'-'+date+' '+hours+':'+minutes+':'+seconds;
-				
-			}
 			sm = new xg.CheckboxSelectionModel();
 			var cm = new Ext.grid.ColumnModel([sm,{
 	           id: 'controlId', 
@@ -59,10 +45,15 @@ var FrameControlApp= function(){
 	           width: 40
 	        },{
 	           id: 'name', 
-	           header: "名称",
+	           header: "英文名称",
 	           dataIndex: 'name',
 	           width: 100
 	        },{
+		           id: 'label', 
+		           header: "中文名称",
+		           dataIndex: 'label',
+		           width: 100
+		        },{
 	           header: "对应模板",
 	           dataIndex: 'templateName',
 	           width: 150,
@@ -117,6 +108,7 @@ var FrameControlApp= function(){
 		    });
 		    grid.on('rowdblclick',FrameControlApp.loadInfo);
 		    grid.render();
+		    store.load({params:{start:0, limit:pageSize}});
 		},
 		
 		addInfo:function(){
@@ -134,10 +126,8 @@ var FrameControlApp= function(){
 				contentEl:'controlGrid',
 				items:[grid]
 		    });
-	     	FineCmsMain.addFunctionPanel(grid);
-	     	//
-			store.load({params:{start:0, limit:pageSize}});
-			center.syncSize();
+	     	FineCmsMain.addFunctionPanel(center);
+			
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){

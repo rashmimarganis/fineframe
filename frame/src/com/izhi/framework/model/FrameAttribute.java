@@ -2,7 +2,6 @@ package com.izhi.framework.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,13 +32,19 @@ public class FrameAttribute implements Serializable {
 	@NotFound(action=NotFoundAction.IGNORE)
 	@JoinColumn(name="control_id",updatable=true,insertable=true,nullable=true)
 	private FrameControl control;
-	@Column(name="sql_type")
-	private String sqlType;
-	@Basic
-	private String note;
+	
+	@Column(name="is_key")
+	private boolean isKey;
+	
+	@Column(name="required")
+	private boolean required=false;
+	
+	@Column(name="java_class")
+	private String javaClass;
 
 	@Column(name="length")
 	private int length;
+	
 	@ManyToOne(optional=true)
 	@NotFound(action=NotFoundAction.IGNORE)
 	@JoinColumn(name="model_id",updatable=true,insertable=true,nullable=true)
@@ -79,13 +84,7 @@ public class FrameAttribute implements Serializable {
 	public void setModel(FrameModel model) {
 		this.model = model;
 	}
-	public String getSqlType() {
-		return sqlType;
-	}
 
-	public void setSqlType(String sqlType) {
-		this.sqlType = sqlType;
-	}
 
 	public FrameControl getControl() {
 		return control;
@@ -96,13 +95,6 @@ public class FrameAttribute implements Serializable {
 	}
 
 	
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}
 
 	public String getLabel() {
 		return label;
@@ -112,4 +104,35 @@ public class FrameAttribute implements Serializable {
 		this.label = label;
 	}
 
+	
+	public boolean getIsKey() {
+		return isKey;
+	}
+
+	public void setIsKey(boolean isKey) {
+		this.isKey = isKey;
+	}
+
+	public boolean isRequired() {
+		return required;
+	}
+
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	public String getJavaClass() {
+		return javaClass;
+	}
+
+	public void setJavaClass(String javaClass) {
+		this.javaClass = javaClass;
+	}
+
+	public void setKey(boolean isKey) {
+		this.isKey = isKey;
+	}
+
+
+	
 }

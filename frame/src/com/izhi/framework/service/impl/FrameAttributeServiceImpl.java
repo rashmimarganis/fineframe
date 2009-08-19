@@ -75,4 +75,9 @@ public class FrameAttributeServiceImpl implements IFrameAttributeService {
 		this.frameAttributeDao = frameAttributeDao;
 	}
 
+	@Override
+	public List<Map<String, Object>> findJsonById(int id) {
+		return frameAttributeDao.findJsonById(id);
+	}
+
 }

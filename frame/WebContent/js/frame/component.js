@@ -130,6 +130,7 @@ var FrameComponentApp= function(){
 		    });
 		    grid.on('rowdblclick',FrameComponentApp.loadInfo);
 		    grid.render();
+		    store.load({params:{start:0, limit:pageSize}});
 		},
 		
 		addInfo:function(){
@@ -144,14 +145,11 @@ var FrameComponentApp= function(){
 		        collapsible:false,
 				layout:'fit',
 		        el: 'componentCenter',
-				region:'center',
 				contentEl:'componentGrid',
 				items:[grid]
 		    });
-	     	FineCmsMain.addFunctionPanel(grid);
-	     	//
-			store.load({params:{start:0, limit:pageSize}});
-			center.syncSize();
+	     	FineCmsMain.addFunctionPanel(center);
+			
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){

@@ -121,6 +121,7 @@ var FrameTemplateApp= function(){
 		    });
 		    grid.on('rowdblclick',FrameTemplateApp.loadInfo);
 		    grid.render();
+		    store.load({params:{start:0, limit:pageSize}});
 		},
 		addInfo:function(){
 			FrameTemplateApp.showInfoDlg();
@@ -138,10 +139,8 @@ var FrameTemplateApp= function(){
 				contentEl:'templateGrid',
 				items:[grid]
 		    });
-	     	FineCmsMain.addFunctionPanel(grid);
-	     	//
-			store.load({params:{start:0, limit:pageSize}});
-			center.syncSize();
+	     	FineCmsMain.addFunctionPanel(center);
+	     	
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){

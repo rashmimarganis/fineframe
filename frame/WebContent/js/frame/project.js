@@ -93,6 +93,7 @@ var FrameProjectApp= function(){
 				sm: sm,
 		        trackMouseOver:true,
 		        frame:false,
+		        autoDestroy:true,
 		        height:mainHeight,
 		        autoScroll:true,
 		        loadMask: true,
@@ -138,9 +139,16 @@ var FrameProjectApp= function(){
 		    grid.render();
 		},
 		initLayout:function(){
+			var center= new Ext.Panel({
+		        collapsible:false,
+				layout:'fit',
+		        el: 'projectCenter',
+				contentEl:'projectGrid',
+				items:[grid]
+		    });
 			store.load({params:{start:0, limit:pageSize}});
-	     	FineCmsMain.addFunctionPanel(grid);
-	     	grid.syncSize();
+	     	FineCmsMain.addFunctionPanel(center);
+	     	
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){

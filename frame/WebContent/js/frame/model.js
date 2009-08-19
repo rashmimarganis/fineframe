@@ -233,13 +233,12 @@ var FrameModelApp= function(){
 	
 		    cm.defaultSortable = true;
 		    
-			
+		    var mainHeight=FineCmsMain.getMainPanelHeight()-1;	 
 		    grid = new Ext.grid.GridPanel({
 		        store: store,
 		        cm: cm,
 				sm: sm,
-				region:'west',
-				width:'300',
+				height:mainHeight,
 		        trackMouseOver:true,
 		        frame:false,
 		        autoScroll:true,
@@ -274,6 +273,7 @@ var FrameModelApp= function(){
 		    });
 		    grid.on('rowdblclick',FrameModelApp.loadInfo);
 		    grid.render();
+		    store.load({params:{start:0, limit:pageSize}});
 		},
 		
 		addInfo:function(){
@@ -285,19 +285,12 @@ var FrameModelApp= function(){
 			var mainHeight=FineCmsMain.getMainPanelHeight()-1;	 
 			var center= new Ext.Panel({
 		        collapsible:false,
-				layout:'border',
+				layout:'fit',
 		        el: 'modelCenter',
-		        height:mainHeight,
-				region:'center',
+		        contentEl:'modelGrid',
 				items:[grid]
 		    });
-			FineCmsMain.addFunctionPanel(grid);
-	     	//mainPanel.add(center);
-	     	
-	     	//
-			store.load({params:{start:0, limit:pageSize}});
-			center.syncSize();
-			//mainPanel.doLayout();
+			FineCmsMain.addFunctionPanel(center);
     	},
     	loadInfo:function(){
     		if(sm.getSelected()==null){
