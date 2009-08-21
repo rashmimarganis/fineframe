@@ -1,6 +1,7 @@
 package com.izhi.framework.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NotFound;
@@ -42,6 +44,9 @@ public class FrameModel implements Serializable {
 	@JoinColumn(name="project_id",updatable=true,insertable=true,nullable=true)
 	private FrameProject project;
 	
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name="model_id",updatable=true,insertable=true,nullable=true)
+	private List<FrameAttribute> attributes;
 	public String getName() {
 		return name;
 	}
@@ -78,6 +83,12 @@ public class FrameModel implements Serializable {
 	}
 	public void setProject(FrameProject project) {
 		this.project = project;
+	}
+	public List<FrameAttribute> getAttributes() {
+		return attributes;
+	}
+	public void setAttributes(List<FrameAttribute> attributes) {
+		this.attributes = attributes;
 	}
 	
 
