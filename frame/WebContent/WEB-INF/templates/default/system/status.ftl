@@ -49,3 +49,4 @@ JVM Vendor：</td><td>${serverInfo.javaVmVendor}
 </tr>
 <tr><td colspan="2" class="align_c"><input class="button_style" type="button" value="&nbsp;刷新状态&nbsp;" onclick="javascript:loadPage('${base}/system/status.jhtm');"></td></tr>
 </table>
+<@attr name="ggg"/>

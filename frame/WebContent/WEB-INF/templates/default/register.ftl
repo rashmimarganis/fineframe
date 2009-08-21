@@ -9,9 +9,8 @@
 <script type="text/javascript" src="${base}/js/jquery.validate.js"></script>
 </head>
 <body style="">
-	<@tag name="user"/>
-	<@tag/>
-	<@block name="header"/>
+	<@model name="user"/>
+
 	<form id="form1" action="${base}/member/register.jhtm" method="post">
 	<table width="100%" cellpadding="0" cellspacing="1" class="table_form">
 
