@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.WorkflowMeta"
+        table="WF_META"
+    >
+
+        <id
+            name="flowMetaID"
+            column="PK_FLOW_META_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-WorkflowMeta.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="flowFileInUse"
+            class="com.xenging.platform.workflow.model.FlowMetaFile"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_FILE_IN_USE"
+            unique="true"
+        />
+
+        <bag
+            name="flowFileVersions"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_WORKFLOW_META_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowMetaFile"
+              />
+
+        </bag>
+
+        <bag
+            name="flowDeploies"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_META_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowDeploy"
+              />
+
+        </bag>
+
+        <property
+            name="flowProcessID"
+            type="string"
+            column="VC_FLOW_PROCESS_ID"
+            length="255"
+            not-null="true"
+            unique="true"
+        />
+
+        <many-to-one
+            name="businessType"
+            class="com.xenging.platform.workflow.model.BusinessType"
+            cascade="none"
+            outer-join="auto"
+            column="FK_BUSINESS_TYPE_ID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-WorkflowMeta.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="AllWorkflowMetas"><![CDATA[
+            from WorkflowMeta wm order by wm.flowMetaID asc
+        ]]></query>
+        <query name="WorkflowMetaByProcess"><![CDATA[
+            from WorkflowMeta wm WHERE wm.flowProcessID = ?
+        ]]></query>
+        <query name="WorkflowMetasNoBusinessType"><![CDATA[
+            from WorkflowMeta wm WHERE wm.businessType is null
+        ]]></query>
+
+</hibernate-mapping>

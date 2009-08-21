@@ -35,7 +35,7 @@
 	Map<String,Object> map=new HashMap<String, Object>();
 	map.put("objs", templateService.findJsonByType("control"));
 	map.put("totalCount", templateService.findTotalCountByType("control"));
-	out.println(JSONObject.fromObject(map).toString());
+	//out.println(JSONObject.fromObject(map).toString());
 	IFrameModelDao modelService=(IFrameModelDao)wac.getBean("frameModelDao");
 	List<Integer> l=new ArrayList<Integer>();
 	PageParameter pp=new PageParameter();

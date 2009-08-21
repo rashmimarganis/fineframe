@@ -1,0 +1,35 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+			
+		<mapping resource="com/izhi/workflow/model/BusinessType.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowDeploy.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowMetaFile.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowNodeBinding.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowNodeInputParamBinding.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowNodeOutputParamBinding.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowNodeOutputParamEnumeBinding.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowUserPerformer.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowRolePerformer.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowProc.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowProcRelativeData.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowProcTransaction.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowProcTransition.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowTask.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowTaskUser.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowTaskRole.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowTaskAssigner.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowTaskRefuse.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/WFDriverInputParam.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/WFDriverOutputParam.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/WFDriverOutputParamEnume.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/WorkflowDriver.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/WorkflowMeta.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/FlowMetaFileStore.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/NewTask.hbm.xml" />
+		<mapping resource="com/izhi/workflow/model/TestObject.hbm.xml" />
+
+	</session-factory>
+</hibernate-configuration>

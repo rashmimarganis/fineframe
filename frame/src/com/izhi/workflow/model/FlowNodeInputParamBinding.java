@@ -1,0 +1,112 @@
+/*
+ * Copyright 2004-2005 the original author or authors.
+ *
+ * Licensed under the LGPL license, Version 2.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/copyleft/lesser.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @author daquanda(liyingquan@gmail.com)
+ * @author kevin(diamond_china@msn.com)
+ */
+package com.izhi.workflow.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
+@Entity
+@Table(name="flow_node_input_param_binding")
+public class FlowNodeInputParamBinding implements BaseObject {
+
+	private static final long serialVersionUID = -8500424255153402368L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="param_binding_id")
+	private Long paramBindingID = new Long(-1);
+	
+	@ManyToOne
+	@JoinColumn(name="flow_node_binding_id")
+	private FlowNodeBinding flowNodeBinding;
+	
+	@Column(name="node_param_id")
+	private String flowNodeParamID;
+	
+	@ManyToOne
+	@JoinColumn(name="input_param_id")
+	private WFDriverInputParam wfDriverInputParam;
+
+	public Long getParamBindingID() {
+		return paramBindingID;
+	}
+
+	public void setParamBindingID(Long paramBindingID) {
+		this.paramBindingID = paramBindingID;
+	}
+
+	public FlowNodeBinding getFlowNodeBinding() {
+		return flowNodeBinding;
+	}
+
+	public void setFlowNodeBinding(FlowNodeBinding flowNodeBinding) {
+		this.flowNodeBinding = flowNodeBinding;
+	}
+
+	public String getFlowNodeParamID() {
+		return flowNodeParamID;
+	}
+
+	public void setFlowNodeParamID(String flowNodeParamID) {
+		this.flowNodeParamID = flowNodeParamID;
+	}
+
+	public WFDriverInputParam getWfDriverInputParam() {
+		return wfDriverInputParam;
+	}
+
+	public void setWfDriverInputParam(WFDriverInputParam wfDriverInputParam) {
+		this.wfDriverInputParam = wfDriverInputParam;
+	}
+
+	public boolean equals(Object object) {
+		if (!(object instanceof FlowNodeInputParamBinding)) {
+			return false;
+		}
+		FlowNodeInputParamBinding fnb = (FlowNodeInputParamBinding) object;
+		return new EqualsBuilder().append(this.getParamBindingID().toString(),
+				fnb.getParamBindingID().toString()).append(
+				this.getFlowNodeParamID(), fnb.getFlowNodeParamID()).isEquals();
+	}
+
+	public int hashCode() {
+		return new HashCodeBuilder(1456335803, 147569255).append(
+				this.getParamBindingID().toString()).append(
+				this.getFlowNodeParamID()).toHashCode();
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+				.append("paramBindingID", this.getParamBindingID().toString())
+				.append("flowNodeParamID", this.getFlowNodeParamID())
+				.toString();
+	}
+
+}

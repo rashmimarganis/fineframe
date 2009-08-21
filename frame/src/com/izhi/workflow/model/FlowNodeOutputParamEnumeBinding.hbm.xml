@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowNodeOutputParamEnumeBinding"
+        table="WF_NODE_OUT_PARAM_ENUME_BIND"
+    >
+
+        <id
+            name="paramEnumeBindingID"
+            column="PK_PARAM_ENUME_BINDING_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowNodeOutputParamEnumeBinding.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="flowNodeOutputParamBinding"
+            class="com.xenging.platform.workflow.model.FlowNodeOutputParamBinding"
+            cascade="none"
+            outer-join="auto"
+            column="FK_PARAM_BINDING_ID"
+        />
+
+        <property
+            name="nodeOutputParamEnume"
+            type="string"
+            column="VC_NODE_OUTPUT_PARAM_ENUME_ID"
+            length="255"
+            not-null="true"
+        />
+
+        <many-to-one
+            name="wfDriverOutputParamEnume"
+            class="com.xenging.platform.workflow.model.WFDriverOutputParamEnume"
+            cascade="none"
+            outer-join="auto"
+            column="FKDRIVEROUTPUTPARAMENUMEID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowNodeOutputParamEnumeBinding.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowMetaFile"
+        table="WF_FLOW_META_FILE"
+    >
+
+        <id
+            name="flowFileID"
+            column="PK_FLOW_FILE_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowMetaFile.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="workflowMeta"
+            class="com.xenging.platform.workflow.model.WorkflowMeta"
+            cascade="none"
+            outer-join="auto"
+            column="FK_WORKFLOW_META_ID"
+        />
+
+        <property
+            name="flowMetaName"
+            type="string"
+            column="VC_FLOW_META_NAME"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="createdTime"
+            type="string"
+            column="VC_FLOW_CREATED_TIME"
+            length="255"
+            not-null="false"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowMetaFile.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="AllFlowMetaFiles"><![CDATA[
+            from FlowMetaFile fmf order by fmf.flowFileID asc
+        ]]></query>
+
+</hibernate-mapping>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowProcRelativeData"
+        table="WF_FLOW_PROC_RELATIVE_DATA"
+    >
+
+        <id
+            name="id"
+            column="PK_FLOW_PROC_DATA_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowProcRelativeData.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="flowProc"
+            class="com.xenging.platform.workflow.model.FlowProc"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_PROC_ID"
+        />
+
+        <many-to-one
+            name="flowNodeOutputParamBinding"
+            class="com.xenging.platform.workflow.model.FlowNodeOutputParamBinding"
+            cascade="none"
+            outer-join="auto"
+            column="FKFLOWNODEOUTPUTPARAMBINDINGID"
+        />
+
+        <property
+            name="driverParamValue"
+            type="string"
+            column="VC_DRIVER_PARAM_VALUE"
+            length="255"
+            not-null="true"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowProcRelativeData.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

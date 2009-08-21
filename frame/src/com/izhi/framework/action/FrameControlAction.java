@@ -48,6 +48,27 @@ public class FrameControlAction extends BasePageAction{
 		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
+	@Action("all")
+	public String findAll(){
+		PageParameter pp=this.getPageParameter();
+		if(pp.getSort()==null){
+			pp.setSort("controlId");
+		}
+		if(pp.getDir()==null){
+			pp.setDir("desc");
+		}
+		
+		int totalCount=(int)controlService.findTotalCount();
+		pp.setLimit(totalCount);
+		List<Map<String,Object>> l=controlService.findPage(pp);
+		Map<String,Object> map =new HashMap<String, Object>();
+		map.put("objs", l);
+		map.put("totalCount",totalCount);
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
+	
 	@Action("add")
 	public String add(){
 		obj=new FrameControl();

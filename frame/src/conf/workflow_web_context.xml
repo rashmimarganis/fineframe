@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+
+  <bean id="businessTypeAction"  class="com.izhi.workflow.type.action.BusinessTypeAction" scope ="prototype">
+           <property name="service" ref="businessTypeService"></property>
+           <property name="flowTaskService" ref="flowTaskService"></property>
+  </bean>
+  <bean id="metaFileAction"  class="com.izhi.workflow.metafile.action.MetaFileAction" scope ="prototype">
+           <property name="service" ref="flowMetaService"></property>
+  </bean>
+  <bean id="testAction"  class="com.izhi.workflow.type.action.TestAction" scope ="prototype">
+           <property name="service" ref="businessTypeService"></property>
+  </bean>
+  <bean id="workflowDeployAction"  class="com.izhi.workflow.deploy.action.FlowDeployAction" scope ="prototype">
+           <property name="flowDeployService" ref="flowDeployService"></property>
+           <property name="flowMetaService" ref="flowMetaService"></property>
+  </bean>
+  <bean id="workflowDriverAction"  class="com.izhi.workflow.flowform.action.WorkflowDriverAction" scope ="prototype">
+           <property name="workflowDriverService" ref="workflowDriverService"></property>
+  </bean>
+  <bean id="flowTaskAction"
+		class="com.izhi.workflow.task.action.FlowTaskAction">
+		<property name="service" ref="flowTaskService"></property>
+	</bean>
+  <bean id="flowInputParamAction"
+		class="com.izhi.workflow.inputparam.action.FlowDriverInputParamAction">
+		<property name="service" ref="workflowDriverService"></property>
+  </bean>
+  <bean id="flowOutputParamAction"
+		class="com.izhi.workflow.outputparam.action.FlowDriverOutputParamAction">
+		<property name="service" ref="workflowDriverService"></property>
+  </bean>
+  
+  <bean id="abstractWorkFlowForm" class="com.izhi.workflow.flowform.AbstractWorkflowFormAction" abstract="true">
+  		<property name="taskService" ref="flowTaskService"></property>
+  		<property name="flowEngineService" ref="flowEngineService"></property>
+  		<property name="formService" ref="workflowDriverService"></property>
+  		<property name="wfExecuterService" ref="wfExecuterService"></property>
+  
+  </bean>
+   <bean id="workflowExecuter"
+		class="com.izhi.workflow.flowform.impl.WorkflowExecuterImpl">
+  </bean>
+  <bean id="abstractWorkFlowWriteForm" class="com.izhi.workflow.flowform.WorkflowDriverWriteAction" abstract="true">
+  		<property name="flowTaskService" ref="flowTaskService"></property>
+  		<property name="workflowEngineService" ref="workflowEngine"></property>
+  		<property name="workflowDriverService" ref="workflowDriverService"></property>
+  		<property name="workflowExecuter" ref="workflowExecuter"></property>
+  		<property name="debug" value="false"></property>
+  </bean>
+  <bean id="abstractWorkFlowReadForm" class="com.izhi.workflow.flowform.WorkflowDriverReadAction" abstract="true">
+  		<property name="flowTaskService" ref="flowTaskService"></property>
+  		<property name="workflowDriverService" ref="workflowDriverService"></property>
+  </bean>
+</beans>

@@ -97,7 +97,7 @@ var FrameAttributeFormPanel = function() {
 	} ]);
 	var controlStore = new Ext.data.Store( {
 		proxy : new Ext.data.HttpProxy( {
-			url : 'frame/control/list.jhtm'
+			url : 'frame/control/all.jhtm'
 		}),
 		autoLoad:true,
 		reader : new Ext.data.JsonReader( {
@@ -150,10 +150,7 @@ var FrameAttributeFormPanel = function() {
 		typeAhead : true,
 		loadingText : '正在加载数据...',
 		width : 200,
-		pageSize : 10,
 		hideTrigger : false,
-		tpl : controlTpl,
-		itemSelector : 'div.search-item',
 		selectOnFocus : true,
 		allowBlank : false,
 		editable:false,

@@ -1,22 +1,16 @@
 package com.izhi.platform.action;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Resource;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.platform.model.Function;
 import com.izhi.platform.model.Org;
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
-import com.izhi.platform.service.IFunctionService;
 @Service
 @Scope("prototype")
 @Namespace("/")

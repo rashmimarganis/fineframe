@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.izhi.platform.security.support.Constants;
 import com.opensymphony.xwork2.ActionSupport;
 
-public abstract class BaseAction extends ActionSupport {
+public class BaseAction extends ActionSupport {
 	/**
 	 * 
 	 */

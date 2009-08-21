@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowProcTransaction"
+        table="WF_FLOW_PROC_TRANSACTION"
+    >
+
+        <id
+            name="transactionID"
+            column="PK_FLOW_PROC_TRANSACTION_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowProcTransaction.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="flowProc"
+            class="com.xenging.platform.workflow.model.FlowProc"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_PROC_ID"
+        />
+
+        <bag
+            name="flowProcTransitions"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_PROC_TRANSACTION_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowProcTransition"
+              />
+
+        </bag>
+
+        <bag
+            name="flowTasks"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_PROC_TRANSACTION_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowTask"
+              />
+
+        </bag>
+
+        <property
+            name="transactionState"
+            type="string"
+            column="VC_TRANSACTION_STATE"
+            length="255"
+            not-null="true"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowProcTransaction.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

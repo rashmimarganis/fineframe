@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IFunctionService;
 @Service
 @Scope("prototype")
-@Namespace("/")
+@Action("/script")
 public class ScriptAction extends BaseAction{
 
 	private static final long serialVersionUID = -1727802178908658217L;
@@ -30,7 +29,6 @@ public class ScriptAction extends BaseAction{
 	@Resource(name="functionService")
 	private IFunctionService functionService;
 	
-	@Action(value="script")
 	public String execute(){
 		user=SecurityUser.getUser();
 		site.put("name", "FineCMS网站管理系统");

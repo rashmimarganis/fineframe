@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.WorkflowDriver"
+        table="WF_DRIVER"
+    >
+
+        <id
+            name="flowDriverID"
+            column="PK_FLOW_DRIVER_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-WorkflowDriver.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="flowDriverName"
+            type="string"
+            column="VC_FLOW_DRIVER_NAME"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="memo"
+            type="string"
+            column="VC_MEMO"
+            length="255"
+        />
+
+        <property
+            name="readURL"
+            type="string"
+            column="VC_READ_URL"
+            length="255"
+        />
+
+        <property
+            name="writeURL"
+            type="string"
+            column="VC_WRITE_URL"
+            length="255"
+        />
+
+        <property
+            name="contextPath"
+            type="string"
+            column="VC_CONTEXT_PATH"
+            length="255"
+            not-null="true"
+        />
+
+        <bag
+            name="wfDriverOutputParams"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_DRIVER_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.WFDriverOutputParam"
+              />
+
+        </bag>
+
+        <bag
+            name="wfDriverInputParams"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_DRIVER_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.WFDriverInputParam"
+              />
+
+        </bag>
+    </class>
+
+        <query name="AllWorkflowDrivers"><![CDATA[
+             from WorkflowDriver wd order by wd.flowDriverID asc
+        ]]></query>
+        <query name="FlowDriversByContextPath"><![CDATA[
+             from WorkflowDriver wd where wd.contextPath = ? 
+        ]]></query>
+        <query name="DriverByReadDO"><![CDATA[
+             from WorkflowDriver wd where wd.contextPath = ? and wd.readURL = ? 
+        ]]></query>
+        <query name="DriverByWriteDO"><![CDATA[
+             from WorkflowDriver wd where wd.contextPath = ? and wd.writeURL = ? 
+        ]]></query>
+        <query name="AllDriverContextPath"><![CDATA[
+             select distinct wd.contextPath from WorkflowDriver wd 
+        ]]></query>
+
+</hibernate-mapping>

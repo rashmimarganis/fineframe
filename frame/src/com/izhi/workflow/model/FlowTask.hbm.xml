@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowTask"
+        table="WF_FLOW_TASK"
+    >
+
+        <id
+            name="taskID"
+            column="PK_FLOW_TASK_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowTask.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="taskState"
+            type="string"
+            column="VC_TASK_STATE"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="createTime"
+            type="string"
+            column="VC_CREATE_TIME"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="startTime"
+            type="string"
+            column="VC_START_TIME"
+            length="255"
+        />
+
+        <property
+            name="overTime"
+            type="string"
+            column="VC_OVER_TIME"
+            length="255"
+        />
+
+        <many-to-one
+            name="flowProcTransaction"
+            class="com.xenging.platform.workflow.model.FlowProcTransaction"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_PROC_TRANSACTION_ID"
+        />
+
+        <many-to-one
+            name="flowNodeBinding"
+            class="com.xenging.platform.workflow.model.FlowNodeBinding"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_NODE_BINDING_ID"
+        />
+
+        <bag
+            name="taskUsers"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_TASK_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowTaskUser"
+              />
+
+        </bag>
+
+        <bag
+            name="taskRoles"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_TASK_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowTaskRole"
+              />
+
+        </bag>
+
+        <bag
+            name="taskAssigners"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_TASK_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowTaskAssigner"
+              />
+
+        </bag>
+
+        <bag
+            name="newTasks"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_TASK_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.NewTask"
+              />
+
+        </bag>
+
+        <bag
+            name="taskRefuses"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_TASK_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowTaskRefuse"
+              />
+
+        </bag>
+
+        <property
+            name="sendEmail"
+            type="int"
+            column="VC_SEND_EMAIL"
+            not-null="true"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowTask.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="NewTaskByNode"><![CDATA[
+            select task from FlowTask task join task.flowNodeBinding node where node.nodeBindingID = ? and task.taskState = ?
+        ]]></query>
+        <query name="MyNewTasksKinds"><![CDATA[
+            select bt.typeID,count(*) from NewTask nt join nt.flowTask task join task.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where nt.taskCandidateUserID = ? and task.taskState in (?) group by bt
+        ]]></query>
+        <query name="MyNewTasksKindsAll"><![CDATA[
+            select new map(bt.typeID as id,bt.typeName||count(*) as name,bt.sort as sort) from NewTask nt join nt.flowTask task join task.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where nt.taskCandidateUserID = ? and task.taskState in (?) group by bt
+        ]]></query>
+        <query name="MyExecutingTasksKinds"><![CDATA[
+            select bt.typeID,count(*) from FlowTaskUser tu join tu.flowTask task join tu.flowTask.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where tu.userID = ? and task.taskState in (?,?) group by bt
+        ]]></query>
+        <query name="TasksToAssign"><![CDATA[
+            select task from FlowTask task where task.taskState in (?)
+        ]]></query>
+        <query name="MyTasksToAssign"><![CDATA[
+            select task from FlowTaskAssigner fta join fta.flowTask task where fta.userID = ? and task.taskState in (?)
+        ]]></query>
+        <query name="MyTasksToAssignNum"><![CDATA[
+            select count(*) from FlowTaskAssigner fta join fta.flowTask task where fta.userID = ? and task.taskState in (?)
+        ]]></query>
+        <query name="MyRefusedTasks"><![CDATA[
+            select task from FlowTaskUser tu join tu.flowTask task where task.taskState in (?) and tu.userID = ?
+        ]]></query>
+        <query name="NewTasksNotEmailed"><![CDATA[
+            select task from FlowTask task where task.taskState in (?) and task.sendEmail = ?
+        ]]></query>
+        <query name="MyFinishedTasksKinds"><![CDATA[
+            select bt.typeID,count(*) from FlowTaskUser tu join tu.flowTask task join tu.flowTask.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where tu.userID = ? and task.taskState= ? group by bt
+        ]]></query>
+        <query name="MyNewTasksNumByType"><![CDATA[
+            select count(*) from NewTask nt join nt.flowTask task join task.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where nt.taskCandidateUserID = ? and task.taskState in(?) and bt.typeID = ?
+        ]]></query>
+        <query name="MyExecutingTasksNumByType"><![CDATA[
+            select count(*) from FlowTaskUser tu join tu.flowTask task join tu.flowTask.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where tu.userID = ? and task.taskState in(?,?) and bt.typeID = ?
+        ]]></query>
+        <query name="MyNewTasksByType"><![CDATA[
+            select task from NewTask nt join nt.flowTask task join task.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where nt.taskCandidateUserID = ? and bt.typeID = ? and task.taskState in(?) order by task.createTime desc
+        ]]></query>
+        <query name="MyExecutingTasksByType"><![CDATA[
+            select task from FlowTaskUser tu join tu.flowTask task join tu.flowTask.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where tu.userID = ? and bt.typeID = ? and task.taskState in(?,?) order by task.startTime desc
+        ]]></query>
+        <query name="MyExecutingTasksNoPageByType"><![CDATA[
+            select task from FlowTaskUser tu join tu.flowTask task join tu.flowTask.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where tu.userID = ? and bt.typeID = ? and task.taskState in(?,?) order by task.startTime desc
+        ]]></query>
+        <query name="MyFinishedTasksNumByType"><![CDATA[
+            select count(*) from FlowTaskUser tu join tu.flowTask task join tu.flowTask.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where tu.userID = ? and task.taskState in(?) and bt.typeID = ?
+        ]]></query>
+        <query name="MyFinishedTasksByType"><![CDATA[
+            select task from FlowTaskUser tu join tu.flowTask task join tu.flowTask.flowNodeBinding.flowDeploy.workflowMeta.businessType bt where tu.userID = ? and bt.typeID = ? and task.taskState in(?) order by task.overTime desc
+        ]]></query>
+        <query name="TaskByNodeAndProc"><![CDATA[
+            select task from FlowTask task join task.flowNodeBinding node join task.flowProcTransaction.flowProc flowProc where node.flowNodeID = ? and flowProc.flowProcID = ?
+        ]]></query>
+        <query name="TasksByProc"><![CDATA[
+            select task from FlowTask task join task.flowProcTransaction.flowProc flowProc where flowProc.flowProcID = ?
+        ]]></query>
+
+</hibernate-mapping>

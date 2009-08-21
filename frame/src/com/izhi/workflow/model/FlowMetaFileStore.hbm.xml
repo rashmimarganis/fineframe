@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowMetaFileStore"
+        table="WF_FLOW_META_FILE_STORE"
+    >
+
+        <id
+            name="flowFileID"
+            column="PK_FLOW_FILE_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="assigned">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowMetaFileStore.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="previewImage"
+            type="blob"
+            column="VC_PREVIEW_IMAGE"
+            length="16"
+        />
+
+        <property
+            name="workflowFile"
+            type="blob"
+            column="VC_WORKFLOW_FILE"
+            length="16"
+            not-null="true"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowMetaFileStore.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

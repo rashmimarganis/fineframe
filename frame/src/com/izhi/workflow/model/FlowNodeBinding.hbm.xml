@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowNodeBinding"
+        table="WF_FLOW_NODE_BINDING"
+    >
+
+        <id
+            name="nodeBindingID"
+            column="PK_NODE_BINDING_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowNodeBinding.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="flowDeploy"
+            class="com.xenging.platform.workflow.model.FlowDeploy"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_DEPLOY_ID"
+        />
+
+        <property
+            name="flowNodeID"
+            type="string"
+            column="VC_FLOW_NODE_ID"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="performerRule"
+            type="string"
+            column="VC_PERFORMER_RULE"
+            length="10"
+            not-null="true"
+        />
+
+        <property
+            name="performerDetail"
+            type="string"
+            column="VC_PERFORMER_DETAIL"
+            length="255"
+            not-null="false"
+        />
+
+        <many-to-one
+            name="workflowDriver"
+            class="com.xenging.platform.workflow.model.WorkflowDriver"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_DRIVER_ID"
+        />
+
+        <bag
+            name="flowUserPerformers"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_NODE_BINDING_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowUserPerformer"
+              />
+
+        </bag>
+
+        <bag
+            name="flowRolePerformers"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_NODE_BINDING_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowRolePerformer"
+              />
+
+        </bag>
+
+        <bag
+            name="flowNodeOutputParamBindings"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_NODE_BINDING_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowNodeOutputParamBinding"
+              />
+
+        </bag>
+
+        <bag
+            name="flowNodeInputParamBindings"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_NODE_BINDING_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowNodeInputParamBinding"
+              />
+
+        </bag>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowNodeBinding.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="FlowNodeBindingsByDriver"><![CDATA[
+            select fnb from FlowNodeBinding fnb inner join fnb.workflowDriver wfd where wfd.flowDriverID = ?
+        ]]></query>
+        <query name="FlowNodeBindsByUserPerformer"><![CDATA[
+            select fup.flowNodeBinding from FlowUserPerformer fup where fup.userID = ?
+        ]]></query>
+        <query name="FlowNodeBindsByRolePerformer"><![CDATA[
+            select frp.flowNodeBinding from FlowRolePerformer frp where frp.roleID = ?
+        ]]></query>
+
+</hibernate-mapping>

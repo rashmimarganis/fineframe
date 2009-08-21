@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowProcTransition"
+        table="WF_FLOW_PROC_TRANSITION"
+    >
+
+        <id
+            name="id"
+            column="PK_FLOW_PROC_TRANSITION_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowProcTransition.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="fromNodeID"
+            type="string"
+            column="VC_FROM_NODE_ID"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="workflowTransitionID"
+            type="string"
+            column="VC_WORKFLOW_TRANSITION_ID"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="toNodeID"
+            type="string"
+            column="VC_TO_NODE_ID"
+            length="255"
+            not-null="true"
+        />
+
+        <many-to-one
+            name="flowProcTransaction"
+            class="com.xenging.platform.workflow.model.FlowProcTransaction"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_PROC_TRANSACTION_ID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowProcTransition.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

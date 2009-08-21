@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="workflowTask" extends="struts-default" namespace="/flow/task">
+		<action name="myExecutingTasks" class="flowTaskAction" method="findMyExecutingTasks"></action>
+		<action name="myFinishedTasks" class="flowTaskAction" method="findMyFinishedTasks"></action>
+		<action name="myNewTasks" class="flowTaskAction" method="findMyNewTasksByType"></action>
+	</package>
+	<package name="workflowBusinessType" extends="struts-default" namespace="/flow/type">
+		<action name="save" class="businessTypeAction" method="save"></action>
+		<action name="delete" class="businessTypeAction" method="delete"></action>
+		<action name="page" class="businessTypeAction" method="page"></action>
+		<action name="all" class="businessTypeAction" method="all"></action>
+		<action name="load" class="businessTypeAction" method="load"></action>
+		<action name="tree" class="businessTypeAction" method="tree"></action>
+		<action name="newTaskTypes" class="businessTypeAction" method="findNewTaskTypes"></action>
+		<action name="executingTaskTypes" class="businessTypeAction" method="findExecutingTaskTypes"></action>
+		<action name="finishedTaskTypes" class="businessTypeAction" method="findFinishedTaskTypes"></action>
+	</package>
+	<package name="workflowMetaFile" extends="struts-default" namespace="/flow/meta">
+        <action name="upload" class="metaFileAction" method="upload">
+	        <interceptor-ref name ="fileUpload" > 
+	        	<param name="maximumSize">10240000</param>
+	  		</interceptor-ref > 
+	        <interceptor-ref name ="defaultStack"/> 
+        </action>
+        <action name="page" class="metaFileAction" method="page">
+        </action>
+        <action name="previewMeta" class="metaFileAction" method="previewMeta">
+        </action>
+	</package>
+	<package name="workflowDeploy" extends="struts-default" namespace="/flow/deploy">
+        <action name="execute" class="workflowDeployAction" method="doExecute">
+        </action>
+        <action name="tree" class="workflowDeployAction" method="tree">
+        </action>
+        <action name="load" class="workflowDeployAction" method="load">
+        </action>
+        <action name="page" class="workflowDeployAction" method="page">
+        </action>
+        <action name="save" class="workflowDeployAction" method="save">
+        </action>
+        <action name="delete" class="workflowDeployAction" method="delete">
+        </action>
+        <action name="enable" class="workflowDeployAction" method="enable">
+        </action>
+        <action name="disable" class="workflowDeployAction" method="disable">
+        </action>
+	</package>
+	<package name="workflowDriver" extends="struts-default" namespace="/flow/driver">
+        <action name="contextPath" class="workflowDriverAction" method="contextPath">
+        </action>
+        <action name="page" class="workflowDriverAction" method="page">
+        </action>
+        <action name="load" class="workflowDriverAction" method="load">
+        </action>
+        <action name="delete" class="workflowDriverAction" method="delete">
+        </action>
+        <action name="save" class="workflowDriverAction" method="save">
+        </action>
+        <action name="disable" class="workflowDriverAction" method="disable">
+        </action>
+	</package>
+	<package name="flowInputParam" extends="struts-default" namespace="/flow/inputparam">
+        <action name="load" class="flowInputParamAction" method="load">
+        </action>
+        <action name="page" class="flowInputParamAction" method="page">
+        </action>
+        <action name="save" class="flowInputParamAction" method="save">
+        </action>
+        <action name="delete" class="flowInputParamAction" method="delete">
+        </action>
+	</package>
+	<package name="flowOutputParam" extends="struts-default" namespace="/flow/outputparam">
+        <action name="load" class="flowOutputParamAction" method="load">
+        </action>
+        <action name="page" class="flowOutputParamAction" method="page">
+        </action>
+        <action name="save" class="flowOutputParamAction" method="save">
+        </action>
+        <action name="delete" class="flowOutputParamAction" method="delete">
+        </action>
+	</package>
+	<package name="test" extends="struts-default" namespace="/test">
+        <action name="upload" class="testAction" >
+	        <interceptor-ref name ="fileUpload" > 
+	        	<param name="maximumSize">10240000</param>
+	  		</interceptor-ref > 
+	        <interceptor-ref name ="defaultStack"/> 
+        </action>
+	</package>
+</struts>

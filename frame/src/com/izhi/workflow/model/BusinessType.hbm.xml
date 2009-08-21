@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.BusinessType"
+        table="WF_BISINESS_TYPE"
+    >
+
+        <id
+            name="typeID"
+            column="PK_TYPE_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+            
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-BusinessType.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="typeName"
+            type="string"
+            column="VC_TYPE_NAME"
+            length="255"
+            not-null="true"
+            unique="true"
+        />
+        <property
+            name="sort"
+            type="int"
+            column="VC_TYPE_SORT"
+            not-null="true"
+        />
+        <property
+            name="note"
+            type="string"
+            column="VC_TYPE_NOTE"
+            length="255"
+            not-null="true"
+        />
+
+        <bag
+            name="workflowMetas"
+            lazy="true"
+            cascade="save-update"
+        >
+
+              <key
+                  column="FK_BUSINESS_TYPE_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.WorkflowMeta"
+              />
+
+        </bag>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-BusinessType.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="AllBusinessTypes"><![CDATA[
+            from BusinessType bt order by bt.typeID asc
+        ]]></query>
+
+</hibernate-mapping>

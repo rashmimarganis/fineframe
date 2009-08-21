@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowProc"
+        table="WF_FLOW_PROC"
+    >
+
+        <id
+            name="flowProcID"
+            column="PK_FLOW_PROC_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowProc.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="flowDeploy"
+            class="com.xenging.platform.workflow.model.FlowDeploy"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_DEPLOY_ID"
+        />
+
+        <property
+            name="startTime"
+            type="string"
+            column="VC_START_TIME"
+            length="255"
+            not-null="true"
+        />
+
+        <many-to-one
+            name="linkFlowProc"
+            class="com.xenging.platform.workflow.model.FlowProc"
+            cascade="none"
+            outer-join="auto"
+            column="FK_LINK_FLOW_PROC_ID"
+        />
+
+        <property
+            name="starterUserID"
+            type="string"
+            column="VC_STARTER_USER_ID"
+            length="255"
+            not-null="true"
+        />
+
+        <bag
+            name="flowProcRelativeDatas"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_PROC_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowProcRelativeData"
+              />
+
+        </bag>
+
+        <bag
+            name="linkedFlowProcs"
+            lazy="true"
+            cascade="save-update"
+        >
+
+              <key
+                  column="FK_LINK_FLOW_PROC_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowProc"
+              />
+
+        </bag>
+
+        <bag
+            name="flowProcTransactions"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_PROC_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowProcTransaction"
+              />
+
+        </bag>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowProc.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="ActiveFlowProcsByDeploy"><![CDATA[
+            select theFP from FlowProc theFP where theFP.flowProcID in (select fp.flowProcID from FlowTask ft join ft.flowProcTransaction.flowProc fp where fp.flowDeploy.flowDeployID = ? and ft.taskState not in (?) group by fp having count(ft) >0)
+        ]]></query>
+
+</hibernate-mapping>

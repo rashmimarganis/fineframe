@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowTaskUser"
+        table="WF_FLOW_TASK_USER"
+    >
+
+        <id
+            name="id"
+            column="PK_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowTaskUser.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="userID"
+            type="string"
+            column="VC_USER_ID"
+            length="255"
+            not-null="true"
+        />
+
+        <many-to-one
+            name="flowTask"
+            class="com.xenging.platform.workflow.model.FlowTask"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_TASK_ID"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowTaskUser.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="IsTaskOwner"><![CDATA[
+            select ftu from FlowTaskUser ftu inner join ftu.flowTask ft where ftu.userID = ? and ft.taskID = ?
+        ]]></query>
+
+</hibernate-mapping>

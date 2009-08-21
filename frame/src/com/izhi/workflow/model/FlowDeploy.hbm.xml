@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.FlowDeploy"
+        table="WF_FLOW_DEPLOY"
+    >
+
+        <id
+            name="flowDeployID"
+            column="PK_FLOW_DEPLOY_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-FlowDeploy.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="flowDeployName"
+            type="string"
+            column="VC_DEPLOY_NAME"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="createTime"
+            type="java.util.Date"
+            column="VC_CREATE_TIME"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="currentState"
+            type="string"
+            column="VC_CURRENT_STATE"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="memo"
+            type="string"
+            column="VC_MEMO"
+            length="255"
+        />
+
+        <many-to-one
+            name="workflowMeta"
+            class="com.xenging.platform.workflow.model.WorkflowMeta"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_META_ID"
+        />
+
+        <bag
+            name="flowNodeBindings"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_DEPLOY_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowNodeBinding"
+              />
+
+        </bag>
+
+        <bag
+            name="flowProcs"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_FLOW_DEPLOY_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.FlowProc"
+              />
+
+        </bag>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-FlowDeploy.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

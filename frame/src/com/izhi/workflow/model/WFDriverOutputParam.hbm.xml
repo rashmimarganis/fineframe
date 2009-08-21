@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="com.xenging.platform.workflow.model.WFDriverOutputParam"
+        table="WF_DRIVER_OUT_PARAM"
+    >
+
+        <id
+            name="driverOutputParamID"
+            column="PK_DRIVER_OUTPUT_PARAM_ID"
+            type="java.lang.Long"
+            unsaved-value="-1"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-WFDriverOutputParam.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="paramName"
+            type="string"
+            column="VC_PARAM_NAME"
+            length="255"
+            not-null="true"
+        />
+
+        <property
+            name="paramAlias"
+            type="string"
+            column="VC_PARAM_ALIAS"
+            length="255"
+            not-null="true"
+        />
+
+        <many-to-one
+            name="workflowDriver"
+            class="com.xenging.platform.workflow.model.WorkflowDriver"
+            cascade="none"
+            outer-join="auto"
+            column="FK_FLOW_DRIVER_ID"
+        />
+
+        <bag
+            name="driverOutputParamEnumes"
+            lazy="true"
+            cascade="all-delete-orphan"
+        >
+
+              <key
+                  column="FK_DRIVER_OUTPUT_PARAM_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="com.xenging.platform.workflow.model.WFDriverOutputParamEnume"
+              />
+
+        </bag>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-WFDriverOutputParam.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>
