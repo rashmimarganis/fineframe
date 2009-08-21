@@ -14,7 +14,7 @@ import com.izhi.workflow.model.WFDriverOutputParam;
 import com.izhi.workflow.service.IWorkflowDriverService;
 @Service
 @Scope("prototype")
-@Namespace("/workflow/driver/outputparam")
+@Namespace("/flow/driver/outputparam")
 public class FlowDriverOutputParamAction extends BasePageAction {
 
 	/**

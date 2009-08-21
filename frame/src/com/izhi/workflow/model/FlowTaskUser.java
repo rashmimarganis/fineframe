@@ -32,14 +32,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-/**
- * @hibernate.class table="WF_FLOW_TASK_USER"
- * @hibernate.query name="IsTaskOwner" query="select ftu from FlowTaskUser ftu
- *                  inner join ftu.flowTask ft where ftu.userID = ? and
- *                  ft.taskID = ?"
- */
 @Entity
-@Table(name="flow_task_user")
+@Table(name="wf_task_user")
 public class FlowTaskUser implements BaseObject {
 	/**
 	 * 

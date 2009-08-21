@@ -17,7 +17,7 @@ import com.izhi.workflow.model.WorkflowDriver;
 import com.izhi.workflow.service.IWorkflowDriverService;
 @Service
 @Scope("prototype")
-@Namespace("/workflow/driver")
+@Namespace("/work/driver")
 public class WorkflowDriverAction extends BasePageAction {
 
 	/**

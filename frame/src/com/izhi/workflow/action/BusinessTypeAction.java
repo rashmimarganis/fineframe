@@ -17,7 +17,7 @@ import com.izhi.workflow.service.IBusinessTypeService;
 import com.izhi.workflow.service.IFlowTaskService;
 @Service
 @Scope("prototype")
-@Namespace("/workflow/type")
+@Namespace("/flow/type")
 public class BusinessTypeAction extends BasePageAction {
 
 	private static final long serialVersionUID = -900988110197590772L;

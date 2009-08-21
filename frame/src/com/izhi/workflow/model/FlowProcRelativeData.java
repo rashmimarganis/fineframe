@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
 import com.izhi.workflow.exception.ExceptionMessage;
 
 @Entity
-@Table(name="flow_proc_relative_data")
+@Table(name="wf_proc_relative_data")
 public class FlowProcRelativeData implements BaseObject {
 	private static final long serialVersionUID = 1978206512184573311L;
 	private static Log log = LogFactory.getLog(FlowProcRelativeData.class);

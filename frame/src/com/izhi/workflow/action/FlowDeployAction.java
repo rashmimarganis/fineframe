@@ -21,7 +21,7 @@ import com.izhi.workflow.service.IFlowDeployService;
 import com.izhi.workflow.service.IFlowMetaService;
 @Service
 @Scope("prototype")
-@Namespace("/workflow/deploy")
+@Namespace("/flow/deploy")
 public class FlowDeployAction extends BasePageAction{
 
 	private static final long serialVersionUID = 6019471491438566420L;

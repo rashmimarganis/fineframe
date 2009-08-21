@@ -33,7 +33,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 @Entity
-@Table(name="flow_node_input_param_binding")
+@Table(name="wf_node_input_param_binding")
 public class FlowNodeInputParamBinding implements BaseObject {
 
 	private static final long serialVersionUID = -8500424255153402368L;

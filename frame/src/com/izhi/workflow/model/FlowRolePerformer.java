@@ -34,7 +34,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 
 @Entity
-@Table(name="flow_role_performer")
+@Table(name="wf_role_performer")
 public class FlowRolePerformer implements BaseObject {
 
 	private static final long serialVersionUID = -310973843104557544L;

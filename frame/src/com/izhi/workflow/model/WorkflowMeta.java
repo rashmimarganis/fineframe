@@ -50,7 +50,7 @@ import com.izhi.workflow.util.FlowDataField;
 
 
 @Entity
-@Table(name="flow_meta")
+@Table(name="wf_meta")
 public class WorkflowMeta implements BaseObject {
 
 	private static final long serialVersionUID = -7259677971551087585L;
@@ -63,7 +63,7 @@ public class WorkflowMeta implements BaseObject {
 	private FlowMetaFile flowFileInUse;
 	
 	@OneToMany(targetEntity=FlowMetaFile.class)
-	@Column(name="flow_meta_id")
+	@JoinColumn(name="flow_meta_id")
 	private List<FlowMetaFile> flowFileVersions = new ArrayList<FlowMetaFile>();
 	
 	@Column(name="process_id")
@@ -73,7 +73,7 @@ public class WorkflowMeta implements BaseObject {
 	@JoinColumn(name="business_type_id")
 	private BusinessType businessType;
 	@OneToMany(targetEntity=FlowDeploy.class)
-	@Column(name="flow_meta_id")
+	@JoinColumn(name="flow_meta_id")
 	private List<FlowDeploy> flowDeploies = new ArrayList<FlowDeploy>();
 	
 	@Transient

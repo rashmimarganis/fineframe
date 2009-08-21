@@ -43,7 +43,7 @@ import com.izhi.workflow.exception.ExceptionMessage;
 import com.izhi.workflow.util.TimeUtil;
 
 @Entity
-@Table(name="flow_task")
+@Table(name="wf_task")
 public class FlowTask implements BaseObject {
 
 	private static final long serialVersionUID = -4025794363759421986L;

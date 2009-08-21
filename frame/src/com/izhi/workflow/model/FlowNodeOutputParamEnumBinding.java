@@ -33,7 +33,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 @Entity
-@Table(name="flow_output_param_enum_bind")
+@Table(name="flow_outputparam_enum_binding")
 public class FlowNodeOutputParamEnumBinding implements BaseObject {
 
 	private static final long serialVersionUID = 5153200024122865825L;

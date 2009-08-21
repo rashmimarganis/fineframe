@@ -37,7 +37,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 @Entity
-@Table(name="flow_driver")
+@Table(name="wf_driver")
 public class WorkflowDriver implements BaseObject {
 	/**
 	 * 

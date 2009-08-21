@@ -33,7 +33,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 @Entity
-@Table(name="flow_task_role")
+@Table(name="wf_task_role")
 public class FlowTaskRole implements BaseObject {
 
 	private static final long serialVersionUID = 6594425102928778L;

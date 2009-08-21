@@ -36,7 +36,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 @Entity
-@Table(name="flow_meta_file")
+@Table(name="wf_meta_file")
 public class FlowMetaFile implements BaseObject {
 	private static final long serialVersionUID = 1112353754468282839L;
 	@Id

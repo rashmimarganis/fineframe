@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "flow_file_store")
+@Table(name = "wf_meta_file_store")
 public class FlowMetaFileStore {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

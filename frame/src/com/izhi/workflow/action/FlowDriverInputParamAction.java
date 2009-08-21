@@ -14,7 +14,7 @@ import com.izhi.workflow.model.WFDriverInputParam;
 import com.izhi.workflow.service.IWorkflowDriverService;
 @Service
 @Scope("prototype")
-@Namespace("/workflow/driver/inputparam")
+@Namespace("/flow/driver/inputparam")
 public class FlowDriverInputParamAction extends BasePageAction {
 
 	/**

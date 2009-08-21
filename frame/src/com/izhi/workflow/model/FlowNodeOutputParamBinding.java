@@ -40,7 +40,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 @Entity
-@Table(name="flow_output_param_binding")
+@Table(name="wf_output_param_binding")
 public class FlowNodeOutputParamBinding implements BaseObject {
 	
 	private static final long serialVersionUID = 974266202682889219L;

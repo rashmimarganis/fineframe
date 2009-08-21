@@ -32,14 +32,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-/**
- * @hibernate.class table="WF_DRIVER_IN_PARAM"
- *                  <p>
- *                  Title: PowerStone
- *                  </p>
- */
 @Entity
-@Table(name="flow_driver_in_param")
+@Table(name="wf_driver_in_param")
 public class WFDriverInputParam implements BaseObject {
 	/**
 	 * 

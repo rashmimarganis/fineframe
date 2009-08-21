@@ -41,7 +41,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 @Entity
-@Table(name="flow_node_binding")
+@Table(name="wf_node_binding")
 public class FlowNodeBinding implements BaseObject {
 	
 	private static final long serialVersionUID = 939320338375448175L;

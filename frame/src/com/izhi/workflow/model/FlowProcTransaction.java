@@ -41,7 +41,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 @Entity
-@Table(name="flow_proc_transaction")
+@Table(name="wf_proc_transaction")
 public class FlowProcTransaction implements BaseObject {
 
 	private static final long serialVersionUID = 4260188116471171250L;

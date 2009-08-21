@@ -34,16 +34,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * ��¼һ������������Ѿ��߹��·��
- * 
- * @hibernate.class table="WF_FLOW_PROC_TRANSITION"
- *                  <p>
- *                  Title: PowerStone
- *                  </p>
- */
 @Entity
-@Table(name="flow_proc_transition")
+@Table(name="wf_proc_transition")
 public class FlowProcTransition implements BaseObject {
 
 	private static final long serialVersionUID = 5181651595895162577L;

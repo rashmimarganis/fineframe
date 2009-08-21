@@ -33,7 +33,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 @Entity
-@Table(name="flow_driver_outparam_enum")
+@Table(name="wf_driver_output_param_enum")
 public class WFDriverOutputParamEnum implements BaseObject {
 
 	private static final long serialVersionUID = 2498109867052656189L;

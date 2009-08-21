@@ -32,15 +32,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-/**
- * @hibernate.class table="WF_FLOW_TASK_NEW"
- *                  <p>
- *                  Title: PowerStone
- *                  </p>
- */
-
 @Entity
-@Table(name="flow_new_task")
+@Table(name="wf_new_task")
 public class NewTask implements BaseObject {
 
 	private static final long serialVersionUID = -2592347620746811978L;

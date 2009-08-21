@@ -34,17 +34,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * @hibernate.class table="WF_FLOW_TASK_ASSIGNER"
- * @hibernate.query name="IsTaskAssigner" query="select fta from
- *                  FlowTaskAssigner fta inner join fta.flowTask ft where
- *                  fta.userID = ? and ft.taskID = ?"
- *                  <p>
- *                  Title: PowerStone
- *                  </p>
- */
 @Entity
-@Table(name="flow_task_assigner")
+@Table(name="wf_task_assigner")
 public class FlowTaskAssigner implements BaseObject {
 
 	private static final long serialVersionUID = 7515240135133772011L;

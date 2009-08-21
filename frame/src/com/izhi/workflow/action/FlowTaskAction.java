@@ -15,7 +15,7 @@ import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.workflow.service.IFlowTaskService;
 @Service
 @Scope("prototype")
-@Namespace("/workflow/task")
+@Namespace("/flow/task")
 public class FlowTaskAction extends BasePageAction {
 
 	/**

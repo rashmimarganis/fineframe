@@ -26,7 +26,7 @@ import com.izhi.workflow.model.WorkflowMeta;
 import com.izhi.workflow.service.IFlowMetaService;
 @Service
 @Scope("prototype")
-@Namespace("/workflow/metafile")
+@Namespace("/flow/metafile")
 public class MetaFileAction extends BasePageAction {
 	public static final int BUFFER_SIZE = 16 * 1024;
 	private static final long serialVersionUID = 119084852334836226L;
