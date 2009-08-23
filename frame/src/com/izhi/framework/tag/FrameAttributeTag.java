@@ -39,7 +39,7 @@ public class FrameAttributeTag extends BaseFrameTag{
 			String file=WebUtils.frameTemplateRoot()+ctl.getTemplate().getFileName()+".ftl";
 			Template tpl= env.getConfiguration().getTemplate(file);
 			Map<String,Object> m=BaseFrameTag.getModel();
-			m.put("attribute", attr);
+			m.put("attr", attr);
 			tpl.process(m, env.getOut());
 		}
 	
