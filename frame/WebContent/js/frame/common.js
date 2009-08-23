@@ -26,12 +26,18 @@ Ext.ux.ComponentType = [
                        ['jsp', 'Jsp文件(.jsp)', 'Jsp文件'],
                        ['ftl', 'Ftl文件(.ftl)', 'Ftl文件'],
                        ['properties', 'Property文件(.properties)', 'Property文件'],
-                       ['xml', '配置文件(.xml)', '配置文件']
+                       ['xml', '配置文件(.xml)', '配置文件'],
+                        ['js', '脚本文件(.js)', '脚本文件']
                    ];
-Ext.ux.FileSuffixType = [
-                        ['.java', 'Java文件', 'Java文件'],
-                        ['.jsp', 'Jsp文件', 'Jsp文件'],
-                        ['.ftl', 'Ftl文件', 'Ftl文件'],
-                        ['.property', 'Property文件', 'Property文件'],
-                        ['.xml', '配置文件', '配置文件']
+Ext.namespace('Ext.ux.DatabaseType');
+Ext.ux.DatabaseType = [
+                        ['mysql', 'MySQL', 'MySQL'],
+                        ['sqlserver', 'SQLServer', 'SQLServer'],
+                        ['oracle', 'Oracle', 'Oracle']
                     ];
+Ext.namespace('Ext.ux.ComponentLevel');
+Ext.ux.ComponentLevel = [
+                        ['project', '项目', '项目'],
+                        ['model', '模型', '模型']
+                    ];
+

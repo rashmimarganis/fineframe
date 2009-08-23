@@ -45,7 +45,7 @@ public class FrameModel implements Serializable {
 	private FrameProject project;
 	
 	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name="model_id",updatable=true,insertable=true,nullable=true)
+	@JoinColumn(name="model_id",updatable=false,insertable=false,nullable=true)
 	private List<FrameAttribute> attributes;
 	public String getName() {
 		return name;

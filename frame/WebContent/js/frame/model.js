@@ -209,16 +209,16 @@ var FrameModelApp= function(){
 	           dataIndex: 'modelId',
 	           width: 40
 	        },{
-	           id: 'name', 
-	           header: "英文名称",
-	           dataIndex: 'name',
-	           width: 100
-	        },{
 		           id: 'label', 
 		           header: "中文名称",
 		           dataIndex: 'label',
 		           width: 100
 		        },{
+			           id: 'name', 
+			           header: "英文名称",
+			           dataIndex: 'name',
+			           width: 100
+			        },{
 	           header: "所属项目",
 	           dataIndex: 'projectName',
 	           width: 150,

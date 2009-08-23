@@ -1,4 +1,4 @@
-package com.izhi.framework.tag;
+package com.izhi.platform.util;
 
 import java.util.HashMap;
 import java.util.Map;

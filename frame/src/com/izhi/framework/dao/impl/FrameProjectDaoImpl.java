@@ -39,7 +39,7 @@ public class FrameProjectDaoImpl  extends HibernateDaoSupport implements IFrameP
 		@SuppressWarnings("unchecked")
 		@Override
 		public List<Map<String,Object>> findPage(PageParameter pp) {
-			String sql="select new map(o.projectId as projectId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath) from FrameProject o where 1=1";
+			String sql="select new map(o.projectId as projectId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath,o.databaseName as databaseName,o.databaseUser as databaseUser,o.databasePassword as databasePassword,o.databaseType as databaseType,o.databaseUrl as databaseUrl,o.driverClass as driverClass,o.javascriptPath as javascriptPath) from FrameProject o where 1=1";
 			
 			String sortField=pp.getSort();
 			String sort=pp.getDir();
@@ -87,7 +87,7 @@ public class FrameProjectDaoImpl  extends HibernateDaoSupport implements IFrameP
 		@SuppressWarnings("unchecked")
 		@Override
 		public List<Map<String,Object>> findJsonById(int id) {
-			String sql="select new map(o.projectId as projectId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath) from FrameProject o where o.projectId=:id";
+			String sql="select new map(o.projectId as projectId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath,o.databaseName as databaseName,o.databaseUser as databaseUser,o.databasePassword as databasePassword,o.databaseType as databaseType,o.databaseUrl as databaseUrl,o.driverClass as driverClass,o.javascriptPath as javascriptPath) from FrameProject o where o.projectId=:id";
 			
 			
 			Session s=this.getSession();
@@ -102,7 +102,7 @@ public class FrameProjectDaoImpl  extends HibernateDaoSupport implements IFrameP
 		@SuppressWarnings("unchecked")
 		@Override
 		public List<Map<String, Object>> findAll() {
-			String sql="select new map(o.projectId as projectId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath) from FrameProject o order by o.projectId desc";
+			String sql="select new map(o.projectId as projectId,o.packageName as packageName,o.sourcePath as sourcePath,o.webPath as webPath,o.name as name,o.encode as encode,o.basePath as basePath,o.databaseName as databaseName,o.databaseUser as databaseUser,o.databasePassword as databasePassword,o.databaseType as databaseType,o.databaseUrl as databaseUrl,o.driverClass as driverClass,o.javascriptPath as javascriptPath) from FrameProject o order by o.projectId desc";
 			Session s=this.getSession();
 			Query q=s.createQuery(sql);			
 			return q.list();

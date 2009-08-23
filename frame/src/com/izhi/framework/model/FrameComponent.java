@@ -24,6 +24,10 @@ public class FrameComponent implements Serializable{
 	public final static String TYPE_FTL="ftl";
 	public final static String TYPE_CONFIG="xml";
 	public final static String TYPE_PROPERTY="properties";
+	public final static String TYPE_JAVASCRIPT="js";
+	
+	public final static String LEVEL_PROJECT="project";
+	public final static String LEVEL_MODEL="model";
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,7 +40,10 @@ public class FrameComponent implements Serializable{
 	private String packageName;
 	
 	@Column(name="type")
-	private String type;
+	private String fileType;
+	
+	@Column(name="componenet_level")
+	private String level=LEVEL_MODEL;
 	
 	@ManyToOne(optional=true)
 	@NotFound(action=NotFoundAction.IGNORE)
@@ -68,13 +75,14 @@ public class FrameComponent implements Serializable{
 	}
 
 
-	public String getType() {
-		return type;
+
+	public String getFileType() {
+		return fileType;
 	}
 
 
-	public void setType(String type) {
-		this.type = type;
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
 	}
 
 
@@ -105,6 +113,16 @@ public class FrameComponent implements Serializable{
 
 	public void setComponentId(int componentId) {
 		this.componentId = componentId;
+	}
+
+
+	public String getLevel() {
+		return level;
+	}
+
+
+	public void setLevel(String level) {
+		this.level = level;
 	}
 
 	

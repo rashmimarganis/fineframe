@@ -38,7 +38,7 @@ public class FrameComponentDaoImpl extends HibernateDaoSupport implements IFrame
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String,Object>> findPage(PageParameter pp) {
-		String sql="select new map(o.componentId as componentId,o.name as name,o.packageName as packageName,o.type as type,o.template.id as templateId,o.template.name as templateName) from FrameComponent o where 1=1";
+		String sql="select new map(o.componentId as componentId,o.name as name,o.packageName as packageName,o.fileType as fileType,o.level as level,o.template.id as templateId,o.template.name as templateName) from FrameComponent o where 1=1";
 		String sortField=pp.getSort();
 		String sort=pp.getDir();
 		sql+=" order by o."+sortField+" "+sort;
@@ -85,7 +85,7 @@ public class FrameComponentDaoImpl extends HibernateDaoSupport implements IFrame
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
-		String sql="select new map(o.componentId as componentId,o.name as name,o.packageName as packageName,o.type as type,o.template.id as templateId) from FrameComponent o where o.componentId=:id";
+		String sql="select new map(o.componentId as componentId,o.name as name,o.packageName as packageName,o.fileType as fileType,o.level as level,o.template.id as templateId) from FrameComponent o where o.componentId=:id";
 		
 		Session s=this.getSession();
 		Query q=s.createQuery(sql);

@@ -24,7 +24,7 @@ var FrameProjectApp= function(){
 		            totalProperty: 'totalCount',
 		            id: 'projectId',
 		            fields: [
-		                'projectId','packageName' ,'name','encode','basePath','sourcePath','webPath'
+		                'projectId','packageName' ,'name','encode','basePath','sourcePath','webPath','databaseType','javascriptPath','driverClass','databaseName','databaseUser','databasePassword'
 		            ]
 		        }),
 		        remoteSort: true
@@ -79,10 +79,18 @@ var FrameProjectApp= function(){
 	           dataIndex: 'sourcePath',
 	           width: 150
 	        },{
-		           header: "页面目录",
-		           dataIndex: 'webPath',
-		           width: 150
-		        }]);
+	           header: "页面目录",
+	           dataIndex: 'webPath',
+	           width: 150
+	        },{
+	        	header: "脚本目录",
+	           dataIndex: 'javascriptPath',
+	           width: 150
+	        },{
+	        	header: "数据库类型",
+	            dataIndex: 'databaseType',
+	            width: 150
+	        }]);
 	
 		    cm.defaultSortable = true;
 		    
@@ -240,6 +248,25 @@ var FrameProjectApp= function(){
 			        selectOnFocus:true,
 			        hiddenName: 'obj.encode'
 			    });
+			    
+			    
+			    var dbStore = new Ext.data.SimpleStore({
+			        fields: ['name', 'label', 'tip'],
+			        data : Ext.ux.DatabaseType // from states.js
+			    });
+			    var dbType = new Ext.form.ComboBox({
+			        store: dbStore,
+			        fieldLabel: '数据库类型',
+			        displayField:'label',
+			        valueField:'name',
+			        typeAhead: true,
+			        mode: 'local',
+			        value:'mysql',
+			        triggerAction: 'all',
+			        emptyText:'请选择数据库类型...',
+			        selectOnFocus:true,
+			        hiddenName: 'obj.databaseType'
+			    });
 				form = new Ext.form.FormPanel({
 			        baseCls: 'x-plain',
 			        layout:'form',
@@ -258,7 +285,14 @@ var FrameProjectApp= function(){
 			            {name: 'obj.basePath', mapping:'basePath'},
 			            {name: 'obj.packageName', mapping:'packageName'},
 			            {name: 'obj.sourcePath', mapping:'sourcePath'},
-			            {name: 'obj.webPath', mapping:'webPath'}
+			            {name: 'obj.webPath', mapping:'webPath'},
+			            {name: 'obj.javascriptPath', mapping:'javascriptPath'},
+			            {name: 'obj.driverClass', mapping:'driverClass'},
+			            {name: 'obj.databaseType', mapping:'databaseType'},
+			            {name: 'obj.databaseUser', mapping:'databaseUser'},
+			            {name: 'obj.databasePassword', mapping:'databasePassword'},
+			            {name: 'obj.databaseUrl', mapping:'databaseUrl'},
+			            {name: 'obj.databaseName', mapping:'databaseName'}
 			        ]),
 			        items: [{
 			        	name:'obj.projectId',
@@ -289,6 +323,31 @@ var FrameProjectApp= function(){
 	                    name: 'obj.webPath',
 	                    allowBlank:false,
 	                    value:'webcontent'
+	                },{
+	                    fieldLabel: '脚本目录',
+	                    name: 'obj.javascriptPath',
+	                    allowBlank:false,
+	                    value:'js'
+	                },dbType,{
+	                    fieldLabel: '驱动类',
+	                    name: 'obj.driverClass',
+	                    allowBlank:false
+	                },{
+	                    fieldLabel: '数据库名',
+	                    name: 'obj.databaseName',
+	                    allowBlank:false
+	                },{
+	                    fieldLabel: '数据库连接',
+	                    name: 'obj.databaseUrl',
+	                    allowBlank:false
+	                },{
+	                    fieldLabel: '数据库帐户',
+	                    name: 'obj.databaseUser',
+	                    allowBlank:false
+	                },{
+	                    fieldLabel: '数据库密码',
+	                    name: 'obj.databasePassword',
+	                    allowBlank:false
 	                }]
 			    });
 				
@@ -320,7 +379,7 @@ var FrameProjectApp= function(){
 			    infoDlg = new Ext.Window({
 			        title: '项目信息',
 			        width: 400,
-			        height:275,
+			        height:475,
 			        minWidth: 300,
 			        minHeight: 200,
 			        layout: 'fit',

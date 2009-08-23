@@ -1,12 +1,15 @@
 package com.izhi.framework.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
 @Table(name="frame_project")
@@ -29,10 +32,12 @@ public class FrameProject implements Serializable{
 	private String sourcePath;
 	@Column(name="web_path")
 	private String webPath;
+	@Column(name="js_path")
+	private String javascriptPath;
 	
 	@Column(name="database_type")
 	private String databaseType;
-	@Column(name="database_class")
+	@Column(name="driver_class")
 	private String driverClass;
 	@Column(name="database_url")
 	private String databaseUrl;
@@ -44,6 +49,11 @@ public class FrameProject implements Serializable{
 	private String databaseName;
 	@Column(name="table_prefix")
 	private String tablePrefix;
+	
+	
+	@OneToMany
+	@JoinColumn(name="project_id",updatable=false,insertable=false)
+	private List<FrameModel> models;
 	
 	public int getProjectId() {
 		return projectId;
@@ -129,6 +139,18 @@ public class FrameProject implements Serializable{
 	}
 	public void setTablePrefix(String tablePrefix) {
 		this.tablePrefix = tablePrefix;
+	}
+	public List<FrameModel> getModels() {
+		return models;
+	}
+	public void setModels(List<FrameModel> models) {
+		this.models = models;
+	}
+	public String getJavascriptPath() {
+		return javascriptPath;
+	}
+	public void setJavascriptPath(String javascriptPath) {
+		this.javascriptPath = javascriptPath;
 	}
 	
 	
