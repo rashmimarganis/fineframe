@@ -188,20 +188,7 @@ var FrameModelApp= function(){
 			});
 		},
 		initGridPanel:function(){	
-			function renderDate(v){
-				if(v==null){
-					return '';
-				}
-				var month=v.month*1+1;
-				var year=v.year*1+1900;
-				var date=v.date;
-				var hours=v.hours;
-				var minutes=v.minutes;
-				var seconds=v.seconds;
-				
-				return year+'-'+month+'-'+date+' '+hours+':'+minutes+':'+seconds;
-				
-			}
+			
 			sm = new xg.CheckboxSelectionModel();
 			var cm = new Ext.grid.ColumnModel([sm,{
 	           id: 'modelId', 

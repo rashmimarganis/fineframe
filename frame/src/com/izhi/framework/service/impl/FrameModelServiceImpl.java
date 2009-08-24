@@ -85,4 +85,14 @@ public class FrameModelServiceImpl implements IFrameModelService {
 		return frameModelDao.findModelByProject(pid);
 	}
 
+	@Override
+	public List<Map<String, Object>> findJsonByProject(int pid, PageParameter pp) {
+		return frameModelDao.findJsonByProject(pid, pp);
+	}
+
+	@Override
+	public int findTotalCount(int pid) {
+		return frameModelDao.findTotalCount(pid);
+	}
+
 }

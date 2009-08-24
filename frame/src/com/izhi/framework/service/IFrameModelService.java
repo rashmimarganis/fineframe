@@ -18,4 +18,6 @@ public interface IFrameModelService {
 	List<Map<String,Object>> findJsonById(int id);
 	
 	List<FrameModel> findModelByProject(int pid);
+	List<Map<String, Object>> findJsonByProject(int pid,PageParameter pp);
+	int findTotalCount(int pid);
 }

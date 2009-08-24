@@ -30,6 +30,7 @@ public class FrameModelAction extends BasePageAction{
 	
 	private int id;
 	
+	private int pid;
 	
 	@Action("list")
 	public String list(){
@@ -42,6 +43,25 @@ public class FrameModelAction extends BasePageAction{
 		}
 		int totalCount=(int)modelService.findTotalCount();
 		List<Map<String,Object>> l=modelService.findPage(pp);
+		Map<String,Object> map =new HashMap<String, Object>();
+		map.put("objs", l);
+		map.put("totalCount",totalCount);
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
+	@Action("listByProject")
+	public String listByProject(){
+		PageParameter pp=this.getPageParameter();
+		if(pp.getSort()==null){
+			pp.setSort("modelId");
+		}
+		if(pp.getDir()==null){
+			pp.setDir("desc");
+		}
+		int totalCount=(int)modelService.findTotalCount(pid);
+		
+		List<Map<String,Object>> l=modelService.findJsonByProject(pid, pp);
 		Map<String,Object> map =new HashMap<String, Object>();
 		map.put("objs", l);
 		map.put("totalCount",totalCount);
@@ -90,8 +110,7 @@ public class FrameModelAction extends BasePageAction{
 		}
 		return SUCCESS;
 	}
-	
-	
+
 	public List<Integer> getIds() {
 		return ids;
 	}
@@ -116,6 +135,12 @@ public class FrameModelAction extends BasePageAction{
 	}
 	public void setObj(FrameModel obj) {
 		this.obj = obj;
+	}
+	public int getPid() {
+		return pid;
+	}
+	public void setPid(int pid) {
+		this.pid = pid;
 	}
 	
 	

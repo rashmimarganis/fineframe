@@ -3,15 +3,19 @@ var FrameProjectApp= function(){
     var xg = Ext.grid;
 	var grid;
 	var sm;
+	var componentSm;
 	var pageSize=18;
 	var infoDlg;
+	var genDlg;
 	var saveBtn;
 	var form;
+	var componentStore;
 	return {
 		init:function(){
 			FrameProjectApp.initStore();
 			FrameProjectApp.initGridPanel();
 			FrameProjectApp.initLayout();
+			
 		}
 		,
 		initStore:function(){
@@ -29,7 +33,7 @@ var FrameProjectApp= function(){
 		        }),
 		        remoteSort: true
 		    });
-		    store.setDefaultSort('projectId', 'desc');
+		    store.setDefaultSort('projectId', 'asc');
 			store.on('load',function(s,r,o){
 				if(s.getTotalCount()>0){
 					sm.selectFirstRow();
@@ -37,20 +41,7 @@ var FrameProjectApp= function(){
 			});
 		},
 		initGridPanel:function(){	
-			function renderDate(v){
-				if(v==null){
-					return '';
-				}
-				var month=v.month*1+1;
-				var year=v.year*1+1900;
-				var date=v.date;
-				var hours=v.hours;
-				var minutes=v.minutes;
-				var seconds=v.seconds;
-				
-				return year+'-'+month+'-'+date+' '+hours+':'+minutes+':'+seconds;
-				
-			}
+
 			sm = new xg.CheckboxSelectionModel();
 			var cm = new Ext.grid.ColumnModel([sm,{
 	           id: 'projectId', 
@@ -129,7 +120,7 @@ var FrameProjectApp= function(){
 				  	text: '生成代码',
 		            iconCls: 'x-btn-text-icon generate',
 		            scope: this,
-					handler:FrameProjectApp.deleteInfo
+					handler:FrameProjectApp.showGenerateDlg
 				 },'-', {
 				  	text: '运行测试',
 		            iconCls: 'x-btn-text-icon server',
@@ -217,6 +208,110 @@ var FrameProjectApp= function(){
 				alert("删除失败！");
 				alert(rep.responseText);
 			}
+		},
+		showGenerateDlg:function(){
+			
+			var select=sm.getSelected();
+			var pid=0;
+			if(!select){
+				Ext.Msg.alert("请选择一个项目！");
+				return;
+			}
+    		pid=select.get('projectId');
+			if(!genDlg){
+				componentStore = new Ext.data.Store({
+			        proxy: new Ext.data.HttpProxy({
+			            url: 'frame/component/list.jhtm'
+			        }),
+			        reader: new Ext.data.JsonReader({
+			            root: 'objs',
+			            totalProperty: 'totalCount',
+			            id: 'componentId',
+			            fields: [
+			                'componentId','name' ,'fileType'
+			            ]
+			        }),
+			        remoteSort: true
+			    });
+				componentStore.setDefaultSort('componentId', 'asc');
+				componentStore.on('load',function(s,r,o){
+					if(s.getTotalCount()>0){
+						sm.selectFirstRow();
+					}
+				});
+				
+				componentSm = new xg.CheckboxSelectionModel();
+				var cm = new Ext.grid.ColumnModel([componentSm,{
+		           id: 'componentId', 
+		           header: "ID",
+		           dataIndex: 'componentId',
+		           width: 40
+		        },{
+			           id: 'name', 
+			           header: "组件名称",
+			           dataIndex: 'name',
+			           width: 100
+			        },{
+				           id: 'fileType', 
+				           header: "组件类型",
+				           dataIndex: 'fileType',
+				           width: 100
+				        }]);
+		
+				componentSm.defaultSortable = true;
+			    
+			    grid = new Ext.grid.GridPanel({
+			        store: componentStore,
+			        cm: cm,
+					sm: componentSm,
+					height:300,
+			        trackMouseOver:true,
+			        frame:false,
+			        autoScroll:true,
+			        loadMask: true,
+					
+					bbar: new Ext.PagingToolbar({
+			            pageSize: pageSize,
+			            store: componentStore,
+			            displayInfo: true
+			        }), 
+					viewConfig: {
+						enableRowBody:true,
+	           			showPreview:true,
+			            forceFit:true
+			        },
+					renderTo:'projectComponentGrid'
+			    });
+			    grid.render();
+			    componentStore.load({params:{start:0, limit:pageSize}});
+				genDlg = new Ext.Window({
+			        title: '项目代码生成',
+			        width: 400,
+			        height:475,
+			        minWidth: 300,
+			        minHeight: 200,
+			        layout: 'fit',
+			        plain:true,
+			        modal:true,
+			        bodyStyle:'padding:5px;',
+			        buttonAlign:'center',
+			        items: grid,
+			        buttons: [{
+			        	text:'生成',
+			        	handler:function(){
+			        	FrameProjectApp.generateCode();
+			        }
+			        },{
+			            text: '取消',
+			            handler:function(){
+			        		genDlg.hide();
+			        	}
+			        }
+			        ]
+			    });
+			}
+			componentStore.load({params:{start:0, limit:pageSize}});
+			genDlg.show();
 		}
 		,
 		getSelectedIds:function(){
@@ -234,6 +329,45 @@ var FrameProjectApp= function(){
 			return ids;
 			
 		},
+		generateCode:function(){
+			var pid=0;
+			if(sm.getSelected()!=null){
+				pid=sm.getSelected().get("projectId");
+			}
+			var idNum=0;
+			
+			var selections=componentSm.getSelections();
+			Ext.Msg.alert("生成代码结果","<div id='generateDiv'>请稍候正在生成代码！<br></div>");
+			
+			FrameProjectApp.generateAction(idNum,pid);
+		},
+		generateAction:function(idNum,pid){
+			var selections=componentSm.getSelections();
+			var cId=selections[idNum].get('componentId');
+			var url='frame/generate/index.jhtm?pid='+pid+"&cid="+cId;
+			Ext.Ajax.request({
+			   url: url,
+			   success: function(o){
+					var div=document.getElementById('generateDiv');
+					if(idNum==selections.length){
+						alert(div.innerHtml);
+						return ;
+					}
+					idNum++;
+					alert(o.responseText);
+					eval("var r1="+o.reponseText);
+					alert(r1.length);
+					for(var i=0;i<r1.length;i++){
+						div.innerHtml=div.innerHtml+r1[i];
+					}
+					//alert(o.responseText);
+					//alert("IDNum:"+idNum);
+					FrameProjectApp.generateAction(idNum,pid);
+			    },
+			   failure: function(){alert("失败！");}
+			});
+		}
+		,
 		showInfoDlg:function(){
 			if(!infoDlg){
 				var store = new Ext.data.SimpleStore({

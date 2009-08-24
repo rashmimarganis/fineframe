@@ -6,12 +6,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -50,7 +52,7 @@ public class FrameGenerateAction extends BaseAction {
 
 	@Action("index")
 	public String execute() {
-		Map<String,String> result=new HashMap<String, String>();
+		List<String> result=new ArrayList<String>();
 		FrameProject fp = projectService.findProjectById(pid);
 		
 		if (cid != 0) {
@@ -88,12 +90,12 @@ public class FrameGenerateAction extends BaseAction {
 						Template tpl = config.getTemplate(ftpl);
 						tpl.process(data, out);
 						out.flush();
-						result.put("component_"+fc.getComponentId(), fc.getName()+"生成成功！");
+						result.add( fc.getName()+"生成成功！");
 					} catch (IOException e) {
-						result.put("component_"+fc.getComponentId(), fc.getName()+"生成失败！");
+						result.add( fc.getName()+"生成失败！");
 						e.printStackTrace();
 					} catch (TemplateException e) {
-						result.put("component_"+fc.getComponentId(), fc.getName()+"生成失败！");
+						result.add( fc.getName()+"生成失败！");
 						e.printStackTrace();
 					}
 
@@ -125,12 +127,12 @@ public class FrameGenerateAction extends BaseAction {
 									ftpl);
 							tpl.process(data, out);
 							out.flush();
-							result.put("component_"+fc.getComponentId()+"_"+fm.getModelId(), fc.getName()+"["+fm.getLabel()+"]"+"生成成功！");
+							result.add(fc.getName()+"["+fm.getLabel()+"]"+"生成成功！");
 						} catch (IOException e) {
-							result.put("component_"+fc.getComponentId()+"_"+fm.getModelId(), fc.getName()+"["+fm.getLabel()+"]"+"生成失败！");
+							result.add( fc.getName()+"["+fm.getLabel()+"]"+"生成失败！");
 							e.printStackTrace();
 						} catch (TemplateException e) {
-							result.put("component_"+fc.getComponentId()+"_"+fm.getModelId(), fc.getName()+"["+fm.getLabel()+"]"+"生成失败！");
+							result.add( fc.getName()+"["+fm.getLabel()+"]"+"生成失败！");
 							e.printStackTrace();
 						}
 					}
@@ -138,7 +140,7 @@ public class FrameGenerateAction extends BaseAction {
 
 			}
 		}
-		this.getRequest().setAttribute("result", JSONObject.fromObject(result).toString());
+		this.getRequest().setAttribute("result", JSONArray.fromObject(result).toString());
 		return SUCCESS;
 	}
 

@@ -106,5 +106,27 @@ public class FrameModelDaoImpl extends HibernateDaoSupport implements IFrameMode
 		return this.getHibernateTemplate().find(sql, pid);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> findJsonByProject(int pid,PageParameter pp) {
+		if(pid==0){
+			return new ArrayList<Map<String,Object>>();
+		}
+		String sql="select new map(o.modelId as modelId,o.name as name,o.label as label) from FrameModel o where o.project.projectId=:pid";
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setInteger("pid", pid);
+		q.setFirstResult(pp.getStart());
+		q.setMaxResults(pp.getLimit());
+		return q.list();
+	}
+
+	@Override
+	public int findTotalCount(int pid) {
+		String sql="select count(*) from FrameModel o where o.project.projectId=?";
+		List l=this.getHibernateTemplate().find(sql,pid);
+		return ((Long)l.get(0)).intValue();
+	}
+
 	
 }
