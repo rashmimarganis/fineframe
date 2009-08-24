@@ -19,7 +19,6 @@ import com.izhi.platform.util.SpringUtils;
 import com.izhi.platform.util.WebUtils;
 
 import freemarker.core.Environment;
-import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateException;

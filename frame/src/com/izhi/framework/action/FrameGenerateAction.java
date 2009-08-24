@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.security.auth.callback.ConfirmationCallback;
+
+import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -27,12 +28,10 @@ import com.izhi.framework.tag.TagUtils;
 import com.izhi.platform.action.BaseAction;
 import com.izhi.platform.util.WebUtils;
 
-import freemarker.core.Environment;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import com.izhi.platform.util.WebUtils;
 
 @Service
 @Namespace("/frame/generate")
@@ -51,8 +50,7 @@ public class FrameGenerateAction extends BaseAction {
 
 	@Action("index")
 	public String execute() {
-		boolean success = false;
-
+		Map<String,String> result=new HashMap<String, String>();
 		FrameProject fp = projectService.findProjectById(pid);
 		
 		if (cid != 0) {
@@ -90,10 +88,12 @@ public class FrameGenerateAction extends BaseAction {
 						Template tpl = config.getTemplate(ftpl);
 						tpl.process(data, out);
 						out.flush();
-						success = true;
+						result.put("component_"+fc.getComponentId(), fc.getName()+"生成成功！");
 					} catch (IOException e) {
+						result.put("component_"+fc.getComponentId(), fc.getName()+"生成失败！");
 						e.printStackTrace();
 					} catch (TemplateException e) {
+						result.put("component_"+fc.getComponentId(), fc.getName()+"生成失败！");
 						e.printStackTrace();
 					}
 
@@ -125,18 +125,20 @@ public class FrameGenerateAction extends BaseAction {
 									ftpl);
 							tpl.process(data, out);
 							out.flush();
-							success = true;
+							result.put("component_"+fc.getComponentId()+"_"+fm.getModelId(), fc.getName()+"["+fm.getLabel()+"]"+"生成成功！");
 						} catch (IOException e) {
+							result.put("component_"+fc.getComponentId()+"_"+fm.getModelId(), fc.getName()+"["+fm.getLabel()+"]"+"生成失败！");
 							e.printStackTrace();
 						} catch (TemplateException e) {
+							result.put("component_"+fc.getComponentId()+"_"+fm.getModelId(), fc.getName()+"["+fm.getLabel()+"]"+"生成失败！");
 							e.printStackTrace();
 						}
 					}
 				}
 
 			}
-
 		}
+		this.getRequest().setAttribute("result", JSONObject.fromObject(result).toString());
 		return SUCCESS;
 	}
 

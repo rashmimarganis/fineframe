@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.service.ILogService;
-import com.izhi.platform.util.PageParameter;
 @Service
 @Scope(value="prototype")
 @Namespace("/log")
