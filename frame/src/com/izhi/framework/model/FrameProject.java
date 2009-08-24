@@ -22,6 +22,9 @@ public class FrameProject implements Serializable{
 	private int projectId;
 	@Column(name="name")
 	private String name;
+	
+	@Column(name="title")
+	private String title;
 	@Column(name="base_path")
 	private String basePath;
 	@Column(name="package_name")
@@ -151,6 +154,12 @@ public class FrameProject implements Serializable{
 	}
 	public void setJavascriptPath(String javascriptPath) {
 		this.javascriptPath = javascriptPath;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	

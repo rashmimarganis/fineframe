@@ -36,9 +36,12 @@ public class FrameComponent implements Serializable{
 	
 	@Column(name="name")
 	private String name;
+	
+	
 	@Column(name="package_name")
 	private String packageName;
-	
+	@Column(name="file_name")
+	private String fileName;
 	@Column(name="type")
 	private String fileType;
 	
@@ -123,6 +126,15 @@ public class FrameComponent implements Serializable{
 
 	public void setLevel(String level) {
 		this.level = level;
+	}
+
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	

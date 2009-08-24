@@ -80,4 +80,9 @@ public class FrameComponentServiceImpl implements IFrameComponentService {
 		return frameComponentDao.findJsonById(id);
 	}
 
+	@Override
+	public List<FrameComponent> findAll() {
+		return null;
+	}
+
 }
