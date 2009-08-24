@@ -40,4 +40,15 @@ Ext.ux.ComponentLevel = [
                         ['project', '项目', '项目'],
                         ['model', '模型', '模型']
                     ];
+Ext.namespace('Ext.ux.Enabled');
+Ext.ux.Enabled = [
+                        ['true', '可用', '可用'],
+                        ['false', '不可用', '不可用']
+                    ];
 
+function rendererEnabled(v){
+	if(v){
+		return '<img src="js/resources/images/default/menu/checked.gif">';
+	}
+	return '<img src="js/resources/images/default/menu/unchecked.gif">';
+}

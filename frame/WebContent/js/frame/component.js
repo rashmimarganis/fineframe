@@ -24,7 +24,7 @@ var FrameComponentApp= function(){
 		            totalProperty: 'totalCount',
 		            id: 'componentId',
 		            fields: [
-		                'componentId','name','packageName','level' ,'fileType','templateId','templateName'
+		                'componentId','name','fileName','enabled','packageName','level' ,'fileType','templateId','templateName'
 		            ]
 		        }),
 		        remoteSort: true
@@ -45,7 +45,7 @@ var FrameComponentApp= function(){
 	           width: 40
 	        },{
 	           id: 'name', 
-	           header: "名称",
+	           header: "组件名称",
 	           dataIndex: 'name',
 	           width: 100
 	        },{
@@ -56,11 +56,24 @@ var FrameComponentApp= function(){
 		        }
 		        ,
 	        {
-	           id: 'type', 
-	           header: "文件类型",
-	           dataIndex: 'fileType',
-	           width: 100
+	           id: 'fileName', 
+	           header: "文件名称",
+	           dataIndex: 'fileName',
+	           width: 410
 	        },
+	        {
+		           id: 'type', 
+		           header: "文件类型",
+		           dataIndex: 'fileType',
+		           width: 100
+		        },
+	        {
+		           id: 'enabled', 
+		           header: "可用",
+		           dataIndex: 'enabled',
+		           width: 100,
+		           renderer:rendererEnabled
+		        },
 		        {
 			           id: 'level', 
 			           header: "组件类型",
@@ -267,6 +280,29 @@ var FrameComponentApp= function(){
 		    return combo;
 		}
 		,
+		createEnabledCombo:function(){
+			var store = new Ext.data.SimpleStore({
+		        fields: ['name', 'label', 'tip'],
+		        data : Ext.ux.Enabled 
+		    });
+		    var combo = new Ext.form.ComboBox({
+		        store: store,
+		        fieldLabel: '可用',
+		        displayField:'label',
+		        valueField:'name',
+		        readOnly:true,
+		        typeAhead: true,
+		        allowBlank:false,
+		        value:'true',
+		        mode: 'local',
+		        triggerAction: 'all',
+		        emptyText:'请选择...',
+		        selectOnFocus:true,
+		        hiddenName: 'obj.enabled'
+		    });
+		    return combo;
+		}
+		,
 		createLevel:function(){
 			var store = new Ext.data.SimpleStore({
 		        fields: ['name', 'label', 'tip'],
@@ -295,6 +331,7 @@ var FrameComponentApp= function(){
 				var templateCombox=FrameComponentApp.createTemplateCombo();
 				var typeCombox=FrameComponentApp.createTypeCombo();
 				var levelCombox=FrameComponentApp.createLevel();
+				var enabledCombox=FrameComponentApp.createEnabledCombo();
 				form = new Ext.form.FormPanel({
 			        baseCls: 'x-plain',
 			        layout:'form',
@@ -309,6 +346,8 @@ var FrameComponentApp= function(){
 			        }, [
 			            {name: 'obj.componentId', mapping:'componentId'}, 
 			            {name: 'obj.name', mapping:'name'},
+			            {name: 'obj.fileName', mapping:'fileName'},
+			            {name: 'obj.enabled', mapping:'enabled'},
 			            {name: 'obj.fileType', mapping:'fileType'},
 			            {name: 'obj.level', mapping:'level'},
 			            {name: 'obj.packageName', mapping:'packageName'},
@@ -326,10 +365,14 @@ var FrameComponentApp= function(){
 	                    allowBlank:false
 	                    
 	                },{
+	                    fieldLabel: '文件名称',
+	                    name: 'obj.fileName',
+	                    allowBlank:false
+	                },{
 	                    fieldLabel: '目录名称',
 	                    name: 'obj.packageName',
 	                    allowBlank:false
-	                },levelCombox,typeCombox,templateCombox]
+	                } ,enabledCombox,levelCombox,typeCombox,templateCombox]
 			    });
 				
 				form.on({
@@ -360,7 +403,7 @@ var FrameComponentApp= function(){
 			    infoDlg = new Ext.Window({
 			        title: '组件信息',
 			        width: 400,
-			        height:255,
+			        height:300,
 			        minWidth: 300,
 			        minHeight: 200,
 			        layout: 'fit',

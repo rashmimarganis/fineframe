@@ -12,8 +12,8 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.izhi.framework.tag.TagUtils;
 import com.izhi.platform.util.SpringUtils;
-import com.izhi.platform.util.TagUtils;
 import com.izhi.platform.util.WebUtils;
 
 public class ApplicationStartListener extends ContextLoaderListener implements

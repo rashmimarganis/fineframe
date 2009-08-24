@@ -26,10 +26,10 @@
 		<level value="DEBUG" />
 	</logger>
 	<logger name="org.apache.struts2">
-		<level value="INFO" />
+		<level value="DEBUG" />
 	</logger>
 	<logger name="com.opensymphony.xwork2">
-		<level value="INFO" />
+		<level value="DEBUG" />
 	</logger>
 
 	<logger name="org.hibernate.SQL">

@@ -16,4 +16,6 @@ public interface IFrameModelDao {
 	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();
 	List<Map<String,Object>> findJsonById(int id);
+	
+	List<FrameModel> findModelByProject(int pid);
 }

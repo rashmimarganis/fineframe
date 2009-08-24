@@ -78,6 +78,7 @@
 	            });
 	            tree.on('click',function(node){
 	                if (node.isLeaf()){
+	                
 	                	var url='${base}'+node.attributes.url;
 	                	FineCmsMain.loadPage(url,node.attributes.text);
 	                }
@@ -100,7 +101,13 @@
 			getMainPanelHeight:function(){
 				return mainPanel.getInnerHeight();
 			},
+			getMainPanelWidth:function(){
+				return mainPanel.getInnerHeight();
+			},
 			loadPage:function(url,title){
+			
+				
+			
 				mainPanel.removeAll();
             	mainPanel.setTitle(title);
                 mainPanel.load({
@@ -109,13 +116,17 @@
 				    	mainPanel.syncSize();
 				    },
 				    text: "正在加载...",
-				    timeout: 80,
+				    timeout: 120,
+				    scope: this, // optional scope for the callback
+		            discardUrl: true,
+		            nocache: true,
 				    scripts: true
 				});
 			},
 			addFunctionPanel:function(p){
 				mainPanel.removeAll();
 				p.setHeight(FineCmsMain.getMainPanelHeight()-1);
+				p.setWidth(FineCmsMain.getMainPanelWidth()-1);
 				mainPanel.add(p);
 				mainPanel.syncSize();
 				//mainPanel.doLayout(true);

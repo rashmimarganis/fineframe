@@ -1,5 +1,6 @@
 package com.izhi.framework.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -93,6 +94,16 @@ public class FrameModelDaoImpl extends HibernateDaoSupport implements IFrameMode
 		List<Map<String,Object>> l=q.list();
 		
 		return l;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<FrameModel> findModelByProject(int pid) {
+		if(pid==0){
+			return new ArrayList<FrameModel>();
+		}
+		String sql="from FrameModel m where m.project.projectId=?";
+		return this.getHibernateTemplate().find(sql, pid);
 	}
 
 	

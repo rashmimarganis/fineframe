@@ -28,7 +28,7 @@ public class BaseAction extends ActionSupport {
 	 * 
 	 */
 	private static final long serialVersionUID = 769088237790376718L;
-	protected final Logger log=LoggerFactory.getLogger(this.getClass());
+	protected Logger log=LoggerFactory.getLogger(this.getClass());
 	private String _dc;
 	private String suit="default";
 

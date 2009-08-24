@@ -45,17 +45,17 @@ public class FrameModelTag extends BaseFrameTag {
 			String file = "WEB-INF/frame/model.ftl";
 			Template tpl = env.getConfiguration().getTemplate(file);
 			
-			String templateStr="${model1.project.name?cap_first}${model1.name?cap_first}";
+			String templateStr="${p.name?cap_first}${m.name?cap_first}";
 			Template fileNameTpl = new Template("fileName", new StringReader(templateStr),
 			               env.getConfiguration());
 			StringWriter sw=new StringWriter();
 			
 			Map<String,Object> map=new HashMap<String, Object>();
-			map.put("model1", model);
+			map.put("m", model);
 			fileNameTpl.process(map, sw);  
 			String fileName=sw.toString();
 			Map<String, Object> m = BaseFrameTag.getModel();
-			m.put("model1", model);
+			m.put("m", model);
 			File afile = new File(WebUtils.getWebRoot() + "/" + fileName+".js");
 			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(afile),"UTF-8"));
 			

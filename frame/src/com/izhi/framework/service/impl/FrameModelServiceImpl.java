@@ -80,4 +80,9 @@ public class FrameModelServiceImpl implements IFrameModelService {
 		return frameModelDao.findJsonById(id);
 	}
 
+	@Override
+	public List<FrameModel> findModelByProject(int pid) {
+		return frameModelDao.findModelByProject(pid);
+	}
+
 }

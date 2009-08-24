@@ -24,7 +24,7 @@ var FrameProjectApp= function(){
 		            totalProperty: 'totalCount',
 		            id: 'projectId',
 		            fields: [
-		                'projectId','packageName' ,'name','encode','basePath','sourcePath','webPath','databaseType','javascriptPath','driverClass','databaseName','databaseUser','databasePassword'
+		                'projectId','packageName' ,'title','name','encode','basePath','sourcePath','webPath','databaseType','javascriptPath','driverClass','databaseName','databaseUser','databasePassword'
 		            ]
 		        }),
 		        remoteSort: true
@@ -59,10 +59,15 @@ var FrameProjectApp= function(){
 	           width: 40
 	        },{
 	           id: 'name', 
-	           header: "名称",
+	           header: "英文名称",
 	           dataIndex: 'name',
 	           width: 100
 	        },{
+		           id: 'title', 
+		           header: "中文名称",
+		           dataIndex: 'title',
+		           width: 100
+		        },{
 	           header: "编码",
 	           dataIndex: 'encode',
 	           width: 150
@@ -283,6 +288,7 @@ var FrameProjectApp= function(){
 			            {name: 'obj.name', mapping:'name'},
 			            {name: 'obj.encode', mapping:'encode'},
 			            {name: 'obj.basePath', mapping:'basePath'},
+			            {name: 'obj.title', mapping:'title'},
 			            {name: 'obj.packageName', mapping:'packageName'},
 			            {name: 'obj.sourcePath', mapping:'sourcePath'},
 			            {name: 'obj.webPath', mapping:'webPath'},
@@ -301,8 +307,14 @@ var FrameProjectApp= function(){
 			        	
 			        },
 			        {
-	                    fieldLabel: '项目名称',
+	                    fieldLabel: '英文名称',
 	                    name: 'obj.name',
+	                    allowBlank:false
+	                    
+	                },
+			        {
+	                    fieldLabel: '中文名称',
+	                    name: 'obj.title',
 	                    allowBlank:false
 	                    
 	                },combo,{
