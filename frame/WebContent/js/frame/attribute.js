@@ -1,3 +1,4 @@
+var pageSize=18;
 var FrameAttributeFormPanel = function() {
 	this.idField = {
 		xtype : 'hidden',
@@ -223,6 +224,7 @@ Ext.extend(FrameAttributeFormPanel, Ext.form.FormPanel, {
 
 var FrameAttributeWindow = function() {
 	var _win = this;
+	this.gridPanel=null;
 	this.formPanel = new FrameAttributeFormPanel();
 	var _form = this.formPanel.getForm();
 	FrameAttributeWindow.superclass.constructor.call(this, {
@@ -255,7 +257,7 @@ var FrameAttributeWindow = function() {
 							});
 						},
 						success : function(form1, action) {
-							FrameAttributeApp.reload();
+							_win.gridPanel.reload();
 
 						}
 					});
@@ -276,275 +278,304 @@ Ext.extend(FrameAttributeWindow, Ext.Window, {
 	}
 });
 
-var FrameAttributeApp = function() {
-	var store;
-	var xg = Ext.grid;
-	var grid;
-	var sm;
-	var pageSize = 18;
-	var infoDlg;
-	var saveBtn;
-	var form;
-	return {
-		init : function() {
-			FrameAttributeApp.initStore();
-			FrameAttributeApp.initGridPanel();
-			FrameAttributeApp.initLayout();
-		},
-		initStore : function() {
-			store = new Ext.data.Store( {
-				proxy : new Ext.data.HttpProxy( {
-					url : 'frame/attribute/list.jhtm'
-				}),
-				reader : new Ext.data.JsonReader( {
-					root : 'objs',
-					totalProperty : 'totalCount',
-					id : 'attributeId',
-					fields : [ 'attributeId', 'name', 'label', 'modelId',
-							'modelLabel', 'isKey', 'required', 'javaClass','controlLabel','controlId' ]
-				}),
-				remoteSort : true
-			});
-			store.setDefaultSort('attributeId', 'desc');
-			store.on('load', function(s, r, o) {
-				if (s.getTotalCount() > 0) {
-					sm.selectFirstRow();
-				}
-			});
-		},
-		initGridPanel : function() {
-			
-			sm = new xg.CheckboxSelectionModel();
-			var cm = new Ext.grid.ColumnModel( [ sm, {
-				id : 'attributeId',
-				header : "ID",
-				dataIndex : 'attributeId',
-				width : 40
-			}, {
-				id : 'name',
-				header : "英文名称",
-				dataIndex : 'name',
-				width : 100
-			},
-			{
-				id : 'label',
-				header : "中文名称",
-				dataIndex : 'label',
-				width : 100
-			}, {
-				id : 'javaClass',
-				header : "类型",
-				dataIndex : 'javaClass',
-				width : 100
-			}, {
-				id : 'isKey',
-				header : "主键",
-				dataIndex : 'isKey',
-				width : 100,
-				renderer:function(v){
-					if(v){
-						return '是';
-					}else{
-						return '否';
-					}
-				}
-			}, {
-				id : 'required',
-				header : "必填",
-				dataIndex : 'required',
-				width : 100,
-				renderer:function(v){
-					if(v){
-						return '是';
-					}else{
-						return '否';
-					}
-				}
-			}, {
-				header : "所属模型",
-				dataIndex : 'modelLabel',
-				width : 150,
-				sortable : false
-			},{
-				header : "所属控件",
-				dataIndex : 'controlLabel',
-				width : 150,
-				sortable : false
-			},  {
-				header : "模型ID",
-				dataIndex : 'modelId',
-				width : 150,
-				sortable : false,
-				hidden : true
-			} ]);
-
-			cm.defaultSortable = true;
-
-			var mainHeight = FineCmsMain.getMainPanelHeight() - 1;
-			grid = new Ext.grid.GridPanel( {
-				store : store,
-				cm : cm,
-				sm : sm,
-				height : mainHeight,
-				trackMouseOver : true,
-				frame : false,
-				autoScroll : true,
-				loadMask : true,
-				tbar : [ {
-					text : '添加属性',
-					iconCls : 'x-btn-text-icon add',
-					scope : this,
-					handler : FrameAttributeApp.addInfo
-				}, '-', {
-					text : '修改属性',
-					iconCls : 'x-btn-text-icon edit',
-					scope : this,
-					handler : FrameAttributeApp.loadInfo
-				}, '-', {
-					text : '删除属性',
-					iconCls : 'x-btn-text-icon delete',
-					scope : this,
-					handler : FrameAttributeApp.deleteInfo
-				} ],
-				bbar : new Ext.PagingToolbar( {
-					pageSize : pageSize,
-					store : store,
-					displayInfo : true
-				}),
-				viewConfig : {
-					enableRowBody : true,
-					showPreview : true,
-					forceFit : true
-				},
-				renderTo : 'attributeGrid'
-			});
-			grid.on('rowdblclick', FrameAttributeApp.loadInfo);
-			grid.render();
-			store.load( {
-				params : {
-					start : 0,
-					limit : pageSize
-				}
-			});
-		},
-
-		addInfo : function() {
-			FrameAttributeApp.showInfoDlg();
-			//form.reset();
-
-		},
-		initLayout : function() {
-			var mainHeight = FineCmsMain.getMainPanelHeight() - 1;
-			var center = new Ext.Panel( {
-				collapsible : false,
-				layout : 'fit',
-				el : 'attributeCenter',
-				contentEl : 'attributeGrid',
-				items : [ grid ]
-			});
-			FineCmsMain.addFunctionPanel(center);
-		},
-		loadInfo : function() {
-			if (sm.getSelected() == null) {
-				Ext.Msg.alert("编辑属性", "请先选择一个属性！");
-				return;
-			} else {
-				FrameAttributeApp.showInfoDlg();
-				var select = sm.getSelected();
-				var id = select.get('attributeId');
-				infoDlg.loadData(id);
+var FrameAttributeGridPanel = function() {
+	this.attrWindow = new FrameAttributeWindow();
+	this.attrWindow.gridPanel=this;
+	var _grid = this;
+	this.mid=0;
+	var recordType = Ext.data.Record.create([ {
+		name : 'attributeId',
+		type : 'int',
+		mapping : 'attributeId'
+	}, {
+		name : 'name',
+		type : 'string',
+		mapping : 'name'
+	}, {
+		name : 'label',
+		type : 'string',
+		mapping : 'label'
+	},{
+		name : 'modelId',
+		type : 'int',
+		mapping : 'modelId'
+	},{
+		name : 'modelLabel',
+		type : 'string',
+		mapping : 'modelLabel'
+	},{
+		name : 'javaClass',
+		type : 'string',
+		mapping : 'javaClass'
+	},{
+		name : 'controlLabel',
+		type : 'string',
+		mapping : 'controlLabel'
+	},{
+		name : 'controlId',
+		type : 'int',
+		mapping : 'controlId'
+	},'isKey', 'required']);
+	this.store = new Ext.data.Store( {
+		proxy : new Ext.data.HttpProxy( {
+			url : 'frame/attribute/listByModel.jhtm?mid='+this.mid
+		}),
+		reader : new Ext.data.JsonReader( {
+			root : 'objs',
+			totalProperty : 'totalCount',
+			id : 'attributeId'
+		}, recordType)
+	});
+	_grid.store.setDefaultSort('attributeId', 'desc');
+	_grid.store.load({params:{start : 0,limit : 18}});
+	var sm = new Ext.grid.CheckboxSelectionModel( {
+		singleSelect : false
+	});
+	this.columns = [new Ext.grid.RowNumberer(), {
+		id : 'attributeId',
+		header : "编号",
+		width : 160,
+		sortable : true,
+		hidden:true,
+		dataIndex : 'attributeId'
+	},{
+		header : "中文名称",
+		width : 75,
+		sortable : true,
+		dataIndex : 'label'
+	}, {
+		header : "英文名称",
+		width : 75,
+		sortable : true,
+		dataIndex : 'name'
+	},  {
+		id : 'javaClass',
+		header : "类型",
+		dataIndex : 'javaClass',
+		width : 100
+	}, {
+		id : 'isKey',
+		header : "主键",
+		dataIndex : 'isKey',
+		width : 100,
+		renderer:function(v){
+			if(v){
+				return '是';
+			}else{
+				return '否';
 			}
-
-		},
-		deleteInfo : function() {
-			if (sm.getSelected == null) {
-				Ext.Msg.alert("删除属性", "请先选择一个属性！");
-				return;
-			} else {
-				var s = Ext.Msg
-						.confirm(
-								"删除属性",
-								"确定要删除选中的属性吗？",
-								function(o) {
-									if (o == 'yes') {
-										var url = 'frame/attribute/deletes.jhtm?' + FrameAttributeApp
-												.getSelectedIds();
-										Ext.Ajax.request( {
-											url : url,
-											success : success,
-											failure : failure
-										});
-									} else {
-										return;
-									}
-								});
+		}
+	}, {
+		id : 'required',
+		header : "必填",
+		dataIndex : 'required',
+		width : 100,
+		renderer:function(v){
+			if(v){
+				return '是';
+			}else{
+				return '否';
 			}
-			function success(rep) {
-				eval("var result=" + rep.responseText);
-				var _success = result.success;
-				var totalCount = result.totalCount;
-				if (_success) {
-					var lastO = store.lastOptions.params;
-					var start = lastO.start;
-					var totRecords = new Number(totalCount);
-					if (start > 0 && start >= totRecords) {
-						store.load( {
-							params : {
-								start : start - pageSize,
-								limit : pageSize
-							}
-						});
-					} else {
-						store.load( {
-							params : {
-								start : start,
-								limit : pageSize
-							}
-						});
-					}
-					Ext.Msg.alert("删除属性", "删除属性成功！");
+		}
+	}, {
+		header : "所属模型",
+		dataIndex : 'modelLabel',
+		width : 150,
+		sortable : false
+	},{
+		header : "所属控件",
+		dataIndex : 'controlLabel',
+		width : 150,
+		sortable : false
+	},  {
+		header : "模型ID",
+		dataIndex : 'modelId',
+		width : 150,
+		sortable : false,
+		hidden : true
+	},sm];
+	
+	FrameAttributeGridPanel.superclass.constructor
+			.call(
+					this,
+					{
+						layout : 'fit',
+						sm : sm,
+						trackMouseOver : true,
+						frame : false,
+						autoScroll : true,
+						loadMask : true,
+						viewConfig : {
+							enableRowBody : true,
+							showPreview : true,
+							forceFit : true
+						},
+						bbar : new Ext.PagingToolbar( {
+							pageSize : 10,
+							store : this.store,
+							displayInfo : true
+						}),
+						tbar : [
+							{
+									text : '添加属性',
+									iconCls : 'x-btn-text-icon add',
+									scope : this,
+									handler : _grid.addInfo
+								}, '-', {
+									text : '修改属性',
+									iconCls : 'x-btn-text-icon edit',
+									scope : this,
+									handler : _grid.loadInfo
+								}, '-', {
+									text : '删除属性',
+									iconCls : 'x-btn-text-icon delete',
+									scope : this,
+									handler : _grid.deleteInfo
+								} 
+						],
+						renderTo : 'attributeGrid'
+					});
+};
+
+Ext.extend(FrameAttributeGridPanel, Ext.grid.GridPanel, {
+	addInfo : function() {
+		
+		this.attrWindow.formPanel.getForm().reset();
+		this.attrWindow.show();
+		
+	},
+	loadByModel:function(mid1){
+		this.mid=mid1;
+		this.store.proxy= new Ext.data.HttpProxy( {
+			url : 'frame/attribute/listByModel.jhtm?mid='+mid1
+		});
+		this.store.load({params:{start:0,limit:18}});
+	}
+	,
+	loadInfo : function() {
+		if (this.getSelected() == null) {
+			Ext.Msg.alert("编辑属性", "请先选择一个属性！");
+			return;
+		} else {
+			this.showInfoDlg();
+			var select = this.getSelected();
+			var id = select.get('attributeId');
+			this.attrWindow.loadData(id);
+		}
+
+	},
+	deleteInfo : function() {
+		var _grid=this;
+		if (this.getSelected == null) {
+			Ext.Msg.alert("删除属性", "请先选择一个属性！");
+			return;
+		} else {
+			var s = Ext.Msg
+					.confirm(
+							"删除属性",
+							"确定要删除选中的属性吗？",
+							function(o) {
+								if (o == 'yes') {
+									var url = 'frame/attribute/deletes.jhtm?' + _grid.getSelectedIds();
+									alert(url);
+									Ext.Ajax.request( {
+										url : url,
+										success : success,
+										failure : failure
+									});
+								} else {
+									return;
+								}
+							});
+		}
+		function success(rep) {
+			eval("var result=" + rep.responseText);
+			var _success = result.success;
+			var totalCount = result.totalCount;
+			if (_success) {
+				var lastO = _grid.store.lastOptions.params;
+				var start = lastO.start;
+				var totRecords = new Number(totalCount);
+				if (start > 0 && start >= totRecords) {
+					this.store.load( {
+						params : {
+							start : start - pageSize,
+							limit : pageSize
+						}
+					});
 				} else {
-					Ext.Msg.alert("删除属性", "删除属性失败！");
+					_grid.store.load( {
+						params : {
+							start : start,
+							limit : pageSize
+						}
+					});
 				}
+				Ext.Msg.alert("删除属性", "删除属性成功！");
+			} else {
+				Ext.Msg.alert("删除属性", "删除属性失败！");
+			}
 
+		}
+		function failure(rep) {
+			alert("删除失败！");
+			alert(rep.responseText);
+		}
+	},
+	getSelectedIds : function() {
+		var ids = "";
+		var selections = this.getSelections();
+		var size = selections.length;
+		for ( var i = 0; i < size; i++) {
+			var r = selections[i];
+			if (ids.length == 0) {
+				ids = 'ids=' + r.get("attributeId");
+			} else {
+				ids += "&ids=" + r.get("attributeId");
 			}
-			function failure(rep) {
-				alert("删除失败！");
-				alert(rep.responseText);
-			}
-		},
-		getSelectedIds : function() {
-			var ids = "";
-			var selections = sm.getSelections();
-			var size = selections.length;
-			for ( var i = 0; i < size; i++) {
-				var r = selections[i];
-				if (ids.length == 0) {
-					ids = 'ids=' + r.get("attributeId");
-				} else {
-					ids += "&ids=" + r.get("attributeId");
-				}
-			}
-			return ids;
+		}
+		return ids;
 
-		},
-		showInfoDlg : function() {
-			if (!infoDlg) {
-				infoDlg = new FrameAttributeWindow();
-			}
-			infoDlg.show();
+	},
+	showInfoDlg : function() {
+		this.attrWindow.show();
 			// form.getForm().findField("obj.name").focus(true);
 	},
 	reload : function() {
-		var lastO = store.lastOptions.params;
+		var lastO = this.store.lastOptions.params;
 		var start = lastO.start;
-		store.load( {
+		this.store.load( {
 			params : {
 				start : start,
-				limit : pageSize
+				limit : 18
 			}
 		});
+	},
+	getSelected : function() {
+		var record = this.getSelectionModel().getSelected();
+		if (record == null) {
+			Ext.MessageBox.show( {
+				title : 'Infomation',
+				msg : "please select record",
+				buttons : Ext.MessageBox.OK,
+				icon : Ext.MessageBox.INFO
+			});
+		} else {
+			return record;
+		}
+	},
+	getSelections : function() {
+		var records = this.getSelectionModel().getSelections();
+		if (records.length < 1) {
+			Ext.MessageBox.show( {
+				title : '提示',
+				msg : "请先选择一个属性！",
+				buttons : Ext.MessageBox.OK,
+				icon : Ext.MessageBox.INFO
+			});
+		} else {
+			return records;
+		}
 	}
-	};
-}();
-FrameAttributeApp.init();
+
+});

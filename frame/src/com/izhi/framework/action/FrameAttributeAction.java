@@ -30,10 +30,18 @@ public class FrameAttributeAction extends BasePageAction{
 	
 	private int id;
 	
+	private int mid;
+	
 	
 	@Action("list")
 	public String list(){
 		PageParameter pp=this.getPageParameter();
+		if(pp.getSort()==null){
+			pp.setSort("attributeId");
+		}
+		if(pp.getDir()==null){
+			pp.setDir("desc");
+		}
 		int totalCount=(int)attributeService.findTotalCount();
 		List<Map<String,Object>> l=attributeService.findPage(pp);
 		Map<String,Object> map =new HashMap<String, Object>();
@@ -74,7 +82,6 @@ public class FrameAttributeAction extends BasePageAction{
 	
 	@Action("save")
 	public String save(){
-		
 		if(obj.getAttributeId()==0){
 			int i=attributeService.saveAttribute(obj);
 			this.getRequest().setAttribute("success", i>0);
@@ -85,6 +92,23 @@ public class FrameAttributeAction extends BasePageAction{
 		return SUCCESS;
 	}
 	
+	@Action("listByModel")
+	public String listByModel(){
+		if(mid!=0){
+			PageParameter pp=this.getPageParameter();
+			if(pp.getSort()==null){
+				pp.setSort("attributeId");
+			}
+			int c=attributeService.findTotalCount(mid);
+			List<Map<String,Object>> l=attributeService.findPageByModel(mid,pp);
+			Map<String,Object> map=new HashMap<String, Object>();
+			map.put("totalCount", c);
+			map.put("objs", l);
+			
+			this.getRequest().setAttribute("result", JSONObject.fromObject(map).toString());
+		}
+		return SUCCESS;
+	}
 	
 	public List<Integer> getIds() {
 		return ids;
@@ -110,6 +134,12 @@ public class FrameAttributeAction extends BasePageAction{
 	}
 	public void setObj(FrameAttribute obj) {
 		this.obj = obj;
+	}
+	public int getMid() {
+		return mid;
+	}
+	public void setMid(int mid) {
+		this.mid = mid;
 	}
 	
 	

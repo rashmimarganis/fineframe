@@ -33,6 +33,12 @@ public class FrameComponentAction extends BasePageAction{
 	@Action("list")
 	public String list(){
 		PageParameter pp=this.getPageParameter();
+		if(pp.getSort()==null){
+			pp.setSort("componentId");
+		}
+		if(pp.getDir()==null){
+			pp.setDir("desc");
+		}
 		int totalCount=(int)componentService.findTotalCount();
 		List<Map<String,Object>> l=componentService.findPage(pp);
 		Map<String,Object> map =new HashMap<String, Object>();

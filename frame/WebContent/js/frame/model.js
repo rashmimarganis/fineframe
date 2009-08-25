@@ -158,6 +158,7 @@ var FrameModelApp= function(){
 	var infoDlg;
 	var saveBtn;
 	var form;
+	var attrGrid;
 	return {
 		init:function(){
 			FrameModelApp.initStore();
@@ -181,11 +182,7 @@ var FrameModelApp= function(){
 		        remoteSort: true
 		    });
 		    store.setDefaultSort('modelId', 'desc');
-			store.on('load',function(s,r,o){
-				if(s.getTotalCount()>0){
-					sm.selectFirstRow();
-				}
-			});
+			
 		},
 		initGridPanel:function(){	
 			
@@ -220,12 +217,13 @@ var FrameModelApp= function(){
 	
 		    cm.defaultSortable = true;
 		    
-		    var mainHeight=FineCmsMain.getMainPanelHeight()-1;	 
 		    grid = new Ext.grid.GridPanel({
 		        store: store,
 		        cm: cm,
 				sm: sm,
-				height:mainHeight,
+				region:'center',
+				height:200,
+				width:300,
 		        trackMouseOver:true,
 		        frame:false,
 		        autoScroll:true,
@@ -249,7 +247,7 @@ var FrameModelApp= function(){
 				bbar: new Ext.PagingToolbar({
 		            pageSize: pageSize,
 		            store: store,
-		            displayInfo: true
+		            displayInfo: false
 		        }), 
 				viewConfig: {
 					enableRowBody:true,
@@ -259,6 +257,11 @@ var FrameModelApp= function(){
 				renderTo:'modelGrid'
 		    });
 		    grid.on('rowdblclick',FrameModelApp.loadInfo);
+		    grid.on('click',function(){
+		    	if(sm.getSelected()!=null){
+		    		attrGrid.loadByModel(sm.getSelected().get('modelId'));
+		    	}
+		    });
 		    grid.render();
 		    store.load({params:{start:0, limit:pageSize}});
 		},
@@ -270,12 +273,35 @@ var FrameModelApp= function(){
 		},
 		initLayout:function(){
 			var mainHeight=FineCmsMain.getMainPanelHeight()-1;	 
+			attrGrid=new FrameAttributeGridPanel();
 			var center= new Ext.Panel({
 		        collapsible:false,
-				layout:'fit',
+				layout:'border',
+				height:mainHeight,
 		        el: 'modelCenter',
-		        contentEl:'modelGrid',
-				items:[grid]
+				items:[
+				       new Ext.Panel(
+						{
+							title:'模型列表',
+							items:[grid],
+							region:'west',
+							layout:'fit',
+							width:300,
+							height:mainHeight-20,
+							split:true,
+							collapsible:true
+						}),
+						new Ext.Panel({
+							title:'属性列表',
+							region:'center',
+							layout:'fit',
+							height:mainHeight-20,
+							el:'attributeCenter',
+							contentEl:'attributeGrid',
+							items:[attrGrid]
+							
+						}
+				)]
 		    });
 			FineCmsMain.addFunctionPanel(center);
     	},

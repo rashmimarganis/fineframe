@@ -9,7 +9,7 @@
 	var FineCmsMain=function(){
 		return {
 			init:function(){
-				//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+				Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 				FineCmsMain.initMenu();
 				FineCmsMain.initMainPanel();
 				viewport = new Ext.Viewport({
@@ -29,7 +29,20 @@
 		             ]
 		        });
 		       viewport.doLayout();
-		       FrameMsg.init();
+		       mainPanel.load({
+				    url:'welcome.jsp',
+				    callback: function(o){
+				    	mainPanel.syncSize();
+				    },
+				    timeout: 120,
+				    scope: this, // optional scope for the callback
+		            discardUrl: true,
+		            nocache: true,
+				    scripts: true
+				});
+		      
+		       //FrameMsg.init();
+		       
 		       //FrameMsg.msg("AAAA","AAAAAAAAAAAAAAAAAA");
 			},
 			initMenu:function(){
@@ -78,9 +91,9 @@
 	            });
 	            tree.on('click',function(node){
 	                if (node.isLeaf()){
-	                
+	                	document.title=node.text+' - '+document.title;
 	                	var url='${base}'+node.attributes.url;
-	                	FineCmsMain.loadPage(url,node.attributes.text);
+	                	FineCmsMain.loadPage(url,node.text);
 	                }
 	            });
 	            root.expand(true);
@@ -126,7 +139,7 @@
 				});
 			},
 			addFunctionPanel:function(p){
-				Ext.getDom("main").innerHtml="";
+				//Ext.getDom("main").innerHtml="";
 				p.setHeight(FineCmsMain.getMainPanelHeight()-1);
 				p.setWidth(FineCmsMain.getMainPanelWidth()-1);
 				contentPanel=p;

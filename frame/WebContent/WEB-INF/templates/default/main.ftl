@@ -13,6 +13,7 @@
     <script type="text/javascript" src="${base}/js/frame/common.js"></script>
 	<script language="javascript" type="text/javascript" src="${base}/script.jhtm">
 	</script>
+	<script type="text/javascript" src="js/frame/attribute.js"></script>
 </head>
 <body >
 
@@ -25,7 +26,7 @@
   
   </div>
   <div id="main">
-        
+        <div class="welcome"></div>
   </div>
  
   

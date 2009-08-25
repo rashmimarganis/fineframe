@@ -192,4 +192,8 @@ html, body {
     display:block;
     clear:none;
 }
+.welcome{
+	background:url(image/platform/welcome.jpg) no-repeat fixed center;
+	
+}
 	
