@@ -13,8 +13,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -68,10 +66,11 @@ public class FrameGenerateAction extends BaseAction {
 				Map<String, Object> data = new HashMap<String, Object>();
 				data.put("p", fp);
 				String ftpl =fc.getTemplate().getFileName()+".ftl";
-
+				
 				if (fc.getLevel().equals(FrameComponent.LEVEL_PROJECT)) {
+					String fileName1=TagUtils.getGenerateFileName(fp, fc);
 					String fileName = TagUtils.getGeneratePackageName(fp, fc)
-							+ TagUtils.getGenerateFileName(fp, fc);
+							+ fileName1;
 					log.debug("生成文件名称："+fileName);
 					File file = new File(fileName);
 					try {
@@ -90,12 +89,13 @@ public class FrameGenerateAction extends BaseAction {
 						Template tpl = config.getTemplate(ftpl);
 						tpl.process(data, out);
 						out.flush();
-						result.add( fc.getName()+"生成成功！");
+						out.close();
+						result.add( "项目["+fp.getTitle()+"]的"+fileName1+"文件生成成功！");
 					} catch (IOException e) {
-						result.add( fc.getName()+"生成失败！");
+						result.add( "<font color='red'>项目["+fp.getTitle()+"]的"+fileName1+"文件生成失败！</font>");
 						e.printStackTrace();
 					} catch (TemplateException e) {
-						result.add( fc.getName()+"生成失败！");
+						result.add( "<font color='red'>项目["+fp.getTitle()+"]的"+fileName1+"文件生成失败！</font>");
 						e.printStackTrace();
 					}
 
@@ -105,8 +105,9 @@ public class FrameGenerateAction extends BaseAction {
 					
 					for (FrameModel fm : models) {
 						data.put("m", fm);
+						String fileName1=TagUtils.getGenerateFileName(fp, fc,fm);
 						String fileName = TagUtils.getGeneratePackageName(fp, fc,fm)
-						+ TagUtils.getGenerateFileName(fp, fc,fm);
+						+ fileName1;
 						log.debug("生成文件名称："+fileName);
 						File file = new File(fileName);
 						try {
@@ -127,12 +128,13 @@ public class FrameGenerateAction extends BaseAction {
 									ftpl);
 							tpl.process(data, out);
 							out.flush();
-							result.add(fc.getName()+"["+fm.getLabel()+"]"+"生成成功！");
+							out.close();
+							result.add("模型["+fm.getLabel()+"]的"+fileName1+"文件生成成功！");
 						} catch (IOException e) {
-							result.add( fc.getName()+"["+fm.getLabel()+"]"+"生成失败！");
+							result.add( "<font color='red'>模型["+fm.getLabel()+"]的"+fileName1+"]"+"文件生成失败！</font>");
 							e.printStackTrace();
 						} catch (TemplateException e) {
-							result.add( fc.getName()+"["+fm.getLabel()+"]"+"生成失败！");
+							result.add( "<font color='red'>模型["+fm.getLabel()+"]的"+fileName1+"文件生成失败！</font>");
 							e.printStackTrace();
 						}
 					}
@@ -140,7 +142,7 @@ public class FrameGenerateAction extends BaseAction {
 
 			}
 		}
-		this.getRequest().setAttribute("result", JSONArray.fromObject(result).toString());
+		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
 

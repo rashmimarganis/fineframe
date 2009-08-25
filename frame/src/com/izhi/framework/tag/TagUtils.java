@@ -171,7 +171,8 @@ public final class TagUtils {
 			bp += File.separator;
 		}
 		fpn = bp;
-		if (fc.getFileType().equals(FrameComponent.TYPE_JAVA)) {
+		String fileType=fc.getFileType();
+		if (fileType.equals(FrameComponent.TYPE_JAVA)) {
 			fpn += fp.getSourcePath() + File.separator;
 			String pckn = fp.getPackageName();
 			pckn = pckn.replace(".", File.separator);
@@ -179,12 +180,10 @@ public final class TagUtils {
 			String pkn = fc.getPackageName();
 			pkn = pkn.replace(".", File.separator) + File.separator;
 			fpn += pkn + File.separator;
-
-		} else if (fc.getFileType().equals(FrameComponent.TYPE_JAVASCRIPT)) {
+		} else if (fileType.equals(FrameComponent.TYPE_JAVASCRIPT)||fileType.equals(FrameComponent.TYPE_CONFIG)||fileType.equals(FrameComponent.TYPE_FTL)) {
 			fpn += fp.getWebPath() + File.separator;
 			fpn += getTplResult(fp,fc.getPackageName()) + File.separator;
-		} else {
-			fpn += fp.getWebPath() + File.separator;
+		} else if(fileType.equals(FrameComponent.TYPE_PROPERTY)){
 			fpn += fc.getPackageName() + File.separator;
 		}
 

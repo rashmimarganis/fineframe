@@ -7,6 +7,7 @@ var FrameProjectApp= function(){
 	var pageSize=18;
 	var infoDlg;
 	var genDlg;
+	var genResultDlg;
 	var saveBtn;
 	var form;
 	var componentStore;
@@ -39,6 +40,7 @@ var FrameProjectApp= function(){
 					sm.selectFirstRow();
 				}
 			});
+			
 		},
 		initGridPanel:function(){	
 
@@ -234,11 +236,6 @@ var FrameProjectApp= function(){
 			        remoteSort: true
 			    });
 				componentStore.setDefaultSort('componentId', 'asc');
-				componentStore.on('load',function(s,r,o){
-					if(s.getTotalCount()>0){
-						sm.selectFirstRow();
-					}
-				});
 				
 				componentSm = new xg.CheckboxSelectionModel();
 				var cm = new Ext.grid.ColumnModel([componentSm,{
@@ -285,7 +282,7 @@ var FrameProjectApp= function(){
 			    grid.render();
 			    componentStore.load({params:{start:0, limit:pageSize}});
 				genDlg = new Ext.Window({
-			        title: '项目代码生成',
+			        title: '项目【'+sm.getSelected().get("title")+'】代码生成',
 			        width: 400,
 			        height:475,
 			        minWidth: 300,
@@ -311,7 +308,43 @@ var FrameProjectApp= function(){
 			    });
 			}
 			componentStore.load({params:{start:0, limit:pageSize}});
+			componentStore.on('load',function(s,r,o){
+				if(s.getTotalCount()>0){
+					componentSm.selectRange(0,pageSize);
+				}
+			});
+			//genDlg.setTile('项目【'+sm.getSelected().get("title")+"】代码生成");
 			genDlg.show();
+			
+		}
+		,
+		showGenerateResultDlg:function(){
+			Ext.getDom("generateDiv").innerHTML="";
+			if(!genResultDlg){
+				genResultDlg = new Ext.Window({
+			        title: '项目代码生成结果',
+			        width: 350,
+			        height:350,
+			        minWidth: 300,
+			        minHeight: 200,
+			        layout: 'fit',
+			        plain:true,
+			        modal:true,
+			        autoScroll:true,
+			        buttonAlign:'center',
+			        contentEl: 'generateDiv',
+			        buttons: [{
+			            text: '关闭',
+			            handler:function(){
+			        	genResultDlg.hide();
+			        	}
+			        }
+			        ]
+			    });
+			}
+			genResultDlg.setTitle('项目【'+sm.getSelected().get("title")+"】代码生成结果");
+			genResultDlg.show();
+			
 		}
 		,
 		getSelectedIds:function(){
@@ -337,7 +370,7 @@ var FrameProjectApp= function(){
 			var idNum=0;
 			
 			var selections=componentSm.getSelections();
-			Ext.Msg.alert("生成代码结果","<div id='generateDiv'>请稍候正在生成代码！<br></div>");
+			FrameProjectApp.showGenerateResultDlg();
 			
 			FrameProjectApp.generateAction(idNum,pid);
 		},
@@ -348,20 +381,14 @@ var FrameProjectApp= function(){
 			Ext.Ajax.request({
 			   url: url,
 			   success: function(o){
-					var div=document.getElementById('generateDiv');
+					var div=Ext.getDom('generateDiv');
+					
+					
+					div.innerHTML=div.innerHTML+o.responseText;
 					if(idNum==selections.length){
-						alert(div.innerHtml);
 						return ;
 					}
 					idNum++;
-					alert(o.responseText);
-					eval("var r1="+o.reponseText);
-					alert(r1.length);
-					for(var i=0;i<r1.length;i++){
-						div.innerHtml=div.innerHtml+r1[i];
-					}
-					//alert(o.responseText);
-					//alert("IDNum:"+idNum);
 					FrameProjectApp.generateAction(idNum,pid);
 			    },
 			   failure: function(){alert("失败！");}

@@ -5,7 +5,7 @@
 	var viewport;
 	var mainPanelHeight;
 	//Ext.reg('checkbox', Ext.form.Checkbox);
-	
+	var contentPanel;
 	var FineCmsMain=function(){
 		return {
 			init:function(){
@@ -105,9 +105,11 @@
 				return mainPanel.getInnerHeight();
 			},
 			loadPage:function(url,title){
-			
-				
-			
+				/*
+				if(contentPanel){
+					mainPanel.remove(contentPanel);
+				}
+				*/
 				mainPanel.removeAll();
             	mainPanel.setTitle(title);
                 mainPanel.load({
@@ -124,12 +126,13 @@
 				});
 			},
 			addFunctionPanel:function(p){
-				mainPanel.removeAll();
+				Ext.getDom("main").innerHtml="";
 				p.setHeight(FineCmsMain.getMainPanelHeight()-1);
 				p.setWidth(FineCmsMain.getMainPanelWidth()-1);
+				contentPanel=p;
 				mainPanel.add(p);
 				mainPanel.syncSize();
-				//mainPanel.doLayout(true);
+				
 			}
 			
 		};
