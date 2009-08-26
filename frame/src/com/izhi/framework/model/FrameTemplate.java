@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 public class FrameTemplate implements Serializable{
 
 	private static final long serialVersionUID = 4684494637426913663L;
-	
+	public static final String PrimaryKey="templateId";
 	public final static String TYPE_CONTROL="control";
 	public final static String TYPE_COMPONENT="component";
 	@Id

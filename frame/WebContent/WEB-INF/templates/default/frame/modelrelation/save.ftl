@@ -1,0 +1,1 @@
+{'success':${success?string},'msg':'项目信息保存<#if success>成功！<#else>失败！</#if>'}

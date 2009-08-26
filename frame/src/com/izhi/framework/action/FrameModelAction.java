@@ -25,6 +25,7 @@ public class FrameModelAction extends BasePageAction{
 	private static final long serialVersionUID = 8190220809475487574L;
 	@Resource(name="frameModelService")
 	private IFrameModelService modelService;
+	
 	private FrameModel obj;
 	private List<Integer> ids;
 	
@@ -130,6 +131,7 @@ public class FrameModelAction extends BasePageAction{
 	public void setModelService(IFrameModelService templateService) {
 		this.modelService = templateService;
 	}
+	
 	public FrameModel getObj() {
 		return obj;
 	}

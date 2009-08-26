@@ -89,6 +89,7 @@ var FrameModelWindow = function() {
 	var _win = this;
 	this.formPanel = new FrameModelFormPanel();
 	var _form = this.formPanel.getForm();
+	
 	FrameModelWindow.superclass.constructor.call(this, {
 		title : '模型信息',
 		width : 320,
@@ -159,6 +160,7 @@ var FrameModelApp= function(){
 	var saveBtn;
 	var form;
 	var attrGrid;
+	var relationWindow=null;
 	return {
 		init:function(){
 			FrameModelApp.initStore();
@@ -229,20 +231,33 @@ var FrameModelApp= function(){
 		        autoScroll:true,
 		        loadMask: true,
 				tbar:[{
-				  	text: '添加模型',
+				  	text: '添加',
 		            iconCls: 'x-btn-text-icon add',
 		            scope: this,
 					handler:FrameModelApp.addInfo
 				 },'-',{
-				  	text: '修改模型',
+				  	text: '修改',
 		            iconCls: 'x-btn-text-icon edit',
 		            scope: this,
 					handler:FrameModelApp.loadInfo
 				 },'-',{
-				  	text: '删除模型',
+				  	text: '删除',
 		            iconCls: 'x-btn-text-icon delete',
 		            scope: this,
 					handler:FrameModelApp.deleteInfo
+				 },'-',{
+					 text:'模型关系',
+					 iconCls:'x-btn-text-icon relation',
+					 scope:this,
+					 handler:function(){
+						 if(!relationWindow){
+							 relationWindow=new FrameModelRelationWindow();
+						 }
+						 
+						 relationWindow.loadData(sm.getSelected().get('modelId'));
+						 relationWindow.show();
+						 
+					 }
 				 }],
 				bbar: new Ext.PagingToolbar({
 		            pageSize: pageSize,
@@ -282,20 +297,17 @@ var FrameModelApp= function(){
 				items:[
 				       new Ext.Panel(
 						{
-							title:'模型列表',
 							items:[grid],
 							region:'west',
 							layout:'fit',
 							width:300,
-							height:mainHeight-20,
+							height:20,
 							split:true,
 							collapsible:true
 						}),
 						new Ext.Panel({
-							title:'属性列表',
 							region:'center',
 							layout:'fit',
-							height:mainHeight-20,
 							el:'attributeCenter',
 							contentEl:'attributeGrid',
 							items:[attrGrid]

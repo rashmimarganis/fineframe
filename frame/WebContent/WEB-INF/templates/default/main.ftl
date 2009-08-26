@@ -14,6 +14,7 @@
 	<script language="javascript" type="text/javascript" src="${base}/script.jhtm">
 	</script>
 	<script type="text/javascript" src="js/frame/attribute.js"></script>
+	<script type="text/javascript" src="js/frame/modelrelation.js"></script>
 </head>
 <body >
 

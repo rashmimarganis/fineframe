@@ -121,6 +121,7 @@ public class FrameModelDaoImpl extends HibernateDaoSupport implements IFrameMode
 		return q.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int findTotalCount(int pid) {
 		String sql="select count(*) from FrameModel o where o.project.projectId=?";

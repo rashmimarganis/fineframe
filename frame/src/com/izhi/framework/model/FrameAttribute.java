@@ -18,7 +18,7 @@ import org.hibernate.annotations.NotFoundAction;
 public class FrameAttribute implements Serializable {
 
 	private static final long serialVersionUID = -8276606983944130551L;
-	
+	public static final String PrimaryKey="attributeId";
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="attribute_id")

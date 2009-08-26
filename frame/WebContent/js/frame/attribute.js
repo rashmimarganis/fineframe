@@ -416,7 +416,7 @@ var FrameAttributeGridPanel = function() {
 							displayInfo : true
 						}),
 						tbar : [
-							{
+							{xtype: 'tbtext', text: '属性列表'},'->',{
 									text : '添加属性',
 									iconCls : 'x-btn-text-icon add',
 									scope : this,
@@ -433,8 +433,13 @@ var FrameAttributeGridPanel = function() {
 									handler : _grid.deleteInfo
 								} 
 						],
-						renderTo : 'attributeGrid'
+						renderTo : 'attributeGrid',
+						onRowdbclick:function(){
+							this.attrWindow.loadInfo(sm.getSelected('attributeId'));
+						}
+						
 					});
+	
 };
 
 Ext.extend(FrameAttributeGridPanel, Ext.grid.GridPanel, {

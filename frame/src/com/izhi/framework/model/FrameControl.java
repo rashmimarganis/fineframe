@@ -18,6 +18,8 @@ import org.hibernate.annotations.NotFoundAction;
 public class FrameControl implements Serializable{
 
 	private static final long serialVersionUID = -7064198439793652153L;
+	
+	public static final String PrimaryKey="controlId";
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="control_id")

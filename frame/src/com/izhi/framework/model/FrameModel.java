@@ -2,7 +2,6 @@ package com.izhi.framework.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -24,6 +21,8 @@ import org.hibernate.annotations.NotFoundAction;
 public class FrameModel implements Serializable {
 
 	private static final long serialVersionUID = -4278569909316098477L;
+	
+	public static final String PrimaryKey="modelId";
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="model_id")
@@ -35,9 +34,9 @@ public class FrameModel implements Serializable {
 	@Column(name="model_note")
 	private String note;
 	
-	@ManyToMany( fetch = FetchType.EAGER)
-	@JoinTable(name = "frame_model_relation", joinColumns = {@JoinColumn(name = "model_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "parent_id"))
-	private Set<FrameModel> parents;
+	@OneToMany
+	@JoinColumn(name="model_id",updatable=false,insertable=false,nullable=true)
+	private List<FrameModelRelation> relations;
 	
 	@ManyToOne(optional=true)
 	@NotFound(action=NotFoundAction.IGNORE)
@@ -60,11 +59,12 @@ public class FrameModel implements Serializable {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	public Set<FrameModel> getParents() {
-		return parents;
+	
+	public List<FrameModelRelation> getRelations() {
+		return relations;
 	}
-	public void setParents(Set<FrameModel> parents) {
-		this.parents = parents;
+	public void setRelations(List<FrameModelRelation> relations) {
+		this.relations = relations;
 	}
 	public int getModelId() {
 		return modelId;

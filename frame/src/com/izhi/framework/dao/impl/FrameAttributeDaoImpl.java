@@ -92,4 +92,23 @@ public class FrameAttributeDaoImpl extends HibernateDaoSupport implements IFrame
 		List<Map<String,Object>> l=q.list();
 		return l;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> findPageByModel(int mid, PageParameter pp) {
+		
+		String sql="select new map(o.attributeId as attributeId,o.name as name,o.label as label,o.length as length,o.javaClass as javaClass,o.isKey as isKey,o.required as required,o.control.controlId as controlId,o.control.label as controlLabel,o.model.modelId as modelId,o.model.label as modelLabel,o.control.controlId as controlId,o.control.label as controlLabel) from FrameAttribute o  where o.model.modelId=:mid";
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setInteger("mid", mid);
+		List<Map<String,Object>> l=q.list();
+		return l;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public int findTotalCount(int mid) {
+		String sql="select count(*) from FrameAttribute o where o.model.modelId=?";
+		List l=this.getHibernateTemplate().find(sql,mid);
+		return ((Long)l.get(0)).intValue();
+	}
 }

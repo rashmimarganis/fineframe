@@ -16,6 +16,8 @@ import javax.persistence.Table;
 public class FrameProject implements Serializable{
 
 	private static final long serialVersionUID = 2966389089541539271L;
+	
+	public static final String PrimaryKey="projectId";
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="project_id")

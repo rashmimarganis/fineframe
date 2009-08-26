@@ -16,4 +16,7 @@ public interface IFrameAttributeService {
 	List<Map<String,Object>> findPage(PageParameter pp);
 	int findTotalCount();
 	List<Map<String,Object>> findJsonById(int id);
+	
+	List<Map<String,Object>> findPageByModel(int mid,PageParameter pp);
+	int findTotalCount(int mid);
 }

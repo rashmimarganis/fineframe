@@ -18,7 +18,7 @@ import org.hibernate.annotations.NotFoundAction;
 public class FrameComponent implements Serializable{
 
 	private static final long serialVersionUID = 4120780168537312804L;
-	
+	public static final String PrimaryKey="componentId";
 	public final static String TYPE_JAVA="java";
 	public final static String TYPE_JSP="jsp";
 	public final static String TYPE_FTL="ftl";

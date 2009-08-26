@@ -1,4 +1,4 @@
-<#compress>
+
 	Ext.BLANK_IMAGE_URL = '${base}/js/resources/images/default/s.gif';
 	var mainPanel;
 	var menuPanel;
@@ -6,6 +6,7 @@
 	var mainPanelHeight;
 	//Ext.reg('checkbox', Ext.form.Checkbox);
 	var contentPanel;
+	var oTime;
 	var FineCmsMain=function(){
 		return {
 			init:function(){
@@ -29,6 +30,7 @@
 		             ]
 		        });
 		       viewport.doLayout();
+		       /*
 		       mainPanel.load({
 				    url:'welcome.jsp',
 				    callback: function(o){
@@ -40,7 +42,7 @@
 		            nocache: true,
 				    scripts: true
 				});
-		      
+		      */
 		       //FrameMsg.init();
 		       
 		       //FrameMsg.msg("AAAA","AAAAAAAAAAAAAAAAAA");
@@ -123,6 +125,7 @@
 					mainPanel.remove(contentPanel);
 				}
 				*/
+				Ext.getDom("main").innerHtml="";
 				mainPanel.removeAll();
             	mainPanel.setTitle(title);
                 mainPanel.load({
@@ -139,13 +142,23 @@
 				});
 			},
 			addFunctionPanel:function(p){
-				//Ext.getDom("main").innerHtml="";
+				contentPanel=p;
+				
 				p.setHeight(FineCmsMain.getMainPanelHeight()-1);
 				p.setWidth(FineCmsMain.getMainPanelWidth()-1);
 				contentPanel=p;
 				mainPanel.add(p);
+				//mainPanel.syncSize();
+				if (oTime){
+			        clearTimeout(oTime);
+			    }
+			    oTime = setTimeout("FineCmsMain.contentPanelResize()", 100);
+			},
+			contentPanelResize:function(){
+				mainPanel.doLayout();
 				mainPanel.syncSize();
-				
+				//contentPanel.setHeight(FineCmsMain.getMainPanelHeight());
+				//contentPanel.setWidth(FineCmsMain.getMainPanelWidth());
 			}
 			
 		};
@@ -264,4 +277,3 @@ function renderDate(v) {
 			+ minutes + ':' + seconds;
 
 }
-</#compress>

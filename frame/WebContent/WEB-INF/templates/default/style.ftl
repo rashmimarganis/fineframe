@@ -169,6 +169,9 @@ html, body {
 	.prev {
 		background-image: url(js/resources/images/prev.gif) !important;
 	}
+	.relation {
+		background-image: url(js/resources/images/relation.gif) !important;
+	}
 	.search-item {
     font:normal 11px tahoma, arial, helvetica, sans-serif;
     padding:3px 10px 3px 10px;

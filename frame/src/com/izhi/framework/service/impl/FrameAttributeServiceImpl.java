@@ -80,4 +80,14 @@ public class FrameAttributeServiceImpl implements IFrameAttributeService {
 		return frameAttributeDao.findJsonById(id);
 	}
 
+	@Override
+	public List<Map<String, Object>> findPageByModel(int mid, PageParameter pp) {
+		return frameAttributeDao.findPageByModel(mid, pp);
+	}
+
+	@Override
+	public int findTotalCount(int mid) {
+		return frameAttributeDao.findTotalCount(mid);
+	}
+
 }
