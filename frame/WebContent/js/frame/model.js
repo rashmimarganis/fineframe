@@ -297,12 +297,14 @@ var FrameModelApp= function(){
 				items:[
 				       new Ext.Panel(
 						{
-							items:[grid],
 							region:'west',
 							layout:'fit',
 							width:300,
+							frame:false,
 							height:20,
 							split:true,
+							items:[grid],
+							contentEl:'modelGrid',
 							collapsible:true
 						}),
 						new Ext.Panel({
