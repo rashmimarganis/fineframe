@@ -27,7 +27,7 @@
   
   </div>
   <div id="main">
-        <div class="welcome"></div>
+     
   </div>
  
   

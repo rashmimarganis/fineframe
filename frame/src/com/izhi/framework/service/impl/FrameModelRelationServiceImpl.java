@@ -96,4 +96,14 @@ public class FrameModelRelationServiceImpl implements IFrameModelRelationService
 		return frameModelRelationDao.findTotalCount(mid);
 	}
 
+	@Override
+	public List<Map<String, Object>> findNoRelation(int mid) {
+		return frameModelRelationDao.findNoRelation(mid);
+	}
+
+	@Override
+	public int findNoRelationTotalCount(int mid) {
+		return frameModelRelationDao.findNoRelationTotalCount(mid);
+	}
+
 }

@@ -46,7 +46,7 @@ Ext.ux.Enabled = [
                         ['false', '不可用', '不可用']
                     ];
 Ext.namespace('Ext.ux.ModelRelationType');
-Ext.ux.Enabled = [
+Ext.ux.ModelRelationType = [
                   		['onetomany', '一对多', '一对多'],
                   		['manytoone', '多对一', '多对一'],
                         ['onetoone', '一对一', '一对一'],

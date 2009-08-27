@@ -109,6 +109,8 @@ public class FrameModelRelationDaoImpl extends HibernateDaoSupport implements IF
 		Session s=this.getSession();
 		Query q=s.createQuery(sql);
 		q.setInteger("mid", mid);
+		q.setFirstResult(pp.getStart());
+		q.setMaxResults(pp.getLimit());
 		List<Map<String,Object>> l=q.list();
 		return l;
 	}
@@ -118,6 +120,26 @@ public class FrameModelRelationDaoImpl extends HibernateDaoSupport implements IF
 	public int findTotalCount(int mid) {
 		String sql="select count(*) from FrameModelRelation o where o.model.modelId=?";
 		List<Long> l=this.getHibernateTemplate().find(sql,mid);
+		return (l.get(0)).intValue();
+	}
+
+	@Override
+	public List<Map<String, Object>> findNoRelation(int mid) {
+		String sql="select new map(m.modelId as modelId,m.name as name,m.label as label) from FrameModel as m where m.modelId not in(select o.relationModel.modelId from FrameModelRelation  as o where o.model.modelId=:mid) and  m.modelId!=:mid";
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setInteger("mid", mid);
+		List<Map<String,Object>> l=q.list();
+		return l;
+	}
+
+	@Override
+	public int findNoRelationTotalCount(int mid) {
+		String sql="select count(m) from FrameModel as m where m.modelId not in(select o.relationModel.modelId from FrameModelRelation  as o where o.model.modelId=:mid) and m.modelId!=:mid";
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setInteger("mid", mid);
+		List<Long> l=q.list();
 		return (l.get(0)).intValue();
 	}
 

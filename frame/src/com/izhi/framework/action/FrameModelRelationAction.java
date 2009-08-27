@@ -96,6 +96,16 @@ public class FrameModelRelationAction extends BasePageAction {
 		return SUCCESS;
 	}
 
+	@Action("else")
+	public String elseModel(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		int totalCount = modelRelationService.findNoRelationTotalCount(mid);
+		List<Map<String, Object>> list = modelRelationService.findNoRelation(mid);
+		map.put("totalCount", totalCount);
+		map.put("objs", list);
+		this.getRequest().setAttribute("result", JSONObject.fromObject(map).toString());
+		return SUCCESS;
+	}
 	@Action("listByModel")
 	public String loadByModel() {
 		Map<String, Object> map = new HashMap<String, Object>();

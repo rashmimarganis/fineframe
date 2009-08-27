@@ -19,4 +19,7 @@ public interface IFrameModelRelationService {
 	
 	List<Map<String,Object>> findPageByModel(int mid,PageParameter pp);
 	int findTotalCount(int mid);
+	
+	List<Map<String,Object>> findNoRelation(int mid);
+	int findNoRelationTotalCount(int mid);
 }

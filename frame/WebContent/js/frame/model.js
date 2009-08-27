@@ -160,7 +160,7 @@ var FrameModelApp= function(){
 	var saveBtn;
 	var form;
 	var attrGrid;
-	var relationWindow=null;
+	var relationWindow;
 	return {
 		init:function(){
 			FrameModelApp.initStore();
@@ -250,11 +250,12 @@ var FrameModelApp= function(){
 					 iconCls:'x-btn-text-icon relation',
 					 scope:this,
 					 handler:function(){
-						 if(!relationWindow){
-							 relationWindow=new FrameModelRelationWindow();
-						 }
-						 
-						 relationWindow.loadData(sm.getSelected().get('modelId'));
+						if(!relationWindow){
+							relationWindow=new FrameModelRelationWindow();
+						}
+						relationWindow.modelId=sm.getSelected().get('modelId');
+						relationWindow.loadNoRelation(sm.getSelected().get('modelId'));
+					 	relationWindow.loadData(sm.getSelected().get('modelId'));
 						 relationWindow.show();
 						 
 					 }

@@ -1,5 +1,129 @@
 var pageSize=18;
+var FrameModelRelationFormPanel=function(){
+	this.mid=0;
+	this.idField = {
+		xtype : 'hidden',
+		fieldLabel : "id",
+		name : "obj.relationId",
+		value : '0'
+	};
 
+	var modelRecordDef = Ext.data.Record.create( [ {
+		name : 'modelId'
+	}, {
+		name : 'label'
+	} ]);
+	this.modelStore = new Ext.data.Store( {
+		proxy : new Ext.data.HttpProxy( {
+			url : 'frame/modelrelation/else.jhtm?mid='+this.mid
+		}),
+		autoLoad:true,
+		reader : new Ext.data.JsonReader( {
+			root : 'objs',
+			totalProperty : 'totalCount',
+			id : 'modelId'
+		}, [ {
+			name : 'label',
+			mapping : 'label'
+		}, {
+			name : 'name',
+			mapping : 'name'
+		} ], modelRecordDef)
+	});
+    this.modelField = new Ext.form.ComboBox({
+        store: this.modelStore,
+        displayField:'label',
+        valueField:'modelId',
+        fieldLabel : "关联模型",
+        typeAhead: true,
+        mode: 'local',
+        width : 200,
+        triggerAction: 'all',
+        emptyText:'请选择模型...',
+        blankText : '请选择模型...',
+        allowBlank : false,
+        selectOnFocus:true,
+        hiddenName : 'obj.relationModel.label'
+    });
+	
+    var relationStore = new Ext.data.SimpleStore({
+        fields: ['value', 'label','tip'],
+        data : Ext.ux.ModelRelationType
+    });
+    this.relationField = new Ext.form.ComboBox({
+        store: relationStore,
+        displayField:'label',
+        valueField:'value',
+        fieldLabel : "模型关系",
+        typeAhead: true,
+        mode: 'local',
+        width : 200,
+        triggerAction: 'all',
+        emptyText:'请选择模型关系...',
+        blankText : '请选择模型关系...',
+        allowBlank : false,
+        selectOnFocus:true,
+        hiddenName : 'obj.relation'
+    });
+	
+    
+    
+    FrameModelRelationFormPanel.superclass.constructor.call(this, {
+		bodyStyle : 'padding:2px 2px 0',
+		labelWidth: 60,
+		labelAlign: 'top',
+		defaults: {width: 130},
+		frame : true,
+		reader : new Ext.data.JsonReader( {
+			root : 'data',
+			successProperty : 'success',
+			totalProperty : 'totalCount',
+			id : 'relationId'
+		}, [ {
+			name : 'obj.relationId',
+			mapping : 'relationId'
+		}, {
+			name : 'obj.relationModel.modelId',
+			mapping : 'relationModelId'
+		},{
+			name : 'obj.relationModel.label',
+			mapping : 'relationModelLabel'
+		}, {
+			name : 'obj.relationModel.name',
+			mapping : 'relationModelName'
+		}, {
+			name : 'obj.relation',
+			mapping : 'relation'
+		} ]),
+		items : [ this.idField, this.modelField,this.relationField ]
+	});
+};
+Ext.extend(FrameModelRelationFormPanel, Ext.form.FormPanel, {
+		loadNoRelation:function(mid1){
+			this.modelStore.proxy=new Ext.data.HttpProxy( {
+					url : 'frame/modelrelation/else.jhtm?mid='+mid1
+				});
+			this.modelStore.reload();
+		},
+		loadData:function(id){
+			var url = 'frame/modelrelation/load.jhtm?id=' + id;
+			this.getForm().load( {
+				url : url,
+				waitMsg : '正在加载数据....',
+				failure : function(form, action) {
+					var json = action.response.responseText;
+					var o = eval("(" + json + ")");
+					Ext.MessageBox.show( {
+						title : '出现错误',
+						msg : o.message,
+						buttons : Ext.MessageBox.OK,
+						icon : Ext.MessageBox.ERROR
+					});
+				}
+			});
+		}
+	
+});
 var FrameModelRelationGridPanel = function() {
 	var _grid = this;
 	this.modelId=0;
@@ -8,7 +132,6 @@ var FrameModelRelationGridPanel = function() {
     var type = new Ext.form.ComboBox({
     	 typeAhead: true,
          triggerAction: 'all',
-        transform:'relation',
         lazyRender:true,
         listClass: 'x-combo-list-small'
     });
@@ -53,7 +176,7 @@ var FrameModelRelationGridPanel = function() {
 	});
 	_grid.store.setDefaultSort(this.primaryKey, 'desc');
 	//_grid.store.load({params:{start : 0,limit : 18}});
-	var sm = new Ext.grid.CheckboxSelectionModel( {
+	this.sm = new Ext.grid.CheckboxSelectionModel( {
 		singleSelect : false
 	});
 	this.columns = [new Ext.grid.RowNumberer(), {
@@ -77,16 +200,16 @@ var FrameModelRelationGridPanel = function() {
 		header : "关系",
 		width : 75,
 		sortable : true,
-		dataIndex : 'relation',
-		editor:type
-	},sm];
+		dataIndex : 'relation'
+	},this.sm];
 	
 	FrameModelRelationGridPanel.superclass.constructor
 			.call(
 					this,
 					{
 						layout : 'fit',
-						sm : sm,
+						region:'center',
+						sm : this.sm,
 						trackMouseOver : true,
 						frame : false,
 						autoScroll : true,
@@ -99,7 +222,7 @@ var FrameModelRelationGridPanel = function() {
 						},
 						
 						tbar:[{
-						  	text: '添加',
+						  	text: '新增',
 				            iconCls: 'x-btn-text-icon add',
 				            scope: this,
 							handler:function(){}
@@ -125,7 +248,7 @@ var FrameModelRelationGridPanel = function() {
 	
 };
 
-Ext.extend(FrameModelRelationGridPanel, Ext.grid.EditorGridPanel, {
+Ext.extend(FrameModelRelationGridPanel, Ext.grid.GridPanel, {
 	loadByModel:function(mid1){
 		this.modelId=mid1;
 		this.store.proxy= new Ext.data.HttpProxy( {
@@ -237,11 +360,23 @@ Ext.extend(FrameModelRelationGridPanel, Ext.grid.EditorGridPanel, {
 });
 var FrameModelRelationWindow = function() {
 	var _win = this;
+	this.modelId=0;
 	this.gridPanel = new FrameModelRelationGridPanel();
+	this.formPanel=new FrameModelRelationFormPanel();
+	var _formPanel=this.formPanel;
+	this.gridPanel.getSelectionModel().on('rowselect',function(){
+		var id=this.getSelected().get('relationId');
+		_formPanel.loadData(id);
+	});
+	
+	this.panel=new Ext.Panel({
+		layout:'border',
+		items:[new Ext.Panel({region:'center',layout:'fit',contentEl:'modelRelationGrid',items:[this.gridPanel]}),new Ext.Panel({region:'east',width:150,items:[this.formPanel]})]
+	});
 	FrameModelRelationWindow.superclass.constructor.call(this, {
 		title : '模型关系窗口',
-		width : 420,
-		height : 280,
+		width : 520,
+		height : 350,
 		resizable : true,
 		plain : false,
 		border : false,
@@ -249,7 +384,7 @@ var FrameModelRelationWindow = function() {
 		autoScroll : true,
 		layout : 'fit',
 		closeAction : 'hide',
-		items : [this.gridPanel],
+		items : [this.panel],
 		buttons : [{
 			text : '关闭',
 			handler : function() {
@@ -262,5 +397,11 @@ var FrameModelRelationWindow = function() {
 Ext.extend(FrameModelRelationWindow, Ext.Window, {
 	loadData : function(id) {
 		this.gridPanel.loadByModel(id);
+	},
+	loadNoRelation:function(id){
+		this.formPanel.loadNoRelation(id);
+	},
+	loadRelation:function(id){
+		this.formPanel.loadData(id);
 	}
 });

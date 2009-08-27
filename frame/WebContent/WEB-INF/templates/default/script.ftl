@@ -1,4 +1,3 @@
-
 	Ext.BLANK_IMAGE_URL = '${base}/js/resources/images/default/s.gif';
 	var mainPanel;
 	var menuPanel;
@@ -117,7 +116,7 @@
 				return mainPanel.getInnerHeight();
 			},
 			getMainPanelWidth:function(){
-				return mainPanel.getInnerHeight();
+				return mainPanel.getInnerWidth();
 			},
 			loadPage:function(url,title){
 				/*
@@ -125,7 +124,7 @@
 					mainPanel.remove(contentPanel);
 				}
 				*/
-				Ext.getDom("main").innerHtml="";
+				//Ext.getDom("main").innerHtml="";
 				mainPanel.removeAll();
             	mainPanel.setTitle(title);
                 mainPanel.load({
@@ -144,19 +143,20 @@
 			addFunctionPanel:function(p){
 				contentPanel=p;
 				
-				p.setHeight(FineCmsMain.getMainPanelHeight()-1);
-				p.setWidth(FineCmsMain.getMainPanelWidth()-1);
+				p.setHeight(mainPanel.getInnerHeight()-50);
+				p.setWidth(mainPanel.getInnerWidth()-50);
 				contentPanel=p;
 				mainPanel.add(p);
 				//mainPanel.syncSize();
 				if (oTime){
 			        clearTimeout(oTime);
 			    }
-			    oTime = setTimeout("FineCmsMain.contentPanelResize()", 100);
+			    oTime = setTimeout("FineCmsMain.contentPanelResize()", 20);
 			},
 			contentPanelResize:function(){
+				//mainPanel.syncSize();
 				mainPanel.doLayout();
-				mainPanel.syncSize();
+				
 				//contentPanel.setHeight(FineCmsMain.getMainPanelHeight());
 				//contentPanel.setWidth(FineCmsMain.getMainPanelWidth());
 			}
