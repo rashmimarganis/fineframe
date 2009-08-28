@@ -1,3 +1,4 @@
+var seletedModelId;
 var FrameModelFormPanel = function() {
 	this.idField = {
 		xtype : 'hidden',
@@ -94,6 +95,7 @@ var FrameModelWindow = function() {
 		title : '模型信息',
 		width : 320,
 		height : 180,
+		
 		resizable : true,
 		plain : false,
 		border : false,
@@ -253,9 +255,10 @@ var FrameModelApp= function(){
 						if(!relationWindow){
 							relationWindow=new FrameModelRelationWindow();
 						}
+						seletedModelId=sm.getSelected().get('modelId');
 						relationWindow.modelId=sm.getSelected().get('modelId');
-						relationWindow.loadNoRelation(sm.getSelected().get('modelId'));
-					 	relationWindow.loadData(sm.getSelected().get('modelId'));
+						//relationWindow.loadNoRelation(sm.getSelected().get('modelId'));
+					 	 relationWindow.loadData(sm.getSelected().get('modelId'));
 						 relationWindow.show();
 						 
 					 }
@@ -284,7 +287,7 @@ var FrameModelApp= function(){
 		
 		addInfo:function(){
 			FrameModelApp.showInfoDlg();
-			form.reset();
+			//form.reset();
 			
 		},
 		initLayout:function(){

@@ -28,6 +28,7 @@ public class FrameModelRelationAction extends BasePageAction {
 
 	private int id;
 	private int mid;
+	private List<Integer> ids;
 
 	@Action("list")
 	public String list() {
@@ -76,10 +77,7 @@ public class FrameModelRelationAction extends BasePageAction {
 
 	@Action("deletes")
 	public String deletes() {
-		boolean i = false;
-		if (id != 0) {
-			i = modelRelationService.deleteRelation(id);
-		}
+		boolean i=modelRelationService.deleteRelations(ids);
 		this.getRequest().setAttribute("success", i);
 		return SUCCESS;
 	}
@@ -161,6 +159,14 @@ public class FrameModelRelationAction extends BasePageAction {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public List<Integer> getIds() {
+		return ids;
+	}
+
+	public void setIds(List<Integer> ids) {
+		this.ids = ids;
 	}
 
 }

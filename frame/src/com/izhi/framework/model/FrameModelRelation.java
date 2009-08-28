@@ -26,10 +26,10 @@ public class FrameModelRelation implements Serializable{
 	private int relationId;
 	
 	@ManyToOne
-	@JoinColumn(name="model_id",insertable=true,updatable=true,nullable=false)
+	@JoinColumn(name="model_id",insertable=true,updatable=false,nullable=false)
 	private FrameModel model;
 	@ManyToOne
-	@JoinColumn(name="relation_model_id",insertable=true,updatable=true,nullable=false)
+	@JoinColumn(name="relation_model_id",insertable=true,updatable=false,nullable=false)
 	private FrameModel relationModel;
 	@Column(name="relation")
 	private String relation;
