@@ -263,19 +263,19 @@ Ext.extend(FrameModelRelationFormPanel, Ext.form.FormPanel, {
 		},
 		createNew:function(sel){
 			var form_=this.getForm();
-			form_.findField('obj.model.modelId').setRawValue(seletedModelId);
-			form_.findField('obj.relationId').setRawValue(0);
-			form_.findField('obj.relationModel.modelId').setRawValue(sel.get('modelId'));
-			form_.findField('obj.relationModel.label').setRawValue(sel.get("label"));
-			form_.findField('obj.relation').setRawValue('manytomany');
+			form_.findField('obj.model.modelId').setValue(seletedModelId);
+			form_.findField('obj.relationId').setValue(0);
+			form_.findField('obj.relationModel.modelId').setValue(sel.get('modelId'));
+			form_.findField('obj.relationModel.label').setValue(sel.get("label"));
+			form_.findField('obj.relation').setValue('manytomany');
 		}
 		,
 		loadData:function(sel){
 			var form_=this.getForm();
-			form_.findField('obj.relationId').setRawValue(sel.get("relationId"));
-			form_.findField('obj.relationModel.modelId').setRawValue(sel.get('relationModelId'));
-			form_.findField('obj.relationModel.label').setRawValue(sel.get("relationModelLabel"));
-			form_.findField('obj.relation').setRawValue(sel.get("relation"));
+			form_.findField('obj.relationId').setValue(sel.get("relationId"));
+			form_.findField('obj.relationModel.modelId').setValue(sel.get('relationModelId'));
+			form_.findField('obj.relationModel.label').setValue(sel.get("relationModelLabel"));
+			form_.findField('obj.relation').setValue(sel.get("relation"));
 			
 		},
 		save:function(){
@@ -383,7 +383,19 @@ var FrameModelRelationGridPanel = function() {
 		header : "关系",
 		width : 75,
 		sortable : true,
-		dataIndex : 'relation'
+		dataIndex : 'relation',
+		renderer:function(v){
+			if(v=='manytoone'){
+				return '多对一';
+			}else if(v=='manytomany'){
+				return '多对多';
+				
+			}else if(v=='onetomany'){
+				return '一对多';
+			}else if(v=='onetoone'){
+				return '一对一';
+			}
+		}
 	},sm];
 	
 	FrameModelRelationGridPanel.superclass.constructor
