@@ -47,11 +47,16 @@ Ext.ux.Enabled = [
                     ];
 Ext.namespace('Ext.ux.ModelRelationType');
 Ext.ux.ModelRelationType = [
-                  		['onetomany', '一对多', '一对多'],
-                  		['manytoone', '多对一', '多对一'],
-                        ['onetoone', '一对一', '一对一'],
-                        ['manytomany', '多对多', '多对多']
+                  		['OneToMany', '一对多', '一对多'],
+                  		['ManyToOne', '多对一', '多对一'],
+                        ['OnetoOne', '一对一', '一对一'],
+                        ['ManyToMany', '多对多', '多对多']
                     ];
+Ext.namespace('Ext.ux.OrgType');
+Ext.ux.OrgType = [
+	['org', '组织','组织'],
+	['dep', '部门','部门']
+];
 
 function rendererEnabled(v){
 	if(v){

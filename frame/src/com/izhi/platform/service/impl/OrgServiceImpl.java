@@ -233,4 +233,14 @@ public class OrgServiceImpl extends BaseService implements IOrgService {
 		return orgDao.deleteOrgs(ids);
 	}
 
+	@Override
+	public List<Map<String, Object>> findOrgs(Integer pid) {
+		return orgDao.findOrgs(pid);
+	}
+
+	@Override
+	public List<Map<String, Object>> findJsonById(int id) {
+		return orgDao.findJsonById(id);
+	}
+
 }

@@ -226,7 +226,7 @@ var FrameModelApp= function(){
 		        cm: cm,
 				sm: sm,
 				region:'center',
-				height:200,
+				height:500,
 				width:300,
 		        trackMouseOver:true,
 		        frame:false,

@@ -32,7 +32,7 @@ public class Org implements Serializable {
 	private String orgName;
 	@Column(length=32)
 	private String title;
-	private int type;
+	private String type;
 	@ManyToOne(optional=true,fetch=FetchType.EAGER)
 	@NotFound(action=NotFoundAction.IGNORE)
 	@JoinColumn(name="parent_id",updatable=true,nullable=true)
@@ -65,10 +65,10 @@ public class Org implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public int getType() {
+	public String getType() {
 		return type;
 	}
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	public int getSort() {

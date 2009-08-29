@@ -16,10 +16,10 @@ public class FrameModelRelation implements Serializable{
 
 	private static final long serialVersionUID = -790065212642697805L;
 	public static final String PrimaryKey="relationId";
-	public static final String RELATION_ONETOMANY="onetomany";
-	public static final String RELATION_MANYTOMANY="manytomany";
-	public static final String RELATION_MANYTOONE="manytoone";
-	public static final String RELATION_ONETOONE="onetoone";
+	public static final String RELATION_ONETOMANY="OneToMany";
+	public static final String RELATION_MANYTOMANY="ManyToMany";
+	public static final String RELATION_MANYTOONE="ManyToOne";
+	public static final String RELATION_ONETOONE="OneToOne";
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="relation_id")
@@ -34,8 +34,6 @@ public class FrameModelRelation implements Serializable{
 	@Column(name="relation")
 	private String relation;
 
-	@Column(name="filed_name",nullable=true)
-	private String fieldName;
 	
 
 	public int getRelationId() {
@@ -70,13 +68,5 @@ public class FrameModelRelation implements Serializable{
 		this.relation = relation;
 	}
 
-	public String getFieldName() {
-		return fieldName;
-	}
 
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
-	}
-	
-	
 }

@@ -1,9 +1,11 @@
 package com.izhi.platform.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -162,6 +164,40 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 		Query q=this.getSession().createQuery(sql);
 		q.setParameterList("ids", ids);
 		return q.executeUpdate()>0;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> findOrgs(Integer pid) {
+		
+		List<Map<String, Object>> childrens=new ArrayList<Map<String,Object>>();
+		String sql="select new map(o.orgId as id,o.title as text) from Org o";
+		if(pid==null){
+			sql+=" where o.parent.orgId is null order by o.sort desc";
+			childrens=this.getHibernateTemplate().find(sql);
+		}else{
+			sql+=" where o.parent.orgId =? order by o.sort desc";
+			childrens=this.getHibernateTemplate().find(sql,pid);
+		}
+		
+		for(Map<String,Object> c:childrens){
+			Integer id=(Integer)c.get("id");
+			List<Map<String, Object>> cc =findOrgs(id);
+			c.put("leaf", cc.size()==0);
+			c.put("children", cc);
+		}
+		return childrens;
+	}
+
+	@Override
+	public List<Map<String, Object>> findJsonById(int id) {
+		String sql="select new map(o.orgId as orgId,o.orgName as orgName,o.title as title,o.sort as sort,o.type as type,o.parent.orgId as parentId) from Org o where o.orgId=:id";
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setInteger("id", id);
+		List<Map<String,Object>> l=q.list();
+		
+		return l;
 	}
 
 }

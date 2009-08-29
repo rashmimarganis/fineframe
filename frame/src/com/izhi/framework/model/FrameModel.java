@@ -34,6 +34,9 @@ public class FrameModel implements Serializable {
 	@Column(name="model_note")
 	private String note;
 	
+	@Column(name="table_name")
+	private String tableName;
+	
 	@OneToMany
 	@JoinColumn(name="model_id",updatable=false,insertable=false,nullable=true)
 	private List<FrameModelRelation> relations;
@@ -90,6 +93,12 @@ public class FrameModel implements Serializable {
 	public void setAttributes(List<FrameAttribute> attributes) {
 		this.attributes = attributes;
 	}
+	public String getTableName() {
+		return tableName;
+	}
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
 	
-
+	
 }

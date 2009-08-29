@@ -23,4 +23,8 @@ public interface IOrgDao extends IBaseDao<Org, Integer>{
 	boolean findExist(String name,String oname);
 	
 	boolean deleteOrgs(List<Integer> ids);
+	
+	List<Map<String,Object>> findOrgs(Integer pid);
+	
+	List<Map<String,Object>> findJsonById(int id);
 } 

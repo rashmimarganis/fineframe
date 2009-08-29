@@ -1,4 +1,5 @@
 	Ext.BLANK_IMAGE_URL = '${base}/js/resources/images/default/s.gif';
+	var title=document.title;
 	var mainPanel;
 	var menuPanel;
 	var viewport;
@@ -84,7 +85,7 @@
 	                text:title
 	            });
         		 var tree = new Ext.tree.TreePanel({
-	                loader:new Ext.tree.TreeLoader({dataUrl:'${base}/leftMenu.jhtm?pid='+id}),
+	                loader:new Ext.tree.TreeLoader({dataUrl:'${base}/menu.jhtm?pid='+id}),
 	                root:root,
 	                border:false,
 	                margins:'3 3 3 3',
@@ -92,7 +93,7 @@
 	            });
 	            tree.on('click',function(node){
 	                if (node.isLeaf()){
-	                	document.title=node.text+' - '+document.title;
+	                	document.title=node.text+' - '+title;
 	                	var url='${base}'+node.attributes.url;
 	                	FineCmsMain.loadPage(url,node.text);
 	                }

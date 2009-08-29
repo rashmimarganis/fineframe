@@ -1,8 +1,13 @@
 package com.izhi.platform.action;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -13,8 +18,9 @@ import com.izhi.platform.model.Org;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IOrgService;
 import com.izhi.platform.util.PageParameter;
+
 @Service
-@Scope(value="prototype")
+@Scope(value = "prototype")
 @Namespace("/org")
 public class OrgAction extends BasePageAction {
 
@@ -22,11 +28,11 @@ public class OrgAction extends BasePageAction {
 	 * 
 	 */
 	private static final long serialVersionUID = -3796085807778344395L;
-	@Resource(name="orgService")
+	@Resource(name = "orgService")
 	private IOrgService service;
 	private Org obj;
-	private int id=0;
-	
+	private int id = 0;
+
 	public int getId() {
 		return id;
 	}
@@ -37,7 +43,6 @@ public class OrgAction extends BasePageAction {
 
 	private String oldName;
 	private String ids;
-
 
 	public String getIds() {
 		return ids;
@@ -55,67 +60,86 @@ public class OrgAction extends BasePageAction {
 		this.oldName = oldName;
 	}
 
-	@Action(value="load")
+	@Action(value = "load")
 	public String load() {
-		if(id==0){
-			id=SecurityUser.getOrg().getOrgId();
+		if (id == 0) {
+			id = SecurityUser.getOrg().getOrgId();
 		}
-		obj = this.service.findById(id);
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("data", this.service.findJsonById(id).toString());
+		map.put("success", true);
+		String result = JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
-	
+
 	@Action("list")
-	public String list(){
-		PageParameter pp=this.getPageParameter();
-		int totalCount=(int)service.findTopTotalCount();
+	public String list() {
+		PageParameter pp = this.getPageParameter();
+		int totalCount = (int) service.findTopTotalCount();
 		pp.setCurrentPage(p);
 		pp.setTotalCount(totalCount);
 		pp.setSort("orgId");
 		pp.setDir("desc");
-		List<Org> l=service.findTopPage(pp);
+		List<Org> l = service.findTopPage(pp);
 		this.getRequest().setAttribute("objs", l);
 		this.getRequest().setAttribute("page", pp);
 		return SUCCESS;
 	}
-	
+
 	@Action("children")
-	public String children(){
-		PageParameter pp=this.getPageParameter();
-		int totalCount=(int)service.findTopTotalCount();
+	public String children() {
+		PageParameter pp = this.getPageParameter();
+		int totalCount = (int) service.findTopTotalCount();
 		pp.setCurrentPage(p);
 		pp.setTotalCount(totalCount);
 		pp.setSort("orgId");
 		pp.setDir("desc");
-		List<Org> l=service.findTopPage(pp);
+		List<Org> l = service.findTopPage(pp);
 		this.getRequest().setAttribute("objs", l);
 		this.getRequest().setAttribute("page", pp);
 		return SUCCESS;
 	}
-	
-	@Action(value="save")
+
+	@Action("tree")
+	public String tree() {
+		String result = "";
+		if (SecurityUser.isOnline()) {
+			int pid = SecurityUser.getOrg().getOrgId();
+			List<Map<String, Object>> orgs = service.findOrgs(null);
+			result = JSONArray.fromObject(orgs).toString();
+		}
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
+
+	@Action(value = "save")
 	public String save() {
-		boolean s=false;
-		if(obj.getOrgId()==0){
-			s=this.service.saveOrg(obj);
-		}else{
-			s=this.service.saveOrg(obj,oldName);
+		boolean s = false;
+		if (obj.getOrgId() == 0) {
+			s = this.service.saveOrg(obj);
+		} else {
+			s = this.service.saveOrg(obj, oldName);
 		}
 		this.getRequest().setAttribute("success", s);
 		return SUCCESS;
 	}
-	@Action(value="delete")
+
+	@Action(value = "delete")
 	public String delete() {
 		this.service.delete(id);
 		this.getRequest().setAttribute("success", true);
 		return SUCCESS;
 	}
-	@Action(value="deletes")
+
+	@Action(value = "deletes")
 	public String deletes() {
 		this.service.delete(id);
 		this.getRequest().setAttribute("success", true);
 		return SUCCESS;
 	}
 
+	
 	public IOrgService getService() {
 		return service;
 	}

@@ -249,7 +249,7 @@
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
-    <welcome-file>main.jsp</welcome-file>
+    <welcome-file>index.jhtm</welcome-file>
     <welcome-file>login.jsp</welcome-file>
   </welcome-file-list>
   <session-config>

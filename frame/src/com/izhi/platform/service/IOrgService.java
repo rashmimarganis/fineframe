@@ -1,6 +1,7 @@
 package com.izhi.platform.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.izhi.platform.model.Org;
 import com.izhi.platform.util.PageParameter;
@@ -20,5 +21,7 @@ public interface IOrgService extends IBaseService<Org, Integer> {
 	boolean findExist(String name,String oname);
 	boolean deleteOrgs(List<Integer> ids);
 	
+	public List<Map<String, Object>> findOrgs(Integer pid);
 	
+	List<Map<String,Object>> findJsonById(int id);
 }

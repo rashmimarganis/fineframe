@@ -86,7 +86,7 @@ public class FrameModelRelationDaoImpl extends HibernateDaoSupport implements IF
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
-		String sql="select new map(o.relationId as relationId,o.fieldName as fieldName,o.relation as relation,o.model.modelId as modelId,o.model.name as modelName,o.model.label as modelLabel,o.relationModel.modelId as relationModelId,o.relationModel.name as relationModelName,o.relationModel.label as relationModelLabel) from FrameModelRelation o where o.relationId=:id";
+		String sql="select new map(o.relationId as relationId,o.relation as relation,o.model.modelId as modelId,o.model.name as modelName,o.model.label as modelLabel,o.relationModel.modelId as relationModelId,o.relationModel.name as relationModelName,o.relationModel.label as relationModelLabel) from FrameModelRelation o where o.relationId=:id";
 		
 		Session s=this.getSession();
 		Query q=s.createQuery(sql);
@@ -105,7 +105,7 @@ public class FrameModelRelationDaoImpl extends HibernateDaoSupport implements IF
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findPageByModel(int mid, PageParameter pp) {
-		String sql="select new map(o.relationId as relationId,o.fieldName as fieldName,o.relation as relation,o.model.modelId as modelId,o.model.name as modelName,o.model.label as modelLabel,o.relationModel.modelId as relationModelId,o.relationModel.name as relationModelName,o.relationModel.label as relationModelLabel) from  FrameModelRelation o  where o.model.modelId=:mid";
+		String sql="select new map(o.relationId as relationId,o.relation as relation,o.model.modelId as modelId,o.model.name as modelName,o.model.label as modelLabel,o.relationModel.modelId as relationModelId,o.relationModel.name as relationModelName,o.relationModel.label as relationModelLabel) from  FrameModelRelation o  where o.model.modelId=:mid";
 		Session s=this.getSession();
 		Query q=s.createQuery(sql);
 		q.setInteger("mid", mid);
