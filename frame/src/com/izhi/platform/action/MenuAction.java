@@ -21,7 +21,7 @@ import com.izhi.platform.service.IFunctionService;
 @Service
 @Scope("prototype")
 @Namespace("/")
-public class LeftMenuAction extends BaseAction {
+public class MenuAction extends BaseAction {
 
 	private static final long serialVersionUID = 1L;
 	@Resource(name="functionService")
@@ -51,7 +51,7 @@ public class LeftMenuAction extends BaseAction {
 	public void setFunctionService(IFunctionService functionService) {
 		this.functionService = functionService;
 	}
-	@Action(value="leftMenu")
+	@Action(value="menu")
 	public String execute(){
 		if(SecurityUser.isOnline()){
 			User user=SecurityUser.getUser();
