@@ -14,7 +14,7 @@ import com.izhi.platform.security.support.SecurityUser;
 @Service
 @Scope("prototype")
 @Namespace("/")
-public class MainAction extends BaseAction {
+public class IndexAction extends BaseAction {
 	/**
 	 * 
 	 */
@@ -22,7 +22,7 @@ public class MainAction extends BaseAction {
 	private Map<String,Object> site=new HashMap<String, Object>();
 	private User user;
 	private Org org;
-	@Action(value="main")
+	@Action(value="index")
 	public String execute(){
 		user=SecurityUser.getUser();
 		site.put("name", "FineCMS网站管理系统");
