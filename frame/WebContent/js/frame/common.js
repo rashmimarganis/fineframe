@@ -1,3 +1,9 @@
+Ext.override(Ext.form.Checkbox, {
+	initValue: function() {
+		this.originalValue = this.checked;
+	}
+});
+
 Ext.namespace('Ext.ux.encoding');
 
 Ext.ux.encoding = [
@@ -44,6 +50,16 @@ Ext.namespace('Ext.ux.Enabled');
 Ext.ux.Enabled = [
                         ['true', '可用', '可用'],
                         ['false', '不可用', '不可用']
+                    ];
+Ext.namespace('Ext.ux.FunctionIsMenu');
+Ext.ux.FunctionIsMenu = [
+                        [true, '是', '是'],
+                        [false, '否', '否']
+                    ];
+Ext.namespace('Ext.ux.FunctionIsLog');
+Ext.ux.FunctionIsLog = [
+                        [true, '是', '是'],
+                        [false, '否', '否']
                     ];
 Ext.namespace('Ext.ux.ModelRelationType');
 Ext.ux.ModelRelationType = [

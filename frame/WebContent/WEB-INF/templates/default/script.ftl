@@ -67,7 +67,7 @@
 				});
 		        <#if topFunctions??>
 		    		<#list topFunctions as fun>
-		    			FineCmsMain.addChildMenus('${fun.functionId}','${fun.functionTitle}');
+		    			FineCmsMain.addChildMenus('${fun.functionId}','${fun.functionName}');
 		            </#list>
 			 	</#if>
 			

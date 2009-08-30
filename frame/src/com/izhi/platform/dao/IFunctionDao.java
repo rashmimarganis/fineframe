@@ -8,7 +8,8 @@ import com.izhi.platform.model.Function;
 public interface IFunctionDao extends IBaseDao<Function,Integer> {
 	List<Function> findTopFunctions(Integer orgId,Integer userId);
 	List<Function> findChildren(String[] keys,Object[] values);
-	void update(Function obj);
+	int updateFunction(Function obj);
+	int saveFunction(Function obj);
 	List<String> findAllUrl();
 	List<String> findRolesByUrl( String url);
 	int deleteRoleFunction(int roleId);
@@ -19,5 +20,7 @@ public interface IFunctionDao extends IBaseDao<Function,Integer> {
 	List<Map<String,Object>> findChildren(int id,int roleId);
 	List<Function> findNextFunctions(int orgId, int userId, int pid);
 	List<Map<String,Object>> findMenus(int orgId, int userId, int pid);
+	List<Map<String,Object>> findFunctions(Integer pid);
 	
+	List<Map<String, Object>> findJsonById(int id);
 }

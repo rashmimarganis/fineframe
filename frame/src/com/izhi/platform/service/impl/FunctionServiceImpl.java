@@ -178,54 +178,24 @@ public class FunctionServiceImpl extends BaseService implements
 		return JSONArray.fromObject(list).toString();
 	}
 
-	@Override
-	@CacheFlush(modelId = "functionFlushing")
-	public Map<String, Object> saveFunction(Function obj, String oldName) {
-		// add
-		boolean exist = false;
-		if (obj.getFunctionId() == 0) {
-			exist = this.findIsExist("name", obj.getFunctionName());
-			if (!exist) {
-				if (obj.getParent() == null
-						|| obj.getParent().getFunctionId() == 0) {
-					obj.setParent(null);
-				}
-				Integer id = this.functionDao.save(obj);
-				obj.setFunctionId(id);
-			} else {
-				exist = true;
-			}
-		} else {
-			// update
-			if (obj.getFunctionName().equals(oldName)) {
-				this.functionDao.update(obj);
-
-			} else if (!this.findIsExist("name", obj.getFunctionName())) {
-				this.functionDao.update(obj);
-			} else {
-				exist = true;
-			}
-		}
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("exist", exist);
-		map.put("obj", obj);
-		return map;
-	}
 
 	@Override
 	@CacheFlush(modelId = "functionFlushing")
 	public Map<String, Object> saveFunction(Function obj) {
-		boolean exist = false;
-		exist = this.findIsExist("name", obj.getFunctionName());
-		if (!exist) {
-			Integer id = this.functionDao.save(obj);
-			obj.setFunctionId(id);
-		} else {
-			exist = true;
+		int i=0;
+		String action="add";
+		if(obj.getFunctionId()==0){
+			i=functionDao.saveFunction(obj);
+		}else{
+			log.debug("IsMenu:"+obj.getMenu());
+			log.debug("IsLog:"+obj.getLog());
+			i=functionDao.updateFunction(obj);
+			action="update";
 		}
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("exist", exist);
-		map.put("obj", obj);
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("id", i);
+		map.put("action", action);
+		map.put("success", i>0);
 		return map;
 	}
 
@@ -305,6 +275,16 @@ public class FunctionServiceImpl extends BaseService implements
 	@Override
 	public List<Map<String, Object>> findMenus(int orgId, int userId, int pid) {
 		return functionDao.findMenus(orgId, userId, pid);
+	}
+
+	@Override
+	public List<Map<String, Object>> findFunctions(Integer pid) {
+		return functionDao.findFunctions(pid);
+	}
+
+	@Override
+	public List<Map<String, Object>> findJsonById(int id) {
+		return functionDao.findJsonById(id);
 	}
 
 }

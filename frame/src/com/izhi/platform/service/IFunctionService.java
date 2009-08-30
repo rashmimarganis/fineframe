@@ -13,7 +13,6 @@ public interface IFunctionService extends IBaseService<Function,Integer> {
 	List<Function> findChildren(Org org,User user,String parntname); 
 	String findTreeNodes(Integer id);
 	
-	Map<String,Object> saveFunction(Function obj,String oldName);
 	Map<String,Object> saveFunction(Function obj);
 	
 	Boolean findIsExist(String n,String n1);
@@ -27,4 +26,8 @@ public interface IFunctionService extends IBaseService<Function,Integer> {
 	Function findFunctionByUrl(String url);
 	
 	List<Map<String,Object>> findMenus(int orgId, int userId, int pid);
+	
+	List<Map<String,Object>> findFunctions(Integer pid);
+	
+	List<Map<String, Object>> findJsonById(int id);
 }

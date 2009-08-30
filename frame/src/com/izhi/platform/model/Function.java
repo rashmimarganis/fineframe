@@ -3,7 +3,6 @@ package com.izhi.platform.model;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,20 +34,19 @@ public class Function implements Serializable {
 	private Integer functionId;
 	@Column(length=32,name="function_name")
 	private String functionName;
-	@Column(length=40,name="function_title")
-	private String functionTitle;
+	
 	private int sequence;
 	@Column(length=255)
 	private String url;
-	@Column(name="is_show")
-	private boolean show;
+	@Column(name="is_menu")
+	private Boolean menu;
 	@Column(name="is_log")
-	private boolean isLog;
+	private Boolean log;
 	@ManyToOne(optional=true)
 	@NotFound(action=NotFoundAction.IGNORE)
-	@JoinColumn(name="parent_id",updatable=true,insertable=true,nullable=true)
+	@JoinColumn(name="parent_id",updatable=false,insertable=true,nullable=true)
 	private Function parent;
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany
 	@JoinTable(name="p_role_functions" ,joinColumns=@JoinColumn(name="function_id",updatable=false,insertable=false),inverseJoinColumns=@JoinColumn(name="role_id",updatable=false,insertable=false))
 	private List<Role> roles;
 	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
@@ -56,20 +54,10 @@ public class Function implements Serializable {
 	@JoinColumn(name="parent_id",updatable=false,insertable=false)
 	private List<Function> children;
 
-	@Basic
-	@Column(name="open_type")
-	private String openType;
 	@Column
 	private boolean enabled;
-	@Column
-	private int type;
 	
-	public String getOpenType() {
-		return openType;
-	}
-	public void setOpenType(String openType) {
-		this.openType = openType;
-	}
+	
 	public Integer getFunctionId() {
 		return functionId;
 	}
@@ -100,12 +88,6 @@ public class Function implements Serializable {
 	public void setSequence(int sequence) {
 		this.sequence = sequence;
 	}
-	public String getFunctionTitle() {
-		return functionTitle;
-	}
-	public void setFunctionTitle(String title) {
-		this.functionTitle = title;
-	}
 	public List<Role> getRoles() {
 		return roles;
 	}
@@ -113,24 +95,7 @@ public class Function implements Serializable {
 		this.roles = roles;
 	}
 
-	public boolean getShow() {
-		return show;
-	}
-	public void setShow(boolean show) {
-		this.show = show;
-	}
-	public boolean isLog() {
-		return isLog;
-	}
-	public void setLog(Boolean isLog) {
-		this.isLog = isLog;
-	}
-	public int getType() {
-		return type;
-	}
-	public void setType(int type) {
-		this.type = type;
-	}
+	
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -143,6 +108,19 @@ public class Function implements Serializable {
 	public void setChildren(List<Function> children) {
 		this.children = children;
 	}
+	public Boolean getMenu() {
+		return menu;
+	}
+	public void setMenu(Boolean menu) {
+		this.menu = menu;
+	}
+	public Boolean getLog() {
+		return log;
+	}
+	public void setLog(Boolean log) {
+		this.log = log;
+	}
+
 
 	
 }

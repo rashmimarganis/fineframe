@@ -6,16 +6,20 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.model.Function;
+import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IFunctionService;
+
 @Service
-@Scope(value="prototype")
+@Scope(value = "prototype")
 @Namespace("/function")
 public class FunctionAction extends BaseAction {
 
@@ -24,12 +28,13 @@ public class FunctionAction extends BaseAction {
 	private Function obj;
 	private String oldName;
 	private Integer node;
-	@Resource(name="functionService")
+	@Resource(name = "functionService")
 	private IFunctionService service;
 	private String ids;
 	private Integer roleId;
+	private int id;
 	private List<Integer> functionIds;
-	
+
 	public IFunctionService getService() {
 		return service;
 	}
@@ -46,13 +51,35 @@ public class FunctionAction extends BaseAction {
 		this.obj = obj;
 	}
 
-	public String save() {
-		if (obj == null) {
-			return null;
+	@Action(value = "load")
+	public String load() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("data", this.service.findJsonById(id));
+		map.put("success", true);
+		String result = JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
+
+	@Action("tree")
+	public String tree() {
+		String result = "";
+		if (SecurityUser.isOnline()) {
+			List<Map<String, Object>> orgs = service.findFunctions(0);
+			result = JSONArray.fromObject(orgs).toString();
 		}
-		Map<String, Object> map = this.getService().saveFunction(obj, oldName);
-		this.out(JSONObject.fromObject(map).toString());
-		return null;
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
+
+	@Action("save")
+	public String save() {
+		if (obj != null) {
+			Map<String, Object> map = this.service.saveFunction(obj);
+			this.getRequest().setAttribute("result",
+					JSONObject.fromObject(map).toString());
+		}
+		return SUCCESS;
 	}
 
 	public String findByRole() {
@@ -71,15 +98,18 @@ public class FunctionAction extends BaseAction {
 		return null;
 	}
 
+	@Action("delete")
 	public String delete() {
-		if (obj != null) {
-			this.getService().delete(obj.getFunctionId());
-		}
-		return null;
+		this.getService().delete(id);
+		this.getRequest().setAttribute("success", true);
+		return SUCCESS;
 	}
 
-	
+	@Action("index")
+	public String index() {
 
+		return SUCCESS;
+	}
 
 	public String getOldName() {
 		return oldName;
@@ -125,9 +155,16 @@ public class FunctionAction extends BaseAction {
 		return functionIds;
 	}
 
-
 	public void setFunctionIds(List<Integer> functionIds) {
 		this.functionIds = functionIds;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

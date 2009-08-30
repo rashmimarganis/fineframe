@@ -67,7 +67,7 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 	public void saveLogOperation(String url,Org org) {
 		if (SecurityUser.isOnline()) {
 			Log log = new Log();
-			log.setOperation(functionService.findFunctionByUrl(url).getFunctionTitle());
+			log.setOperation(functionService.findFunctionByUrl(url).getFunctionName());
 			log.setTime(new Date());
 			User user = SecurityUser.getUser();
 			log.setUser(user);
@@ -99,7 +99,7 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 		o=roleService.findRolesByUrl(org,url);
 		if(o!=null){
 			Function f=functionService.findFunctionByUrl(url);
-			if(f.isLog()){
+			if(f.getLog()){
 				this.saveLogOperation(url,org);
 			}
 		}
