@@ -1,1 +1,1 @@
-{'success':<#if success>true<#else>false</#if>}
+${result?default("{'success':false}")}

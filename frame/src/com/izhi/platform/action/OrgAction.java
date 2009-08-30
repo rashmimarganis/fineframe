@@ -66,7 +66,7 @@ public class OrgAction extends BasePageAction {
 			id = SecurityUser.getOrg().getOrgId();
 		}
 		Map<String,Object> map=new HashMap<String, Object>();
-		map.put("data", this.service.findJsonById(id).toString());
+		map.put("data", this.service.findJsonById(id));
 		map.put("success", true);
 		String result = JSONObject.fromObject(map).toString();
 		this.getRequest().setAttribute("result", result);
@@ -115,13 +115,8 @@ public class OrgAction extends BasePageAction {
 
 	@Action(value = "save")
 	public String save() {
-		boolean s = false;
-		if (obj.getOrgId() == 0) {
-			s = this.service.saveOrg(obj);
-		} else {
-			s = this.service.saveOrg(obj, oldName);
-		}
-		this.getRequest().setAttribute("success", s);
+		Map<String,Object> map=this.service.saveOrg(obj);
+		this.getRequest().setAttribute("result", JSONObject.fromObject(map).toString());
 		return SUCCESS;
 	}
 

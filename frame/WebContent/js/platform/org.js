@@ -1,24 +1,35 @@
+var westPanel;
+var centerPanel;
+
 var OrgFormPanel = function() {
+	var _formPanel=this;
+	this.level=1;
 	this.idField = {
-		xtype : 'hidden',
-		fieldLabel : "id",
+		xtype : 'textfield',
+		fieldLabel : "编号",
 		name : "obj.orgId",
-		value:'0'
+		readOnly:true
+	};
+	this.parentId={
+		xtype : 'hidden',
+		fieldLabel : "上级编号",
+		name : "obj.parent.orgId"
+	};
+	this.parentName={
+		xtype : 'textfield',
+		fieldLabel : "上级组织",
+		name : "obj.parent.name",
+		readOnly:true
 	};
 	this.nameField = {
 		xtype : 'textfield',
-		fieldLabel : "英文名称",
+		fieldLabel : "名称",
 		allowBlank : false,
-		name : "obj.orgName"
+		name : "obj.name"
 	};
-	this.titleField = {
-		xtype : 'textfield',
-		fieldLabel : "中文名称",
-		allowBlank : false,
-		name : "obj.title"
-	};
+
 	this.sortField = {
-		xtype : 'textfield',
+		xtype : 'numberfield',
 		fieldLabel : "排序",
 		allowBlank : false,
 		name : "obj.sort"
@@ -43,10 +54,64 @@ var OrgFormPanel = function() {
         hiddenName: 'obj.type'
     });
   
+    this.saveBtn=new Ext.Button({
+    	text:'保存组织',
+    	handler:function(){
+    		var _form=_formPanel.getForm();
+	    	if (_form.isValid()) {
+				_form.submit( {
+					waitMsg : '正在保存数据...',
+					url : 'org/save.jhtm',
+					failure : function(form, action) {
+						var json = action.response.responseText;
+						var o = eval("(" + json + ")");
+						Ext.MessageBox.show( {
+							title : '出现错误',
+							msg : o.message,
+							buttons : Ext.MessageBox.OK,
+							icon : Ext.MessageBox.ERROR
+						});
+					},
+					success : function(form1, action) {
+						var json = action.response.responseText;
+						var o = eval("(" + json + ")");
+						if(o.success){
+							var node=westPanel.getSelectionModel().getSelectedNode();
+								if(o.action=='update'){
+									node.setText(_form.findField("obj.name").getValue());
+								}else{
+									var id=o.id;
+									_formPanel.getForm().findField("obj.orgId").setValue(id);
+									var text=_formPanel.getForm().findField("obj.name").getValue();
+									var newNode = new Ext.tree.TreeNode({id:id,text:text,leaf:true});
+									alert(_formPanel.level);
+									if(_formPanel.level==0){
+										if(node.attributes.iconCls=='file'){
+											node.attributes.iconCls=='folder';
+										}
+										node.appendChild(newNode);
+									}else{
+										node.parentNode.appendChild(newNode);
+									}
+									newNode.select();
+								}
+						
+						}
+	
+					}
+				});
+			}else{
+				Ext.Masg.alert('验证信息','请把组织信息填写正确！');
+			}
+    	}
+    });
 	
 	OrgFormPanel.superclass.constructor.call(this, {
 		bodyStyle : 'padding:2px 2px 0',
 		frame : true,
+		width:300,
+        height:300,
+		waitMsgTarget:'main',
 		reader : new Ext.data.JsonReader( 
 		{
 			root : 'data',
@@ -55,23 +120,28 @@ var OrgFormPanel = function() {
 			id : 'orgId'
 		}, [
 		    {name:'obj.orgId', mapping:'orgId'},
-		    {name:'obj.orgName',mapping:'orgName'}, 
-		    {name:'obj.title',mapping:'title'},
+		    {name:'obj.name',mapping:'name'}, 
 		    {name:'obj.type',mapping:'type'},
+		    {name:'obj.parent.orgId',mapping:'parentId'},
 		    {name:'obj.sort',mapping:'sort'}
 		    ]
 		),
-		items : [this.idField,this.nameField,this.titleField,this.typeField,this.sortField]
+		items : [this.idField,this.nameField,this.typeField,this.sortField,this.parentId,this.parentName],
+		buttons:[this.saveBtn]
 	});
 };
 Ext.extend(OrgFormPanel, Ext.form.FormPanel, {
 	loadData : function(id) {
 		var url = 'org/load.jhtm?id=' + id;
+		var _form=this.getForm();
 		this.getForm().load( {
 			url : url,
 			waitMsg : '正在加载数据....',
 			success:function(form,action){
-				alert(action.response.responseText);
+				var node=westPanel.getSelectionModel().getSelectedNode();
+				if(node.id!=0){
+					_form.findField("obj.parent.name").setValue(node.parentNode.text);
+				}
 			},
 			failure : function(form, action) {
 				var json = action.response.responseText;
@@ -86,9 +156,9 @@ Ext.extend(OrgFormPanel, Ext.form.FormPanel, {
 		});
 	}
 });
+
 var OrgApp= function(){
-	var westPanel;
-	var centerPanel;
+	
 	var level=1;
 	var level_tj=1;
 	var level_xj=2;
@@ -110,6 +180,7 @@ var OrgApp= function(){
                   title:'组织信息',
                   el:'orgFormPanel',
                   border:true,
+                  split:true,
                   autoScroll:true,
                   items:[formPanel],
 				  tbar:[{
@@ -122,25 +193,6 @@ var OrgApp= function(){
 		            iconCls: 'x-btn-text-icon add',
 		            scope: this,
 					handler:OrgApp.addXj
-				  },'-',{
-				  	text: '保存组织',
-		            iconCls: 'x-btn-text-icon save',
-		            scope: this,
-					handler:OrgApp.saveInfo
-				  },{
-				  	text: '删除',
-		            iconCls: 'delete',
-					scope:this,
-					handler: function(){
-						OrgApp.deleteInfo();
-					}
-				  },'-',{
-				  	text: '刷新',
-		            iconCls: 'refresh',
-		            scope: this,
-					handler:function(){
-						selectNode.reload();
-					}
 				  }]
              	}
 		     );
@@ -175,6 +227,14 @@ var OrgApp= function(){
 				rootVisible:true,
 				containerScroll: true, 
 				margins: '0 0 0 0',
+				tbar:[{
+				  	text: '删除',
+		            iconCls: 'delete',
+					scope:this,
+					handler: function(){
+						OrgApp.deleteInfo();
+					}
+				  }],
 		        loader: new Ext.tree.TreeLoader({
 		            dataUrl:'org/tree.jhtm'
 		        })
@@ -213,158 +273,75 @@ var OrgApp= function(){
 			
 		},
 		addTj:function(){
-			var depth=selectNode.getDepth();
-			if(selectNode.id==0){
-				Ext.Msg.alert("提示","对不起，您没有权限创建本级组织的同级组织！");
+			var node=OrgApp.getSelectedNode();
+			if(node.id==0){
+				Ext.Msg.alert("添加组织","对不起，您没有权限创建本级组织的同级组织！");
 				return;
 			}
 			
-			level=level_tj;
-			OrgApp.newObj(level);
+			formPanel.level=1;
+			alert(formPanel.level);
+			var parent=node.parentNode;
+			var form=formPanel.getForm();
+			form.findField("obj.orgId").setValue(0);
+			form.findField("obj.parent.orgId").setValue(parent.id);
+			form.findField("obj.parent.name").setValue(parent.text);
+			form.findField("obj.name").setValue("");
+			form.findField("obj.sort").setValue(0);
+			form.findField("obj.name").focus(false,true);
+			
 		}
 		,
 		addXj:function(){
-			var depth=selectNode.getDepth();
-			if(depth==4){
-				Ext.Msg.alert("提示","已经到最后一级！");
-				return;
-			}
-			if(Ext.getDom("id").value==""){
-				selectNode.select();
-			}
-			level=level_xj;
-			OrgApp.newObj(level);
-		},
-		newObj:function(l){
-			var depth=selectNode.getDepth();
+			var node=OrgApp.getSelectedNode();
 			
-			if(l==level_xj){
-				Ext.get("type").dom.value=1;
-				Ext.get("parentName").dom.value=selectNode.text;
-				Ext.get("parentId").dom.value=selectNode.id;
-			}else{
-				Ext.get("type").dom.value=1;
-				Ext.get("parentName").dom.value=selectNode.parentNode.text;
-				Ext.get("parentId").dom.value=selectNode.parentNode.id;
-			}
-			Ext.get("id").dom.value=0;
-			Ext.get("name").dom.value="";
-			Ext.get("title").dom.value="";
-			Ext.get("oldName").dom.value="";
-			Ext.get("sort").dom.value="0";
-			Ext.get("fullTitle").dom.value="";
-		}
-		,
-		loadInfo:function(node){
-			Ext.Ajax.request({
-				url:'../org/load.do',
-				params:'obj.id='+node.id,
-				success:success,
-				failure:failure
-			});
-			function success(rep){
-				eval("var info="+rep.responseText);
-				Ext.get("id").dom.value=node.id;
-				Ext.get("name").dom.value=info.name;
-				Ext.get("title").dom.value=info.title;
-				Ext.get("type").dom.value=info.type;
-				Ext.get("oldName").dom.value=info.name;
-				Ext.get("sort").dom.value=info.sort;
-				Ext.get("fullTitle").dom.value=info.fullTitle;
-				if(info.parent!=null && node.getDepth() > 1){
-					Ext.get("parentName").dom.value=info.parent.title;
-					Ext.get("parentId").dom.value=info.parent.id;
-				}else{
-					Ext.get("parentName").dom.value="";
-					Ext.get("parentId").dom.value="0";
-				}
-			}
-			function failure(rep){
-				Ext.Msg.alert("加载出现错误",rep.responseText);
-			}
-		},
-		saveInfo:function(){
-			var name=Ext.get("name").dom.value;
-			var oldName=Ext.get("oldName").dom.value;
-			var title=Ext.get("title").dom.value;
-			if(name==""){
-				Ext.Msg.alert("保存验证","请输入编号！");
-				Ext.get("name").focus();
-				return;
-			}
-			if(title==""){
-				Ext.Msg.alert("保存验证","请输入名称！");
-				Ext.get("title").focus();
-				return;
-			}
-			var url='../org/save.do';
-			Ext.Ajax.request({
-				form:'form1',
-				success:success,
-				failure:failure
-			});
-			function success(rep){
-				eval("var result="+rep.responseText);
-				var exist=result.exist;
-				var obj=result.obj;
-			
-				if(exist==true){
-					Ext.Msg.alert("保存失败","编号已经存在，请重新输入！");
-					Ext.get("name").focus();
-					return;
-				}
-				var id=obj.id;
-				var text=obj.title;
-				var node = new Ext.tree.TreeNode({id:id,text:text,cls:'folder',leaf:false});
-				var id_=Ext.get("id").dom.value;
-				if(id_=='0'){
-					if(level==level_tj){
-						selectNode.parentNode.appendChild(node);
-					}else{
-						selectNode.appendChild(node);
-					}
-					selectNode=node;
-					selectNode.select();
-				}else{
-					selectNode.setText(text);
-				}
-				Ext.Msg.alert("保存组织","保存成功！");
-			}
-			function failure(rep){
-				Ext.Msg.alert("保存失败",rep.responseText);
-			}
+			var form=formPanel.getForm();
+			formPanel.level=0;
+			alert(formPanel.level);
+			form.findField("obj.orgId").setValue(0);
+			form.findField("obj.parent.orgId").setValue(node.id);
+			form.findField("obj.parent.name").setValue(node.text);
+			form.findField("obj.name").setValue("");
+			form.findField("obj.sort").setValue(0);
+			form.findField("obj.name").focus(false,true);
 		},
 		deleteInfo:function(){
-			if(selectNode.firstChild!=null){
-				alert("本组织含有下级组织，请先删除下级组织！");
+			var node=westPanel.getSelectionModel().getSelectedNode();
+			if(!node){
+				Ext.Msg.alert("删除组织",'请选择组织！');
+			}
+			if(node.firstChild!=null){
+				Ext.Msg.alert("删除组织","本组织含有下级组织，请先删除下级组织！");
 				return;
 			}
 			if(!confirm("确定要删除该组织吗？")){
 				return;
 			}
-			var url='../org/delete.do';
+			var url='org/delete.jhtm';
 			Ext.Ajax.request({
 				url:url,
-				params:'obj.id='+selectNode.id,
+				params:'id='+node.id,
 				success:success,
 				failure:failure
 			});
 			function success(rep){
 				eval("var result="+rep.responseText);
 				if(result.success){
-					deleteNode=selectNode;
-					selectNode=selectNode.parentNode;
+					Ext.Msg.alert("删除组织","删除成功！");
+					deleteNode=node;
+					var node1=selectNode.nextSibling;
 					deleteNode.remove();
-					if(selectNode.firstChild!=null){
-						selectNode=selectNode.firstChild;	
-					}
-					selectNode.select();
+					node1.select();
 				}
-				Ext.Msg.alert("删除组织","删除成功！");
+				
 			}
 			function failure(rep){
 				Ext.Msg.alert("删除组织",rep.repsonseText);
 			}
+		},
+		getSelectedNode:function(){
+			var node=westPanel.getSelectionModel().getSelectedNode();
+			return node;
 		}
 	};
 }();

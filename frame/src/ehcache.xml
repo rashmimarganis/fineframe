@@ -354,7 +354,13 @@
            memoryStoreEvictionPolicy="LFU"
     />
  	
- 	
+ 	<cache name="personCache"
+           maxElementsInMemory="200"
+           maxElementsOnDisk="1000"
+           eternal="true"
+           overflowToDisk="true"
+           memoryStoreEvictionPolicy="LFU"
+    />
  	<cache name="functionCache"
            maxElementsInMemory="200"
            maxElementsOnDisk="1000"

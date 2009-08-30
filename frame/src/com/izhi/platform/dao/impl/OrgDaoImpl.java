@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -28,19 +27,6 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 			return this.find(sql, parentId);
 		}
 	}
-
-	@Override
-	public List<Map<String,Object>> findChildNodes(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean findIsExist(String nameFiled, String name) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 
 
 	@Override
@@ -138,7 +124,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 	}
 
 	@Override
-	public int updateOrg(Org obj, String on) {
+	public int updateOrg(Org obj) {
 		this.getHibernateTemplate().update(obj);
 		return 1;
 	}
@@ -171,7 +157,7 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 	public List<Map<String, Object>> findOrgs(Integer pid) {
 		
 		List<Map<String, Object>> childrens=new ArrayList<Map<String,Object>>();
-		String sql="select new map(o.orgId as id,o.title as text) from Org o";
+		String sql="select new map(o.orgId as id,o.name as text) from Org o";
 		if(pid==null){
 			sql+=" where o.parent.orgId is null order by o.sort desc";
 			childrens=this.getHibernateTemplate().find(sql);
@@ -189,15 +175,13 @@ public class OrgDaoImpl extends BaseDaoImpl<Org, Integer> implements IOrgDao {
 		return childrens;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
-		String sql="select new map(o.orgId as orgId,o.orgName as orgName,o.title as title,o.sort as sort,o.type as type,o.parent.orgId as parentId) from Org o where o.orgId=:id";
-		Session s=this.getSession();
-		Query q=s.createQuery(sql);
-		q.setInteger("id", id);
-		List<Map<String,Object>> l=q.list();
-		
+		String sql="select new map(o.orgId as orgId,o.name as name,o.sort as sort,o.type as type,o.parent.orgId as parentId) from Org o where o.orgId=?";
+		List<Map<String,Object>> l=this.getHibernateTemplate().find(sql,id);
 		return l;
 	}
+
 
 }

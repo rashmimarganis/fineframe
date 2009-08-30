@@ -29,9 +29,7 @@ public class Org implements Serializable {
 	@Column(name="org_id")
 	private int orgId;
 	@Column(length=32,name="org_name")
-	private String orgName;
-	@Column(length=32)
-	private String title;
+	private String name;
 	private String type;
 	@ManyToOne(optional=true,fetch=FetchType.EAGER)
 	@NotFound(action=NotFoundAction.IGNORE)
@@ -46,12 +44,7 @@ public class Org implements Serializable {
 	public void setOrgId(int id) {
 		this.orgId = id;
 	}
-	public String getOrgName() {
-		return orgName;
-	}
-	public void setOrgName(String name) {
-		this.orgName = name;
-	}
+
 	public Org getParent() {
 		return parent;
 	}
@@ -59,12 +52,6 @@ public class Org implements Serializable {
 		this.parent = parent;
 	}
 	
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
 	public String getType() {
 		return type;
 	}
@@ -76,6 +63,12 @@ public class Org implements Serializable {
 	}
 	public void setSort(int sort) {
 		this.sort = sort;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

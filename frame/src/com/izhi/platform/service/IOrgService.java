@@ -8,10 +8,7 @@ import com.izhi.platform.util.PageParameter;
 
 public interface IOrgService extends IBaseService<Org, Integer> {
 	List<Org> findChildren(Integer id);
-	String findChildNodes(Integer id);
-	boolean saveOrg(Org obj,String oldName); 
-	boolean saveOrg(Org obj); 
-	boolean findIsExist(String nameFiled,String name);
+	Map<String,Object> saveOrg(Org obj); 
 	int findTotalCount();
 	int findTopTotalCount();
 	List<Org> findPage(PageParameter pp);

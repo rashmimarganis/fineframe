@@ -8,10 +8,8 @@ import com.izhi.platform.util.PageParameter;
 
 public interface IOrgDao extends IBaseDao<Org, Integer>{
 	List<Org> findChildren(Integer parentId);
-	List<Map<String,Object>> findChildNodes(Integer id);
 	int saveOrg(Org obj); 
-	int updateOrg(Org obj,String on);
-	boolean findIsExist(String nameFiled,String name);
+	int updateOrg(Org obj);
 	
 	List<Org> findPage(PageParameter pp);
 	List<Org> findPage(PageParameter pp,int parentId);

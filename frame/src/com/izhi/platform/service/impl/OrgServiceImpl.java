@@ -1,11 +1,10 @@
 package com.izhi.platform.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-
-import net.sf.json.JSONArray;
 
 import org.springframework.stereotype.Service;
 import org.springmodules.cache.annotations.CacheFlush;
@@ -84,41 +83,7 @@ public class OrgServiceImpl extends BaseService implements IOrgService {
 		this.orgDao = dao;
 	}
 
-	@Override
-	@CacheFlush(modelId = "orgFlushing")
-	public Integer save(Org obj, String oldName) {
-		if (obj == null) {
-			return new Integer(-2);
-		}
-
-		// add
-		if (obj.getOrgId() == 0) {
-			boolean exist = this.orgDao.findIsExist("name", obj.getOrgName());
-			if (exist) {
-				// name exist
-				return new Integer(-1);
-			} else {
-				if (obj.getParent() == null || obj.getParent().getOrgId() == 0) {
-					obj.setParent(null);
-				}
-				return this.orgDao.save(obj);
-			}
-		} else {
-			// update
-			if (obj.getOrgName().equals(oldName)) {
-				this.orgDao.update(obj);
-				// success
-				return new Integer(1);
-			} else if (!this.orgDao.findIsExist("name", obj.getOrgName())) {
-				this.orgDao.update(obj);
-				// success
-				return new Integer(1);
-			} else {
-				// name exist
-				return new Integer(-1);
-			}
-		}
-	}
+	
 
 	@Override
 	
@@ -128,35 +93,23 @@ public class OrgServiceImpl extends BaseService implements IOrgService {
 		return list;
 	}
 
-	@Override
-	
-	@Cacheable(modelId = "orgCaching")
-	public String findChildNodes(Integer id) {
-		List<Map<String, Object>> list = orgDao.findChildNodes(id);
-		return JSONArray.fromObject(list).toString();
-	}
 
 	@Override
 	@CacheFlush(modelId = "orgFlushing")
-	public boolean saveOrg(Org obj, String oldName) {
+	public Map<String,Object> saveOrg(Org obj) {
 		int i=0;
-		if(this.findExist(obj.getOrgName(), oldName)){
-			i=orgDao.updateOrg(obj,oldName);
+		String action="add";
+		if(obj.getOrgId()==0){
+			i=orgDao.saveOrg(obj);
+		}else{
+			i=orgDao.updateOrg(obj);
+			action="update";
 		}
-		return i>0;
-	}
-
-	@Override
-	@CacheFlush(modelId = "orgFlushing")
-	public boolean saveOrg(Org obj) {
-		return orgDao.saveOrg(obj)>0;
-	}
-
-	@Override
-	
-	@Cacheable(modelId = "orgCaching")
-	public boolean findIsExist(String nameFiled, String name) {
-		return orgDao.findIsExist("name", name);
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("id", i);
+		map.put("action", action);
+		map.put("success", i>0);
+		return map;
 	}
 
 	@Override
@@ -241,6 +194,12 @@ public class OrgServiceImpl extends BaseService implements IOrgService {
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
 		return orgDao.findJsonById(id);
+	}
+
+	@Override
+	public Integer save(Org obj, String oldName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
