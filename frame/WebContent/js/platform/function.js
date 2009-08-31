@@ -38,7 +38,7 @@ var FunctionFormPanel = function() {
 		xtype : 'numberfield',
 		fieldLabel : "排序",
 		allowBlank : false,
-		name : "obj.sequense"
+		name : "obj.sequence"
 	};
 
 	
@@ -47,7 +47,7 @@ var FunctionFormPanel = function() {
     	autoShow:true,
         width: 520,
         boxLabel:'是',
-        value:'true',
+        inputValue:'true',
         fieldLabel: '菜单',
         name:'obj.menu'
     };
@@ -56,7 +56,7 @@ var FunctionFormPanel = function() {
     	xtype:'checkbox',
     	autoShow:true,
         width: 520,
-        value:'true',
+        inputValue:'true',
         boxLabel:'是',
         fieldLabel: '记录',
         name:'obj.log'
@@ -93,7 +93,6 @@ var FunctionFormPanel = function() {
 									_formPanel.getForm().findField("obj.functionId").setValue(id);
 									var text=_formPanel.getForm().findField("obj.functionName").getValue();
 									var newNode = new Ext.tree.TreeNode({id:id,text:text,leaf:true});
-									alert(_formPanel.level);
 									if(_formPanel.level==0){
 										node.appendChild(newNode);
 									}else{
@@ -128,13 +127,14 @@ var FunctionFormPanel = function() {
 		    {name:'obj.functionId', mapping:'functionId'},
 		    {name:'obj.functionName',mapping:'functionName'}, 
 		    {name:'obj.menu',mapping:'isMenu'},
+		    {name:'obj.sequence',mapping:'sequence'},
 		    {name:'obj.log',mapping:'isLog'},
 		    {name:'obj.url',mapping:'url'},
 		    {name:'obj.parent.functionId',mapping:'parentId'},
-		    {name:'obj.sequense',mapping:'sequense'}
+		    {name:'obj.sequence',mapping:'sequence'}
 		    ]
 		),
-		items : [this.idField,this.nameField,this.urlField,this.menuField,this.logField,this.parentId,this.parentName],
+		items : [this.idField,this.nameField,this.urlField,this.menuField,this.logField,this.sortField,this.parentId,this.parentName],
 		buttons:[this.saveBtn]
 	});
 };
@@ -292,15 +292,17 @@ var FunctionApp= function(){
 			}
 			
 			formPanel.level=1;
-			alert(formPanel.level);
 			var parent=node.parentNode;
 			var form=formPanel.getForm();
-			form.findField("obj.orgId").setValue(0);
-			form.findField("obj.parent.orgId").setValue(parent.id);
-			form.findField("obj.parent.name").setValue(parent.text);
-			form.findField("obj.name").setValue("");
-			form.findField("obj.sort").setValue(0);
-			form.findField("obj.name").focus(false,true);
+			form.findField("obj.functionId").setValue(0);
+			form.findField("obj.parent.functionId").setValue(parent.id);
+			form.findField("parentName").setValue(parent.text);
+			form.findField("obj.functionName").setValue("");
+			form.findField("obj.url").setValue("");
+			form.findField("obj.sequence").setValue(0);
+			form.findField("obj.menu").setValue(true);
+			form.findField("obj.log").setValue(true);
+			form.findField("obj.functionName").focus(false,true);
 			
 		}
 		,
@@ -310,12 +312,15 @@ var FunctionApp= function(){
 			var form=formPanel.getForm();
 			formPanel.level=0;
 			alert(formPanel.level);
-			form.findField("obj.orgId").setValue(0);
-			form.findField("obj.parent.orgId").setValue(node.id);
-			form.findField("obj.parent.name").setValue(node.text);
-			form.findField("obj.name").setValue("");
-			form.findField("obj.sort").setValue(0);
-			form.findField("obj.name").focus(false,true);
+			form.findField("obj.functionId").setValue(0);
+			form.findField("obj.parent.functionId").setValue(node.id);
+			form.findField("parentName").setValue(node.text);
+			form.findField("obj.functionName").setValue("");
+			form.findField("obj.sequence").setValue(0);
+			form.findField("obj.url").setValue("");
+			form.findField("obj.menu").setValue(true);
+			form.findField("obj.log").setValue(true);
+			form.findField("obj.functionName").focus(false,true);
 		},
 		deleteInfo:function(){
 			var node=westPanel.getSelectionModel().getSelectedNode();
@@ -342,8 +347,10 @@ var FunctionApp= function(){
 					Ext.Msg.alert("删除功能","删除成功！");
 					deleteNode=node;
 					var node1=selectNode.nextSibling;
+					if(node1){
+						node1.select();
+					}
 					deleteNode.remove();
-					node1.select();
 				}
 				
 			}

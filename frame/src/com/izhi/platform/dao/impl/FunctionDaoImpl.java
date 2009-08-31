@@ -29,12 +29,13 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	}
 	
 	public void delete(Integer id){
-		String sql="delete RoleFunction o where o.roleId =?";
+		String sql="delete Function o where o.functionId =?";
 		this.getHibernateTemplate().bulkUpdate(sql,id);
-		super.delete(id);
 	}
 	
 	public int updateFunction(Function obj){
+		//Function f=this.findById(obj.getFunctionId());
+		//obj.setRoles(f.getRoles());
 		this.getHibernateTemplate().update(obj);
 		return 1;
 	}

@@ -46,7 +46,7 @@ public class Function implements Serializable {
 	@NotFound(action=NotFoundAction.IGNORE)
 	@JoinColumn(name="parent_id",updatable=false,insertable=true,nullable=true)
 	private Function parent;
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.PERSIST,mappedBy = "functions",targetEntity=Role.class)
 	@JoinTable(name="p_role_functions" ,joinColumns=@JoinColumn(name="function_id",updatable=false,insertable=false),inverseJoinColumns=@JoinColumn(name="role_id",updatable=false,insertable=false))
 	private List<Role> roles;
 	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
@@ -121,6 +121,15 @@ public class Function implements Serializable {
 		this.log = log;
 	}
 
-
+	public boolean equals(Object o) {
+		if(o instanceof Function){
+			Function o_=(Function)o;
+			if(o_.getFunctionId()==this.getFunctionId()){
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 }
