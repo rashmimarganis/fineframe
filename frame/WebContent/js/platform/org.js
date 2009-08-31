@@ -10,6 +10,11 @@ var OrgFormPanel = function() {
 		name : "obj.orgId",
 		readOnly:true
 	};
+	this.oldNameField = {
+			xtype : 'hidden',
+			fieldLabel : "旧名",
+			name : "obj.oldName"
+		};
 	this.parentId={
 		xtype : 'hidden',
 		fieldLabel : "上级编号",
@@ -120,12 +125,13 @@ var OrgFormPanel = function() {
 		}, [
 		    {name:'obj.orgId', mapping:'orgId'},
 		    {name:'obj.name',mapping:'name'}, 
+		    {name:'obj.odlName',mapping:'name'}, 
 		    {name:'obj.type',mapping:'type'},
 		    {name:'obj.parent.orgId',mapping:'parentId'},
 		    {name:'obj.sort',mapping:'sort'}
 		    ]
 		),
-		items : [this.idField,this.nameField,this.typeField,this.sortField,this.parentId,this.parentName],
+		items : [this.idField,this.nameField,this.oldNameField,this.typeField,this.sortField,this.parentId,this.parentName],
 		buttons:[this.saveBtn]
 	});
 };

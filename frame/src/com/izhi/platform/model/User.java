@@ -46,7 +46,7 @@ public class User  implements UserDetails {
 	@Column(length = 100)
 	private String email;
 	@ManyToMany( fetch = FetchType.EAGER)
-	@JoinTable(name = "p_user_roles", joinColumns = {@JoinColumn(name = "user_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "p_user_roles", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 	
 	@Column(name="credentials_expired")

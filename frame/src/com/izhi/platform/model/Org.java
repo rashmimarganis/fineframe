@@ -2,7 +2,6 @@ package com.izhi.platform.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -24,7 +24,6 @@ public class Org implements Serializable {
 	 */
 	private static final long serialVersionUID = -5390001174287826313L;
 	@Id
-	@Basic(fetch=FetchType.EAGER)
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="org_id")
 	private int orgId;
@@ -33,10 +32,12 @@ public class Org implements Serializable {
 	private String type;
 	@ManyToOne(optional=true,fetch=FetchType.EAGER)
 	@NotFound(action=NotFoundAction.IGNORE)
-	@JoinColumn(name="parent_id",updatable=true,nullable=true)
+	@JoinColumn(name="parent_id",insertable=false,updatable=false,nullable=true)
 	private Org parent;
-	@Column
+	@Column(name="sequence")
 	private int sort=0;
+	@Transient
+	private String oldName;
 
 	public int getOrgId() {
 		return orgId;
@@ -69,6 +70,12 @@ public class Org implements Serializable {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getOldName() {
+		return oldName;
+	}
+	public void setOldName(String oldName) {
+		this.oldName = oldName;
 	}
 	
 }

@@ -25,14 +25,13 @@ import com.izhi.platform.model.Org;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.security.support.Constants;
 import com.izhi.platform.security.support.SecurityUser;
-import com.izhi.platform.service.BaseService;
 import com.izhi.platform.service.IFunctionService;
 import com.izhi.platform.service.IRoleService;
 import com.izhi.platform.util.PageParameter;
 
 @Service("roleService")
 
-public class RoleServiceImpl extends BaseService implements IRoleService {
+public class RoleServiceImpl  implements IRoleService {
 
 	private boolean convertUrlToLowercaseBeforeComparison = false;
 	private boolean useAntPath = false;
@@ -102,7 +101,6 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 				} else {
 					roles = functionService.findRolesByUrl(r);
 				}
-				log.info("Current Url:" + url + " roles :" + roles);
 				String authoritiesStr = " ";
 				if (roles.size() > 0) {
 					for (String role : roles) {
@@ -121,102 +119,17 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 
 	@Override
 	@CacheFlush(modelId = "roleFlushing")
-	public void delete(Integer id) {
-		roleDao.delete(id);
+	public boolean deleteRole(Integer id) {
+		return roleDao.deleteRole(id);
 	}
+
 
 	@Override
 	@CacheFlush(modelId = "roleFlushing")
-	public void delete(Role obj) {
-		this.delete(obj);
+	public boolean deleteRoles(List<Integer> ids) {
+		return roleDao.deleteRoles(ids);
 	}
 
-	@Override
-	@CacheFlush(modelId = "roleFlushing")
-	public int delete(String ids, String id) {
-		return this.delete(ids, id);
-	}
-
-	@Override
-	@CacheFlush(modelId = "roleFlushing")
-	public int delete(String ids) {
-		return roleDao.delete(ids);
-	}
-
-	@Override
-	@CacheFlush(modelId = "roleFlushing")
-	public void deleteAll() {
-		roleDao.deleteAll();
-	}
-
-	@Override
-	
-	@Cacheable(modelId = "roleCaching")
-	public List<Role> find(String sql) {
-		return roleDao.find(sql);
-	}
-
-	@Override
-	
-	@Cacheable(modelId = "roleCaching")
-	public List<Role> find(String sql, Object obj) {
-		return roleDao.find(sql, obj);
-	}
-
-	@Override
-	
-	@Cacheable(modelId = "roleCaching")
-	public List<Role> find(String sql, String[] keys, Object[] objs) {
-		return roleDao.find(sql, keys, objs);
-	}
-
-	@Override
-	
-	@Cacheable(modelId = "roleCaching")
-	public List<Role> findPage(int firstResult, int maxResult,
-			String sortField, String sort) {
-		return roleDao.findPage(firstResult, maxResult, sortField, sort);
-	}
-
-	@Override
-	@CacheFlush(modelId = "roleFlushing")
-	public Integer save(Role obj) {
-		return roleDao.save(obj);
-	}
-
-	@Override
-	@CacheFlush(modelId = "roleFlushing")
-	public Integer save(Role obj, String oldName) {
-		if (obj != null) {
-			if (obj.getRoleId() == 0) {
-				if (this.findIsExist(obj.getRoleName())) {
-					return -1;
-				} else {
-					return roleDao.save(obj);
-				}
-			} else {
-				if (obj.getRoleName().equals(oldName)) {
-					roleDao.update(obj);
-					return 1;
-				} else {
-					if (this.findIsExist(obj.getRoleName())) {
-						return -1;
-					} else {
-						roleDao.update(obj);
-						return 1;
-					}
-				}
-			}
-		}
-		return -2;
-	}
-
-	@Override
-	
-	@Cacheable(modelId = "roleCaching")
-	public boolean findIsExist(String name) {
-		return roleDao.findIsExist("name", name);
-	}
 
 	public IRoleDao getDao() {
 		return roleDao;
@@ -238,14 +151,14 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Override
 	
 	@Cacheable(modelId = "roleCaching")
-	public Map<String, Object> findPage(PageParameter pp, Org org) {
-		if (org == null || org.getOrgId() == 0) {
-			org = SecurityUser.getOrg();
+	public Map<String, Object> findPage(PageParameter pp, int orgId) {
+		if (orgId == 0) {
+			orgId = SecurityUser.getOrg().getOrgId();
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (pp != null) {
-			List<Map<String, Object>> lp = roleDao.findPage(pp, org);
-			Integer tc = roleDao.findTotalCount(org);
+			List<Map<String, Object>> lp = roleDao.findPage(pp, orgId);
+			Integer tc = roleDao.findTotalCount(orgId);
 			map.put("totalCount", tc);
 			map.put("objs", lp);
 		}
@@ -255,8 +168,8 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Override
 	
 	@Cacheable(modelId = "roleCaching")
-	public Integer findTotalCount(Org org) {
-		return roleDao.findTotalCount(org);
+	public Integer findTotalCount(int orgId) {
+		return roleDao.findTotalCount(orgId);
 	}
 
 	@Override
@@ -269,9 +182,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (pp != null) {
 			List<Map<String, Object>> lp = roleDao.findPage(pp, orgId, userId);
-			Org o = new Org();
-			o.setOrgId(orgId);
-			Integer tc = roleDao.findTotalCount(o);
+			Integer tc = roleDao.findTotalCount(orgId);
 			map.put("totalCount", tc);
 			map.put("objs", lp);
 		}
@@ -307,13 +218,6 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 		}
 	}
 
-	@Override
-	
-	@Cacheable(modelId = "roleCaching")
-	public Map<String, Object> findRoleById(int id) {
-		return roleDao.findByPk(id);
-	}
-
 	public String getDefaultAuthorityRole() {
 		return defaultAuthorityRole;
 	}
@@ -340,13 +244,57 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 	@Override
 	@Cacheable(modelId = "roleCaching")
 	public Role findById(Integer id) {
-		return roleDao.findById(id);
+		return roleDao.findObjById(id);
+	}
+
+
+	@Override
+	public Map<String, Object> findJsonById(int id) {
+		Map<String,Object> m=new HashMap<String, Object>();
+		m.put("data", roleDao.findJsonById(id));
+		m.put("success", true);
+		return m;
 	}
 
 	@Override
 	@CacheFlush(modelId = "roleFlushing")
-	public void update(Role obj) {
-		roleDao.update(obj);
+	public Map<String, Object> saveRole(Role r) {
+		int id=0;
+		boolean success=false;
+		String action="add";
+		if(r.getRoleId()==0){
+			boolean exist=this.findExist(r);
+			if(!exist){
+				id=roleDao.saveRole(r);
+				if(id>0){
+					success=true;
+				}
+			}
+		}else{
+			action="update";
+			if(r.getRoleName().equals(r.getOldName())){
+				roleDao.updateRole(r);
+				success=true;
+			}else{
+				boolean exist=this.findExist(r);
+				if(!exist){
+					roleDao.updateRole(r);
+					success=true;
+					id=1;
+				}
+			}
+		}
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("success", success);
+		map.put("action",action);
+		return map;
+	}
+
+	@Override
+	@Cacheable(modelId = "roleCaching")
+	public boolean findExist(Role o) {
+		return roleDao.findExist(o);
 	}
 
 }

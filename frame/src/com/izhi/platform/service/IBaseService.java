@@ -3,6 +3,8 @@ package com.izhi.platform.service;
 import java.io.Serializable;
 import java.util.List;
 
+import com.izhi.platform.model.Role;
+
 public interface IBaseService<T,Id extends Serializable> {
 	T findById(Id id);
 	Id save(T obj);

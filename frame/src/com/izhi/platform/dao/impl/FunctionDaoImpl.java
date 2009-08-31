@@ -15,7 +15,7 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	
 	@Override
 	public List<Function> findTopFunctions(Integer orgId,Integer userId) {
-		String sql="select f from Function f join f.roles r join r.users u where  f.menu=true and f.parent is null and u.org.id=? and u.id=? order by f.sequence";
+		String sql="select f from User u join u.roles r join r.functions f where  f.menu=true and f.parent is null and u.org.id=? and u.id=? order by f.sequence";
 		List<Function> list=this.getHibernateTemplate().find(sql, new Object[]{orgId,userId});
 		return list;
 	}
@@ -23,7 +23,7 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 
 	@Override
 	public List<Function> findChildren(String[] keys,Object[] values) {
-		String sql="select m from Function m join m.roles mr,User u join u.roles ur where mr.id=ur.id and m.menu=true and mr.org.id=:orgId and mr.id=ur.id and m.parent.name=:parentName and u.id=:userId order by m.sequence";
+		String sql="select m from Role mr join mr.functions,User u join u.roles ur where mr.id=ur.id and m.menu=true and mr.org.id=:orgId and mr.id=ur.id and m.parent.name=:parentName and u.id=:userId order by m.sequence";
 		List<Function> list=this.find(sql, keys,values);
 		return list;
 	}
@@ -117,7 +117,7 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	@Override
 	public List<Map<String, Object>> findMenus(int orgId, int userId, int pid) {
 		List<Map<String, Object>> childrens=new ArrayList<Map<String,Object>>();
-		String sql="select new map(f.functionId as id,f.functionName as text,f.url as url) from Function f join f.roles r join r.users u where u.org.id=? and u.id=? and f.parent.functionId=? order by f.sequence desc ";
+		String sql="select new map(f.functionId as id,f.functionName as text,f.url as url) from User u join u.roles r join r.functions  f where u.org.id=? and u.id=? and f.parent.functionId=? order by f.sequence desc ";
 		childrens=this.getHibernateTemplate().find(sql, new Object[]{orgId,userId,pid});
 		for(Map<String,Object> c:childrens){
 			Integer id=(Integer)c.get("id");

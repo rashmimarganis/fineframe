@@ -11,6 +11,7 @@
     <script type="text/javascript" src="${base}/js/ext-all-debug.js"></script>
     <script type="text/javascript" src="${base}/js/ext-lang-zh_CN.js"></script>
     <script type="text/javascript" src="${base}/js/frame/common.js"></script>
+    <script type="text/javascript" src="js/ComboBoxTree.js"></script>
 	<script language="javascript" type="text/javascript" src="${base}/script.jhtm">
 	</script>
 	<script type="text/javascript" src="js/frame/attribute.js"></script>

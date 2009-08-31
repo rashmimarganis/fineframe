@@ -13,7 +13,6 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.platform.model.Org;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.IFunctionService;
@@ -29,7 +28,7 @@ public class RoleAction extends BasePageAction {
 	private static final long serialVersionUID = 8211666047695628432L;
 	private Role obj;
 	private String oldName;
-	private String ids;
+	private List<Integer> ids;
 	
 	@Resource(name="roleService")
 	private IRoleService roleService;
@@ -39,6 +38,8 @@ public class RoleAction extends BasePageAction {
 	private List<Integer> roleIds;
 	private int orgId;
 	private int userId;
+	
+	private int id;
 	/**
 	 * 多个用户分配同一角色；
 	 */
@@ -77,41 +78,39 @@ public class RoleAction extends BasePageAction {
 	public String execute(){
 		return SUCCESS;
 	}
-	@Action(value="save")
+	@Action("save")
 	public String save(){
 		if(obj==null||obj.getOrg()==null||obj.getOrg().getOrgId()==0){
 			obj.setOrg(SecurityUser.getOrg());
 		}
-		int r=roleService.save(obj, oldName);
-		this.out(""+r);
-		return null;
+		Map<String,Object> m=roleService.saveRole(obj);
+		this.getRequest().setAttribute("result", JSONObject.fromObject(m).toString());
+		return SUCCESS;
 	}
 	@Action(value="delete")
 	public String delete(){
-		roleService.delete(ids);
-		Map<String,Object> m=new HashMap<String, Object>();
-		m.put("success", true);
-		m.put("totalCount", roleService.findTotalCount(obj.getOrg()));
-		this.out(JSONObject.fromObject(m).toString());
-		return null;
+		roleService.deleteRoles(ids);
+		int tc=roleService.findTotalCount(orgId);
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("success", true);
+		map.put("totalCount", tc);
+		this.getRequest().setAttribute("result", JSONObject.fromObject(map).toString());
+		return SUCCESS;
 	}
-	@Action(value="page")
-	public String page(){
-		Org org=null;
-		if(obj==null||obj.getOrg()==null||obj.getOrg().getOrgId()==0){
-			org=SecurityUser.getOrg();
-		}else{
-			org=obj.getOrg();
+	@Action("list")
+	public String list(){
+		if(orgId==0){
+			orgId=SecurityUser.getOrg().getOrgId();
 		}
-		
-		this.out(JSONObject.fromObject(roleService.findPage(this.getPageParameter(),org)).toString());
-		return null;
+		this.getRequest().setAttribute("result",JSONObject.fromObject(roleService.findPage(this.getPageParameter(),orgId)).toString());
+		return SUCCESS;
 	}
 	@Action(value="load")
 	public String load(){
-		obj=roleService.findObjById(obj.getRoleId());
-		//this.out(JSONObject.fromObject(roleService.findRoleById(obj.getId())).toString());
-		return "input";
+		Map<String,Object> m=roleService.findJsonById(id);
+		String result=JSONObject.fromObject(m).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
 	}
 
 	@Action(value="findUserRoles")
@@ -141,14 +140,6 @@ public class RoleAction extends BasePageAction {
 
 	public void setObj(Role obj) {
 		this.obj = obj;
-	}
-
-	public String getIds() {
-		return ids;
-	}
-
-	public void setIds(String ids) {
-		this.ids = ids;
 	}
 
 	
@@ -183,6 +174,18 @@ public class RoleAction extends BasePageAction {
 
 	public void setFunctionService(IFunctionService functionService) {
 		this.functionService = functionService;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setIds(List<Integer> ids) {
+		this.ids = ids;
 	}
 	
 	

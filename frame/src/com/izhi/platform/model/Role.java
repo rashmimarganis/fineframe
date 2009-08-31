@@ -1,8 +1,9 @@
 package com.izhi.platform.model;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.acegisecurity.GrantedAuthority;
 
@@ -26,22 +28,25 @@ public class Role implements Serializable,GrantedAuthority {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="role_id")
 	private int roleId;
-	@Column(length=32,name="role_name")
+	@Column(length=32,name="role_name",unique=true)
 	private String roleName;
-	@Column(length=32)
+	@Column(name="title")
 	private String title;
-	@Column(length=100)
-	private String note;
-	@ManyToOne
+	
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name="org_id")
 	private Org org;
+	@Column(name="sequence")
+	private int sequence;
+	@Transient
+	private String oldName;
 	
-	@ManyToMany( fetch = FetchType.LAZY)
-	@JoinTable(name = "p_user_roles", joinColumns = {@JoinColumn(name = "role_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "user_id",insertable=false,updatable=false))
-	private Set<User> users;
-	@ManyToMany( fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy="roles")
+	private List<User> users;
+	
+	@ManyToMany(cascade={CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.LAZY,targetEntity=Function.class)
 	@JoinTable(name = "p_role_functions", joinColumns = {@JoinColumn(name = "role_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "function_id",insertable=false,updatable=false))
-	private Set<Function> functions;
+	private List<Function> functions;
 
 	public int getRoleId() {
 		return roleId;
@@ -55,34 +60,17 @@ public class Role implements Serializable,GrantedAuthority {
 	public void setRoleName(String name) {
 		this.roleName = name;
 	}
-	public String getNote() {
-		return note;
-	}
-	public void setNote(String note) {
-		this.note = note;
-	}
+	
 	public Org getOrg() {
 		return org;
 	}
 	public void setOrg(Org org) {
 		this.org = org;
 	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
 
 	@Override
 	public String getAuthority() {
 		return this.roleName;
-	}
-	public Set<User> getUsers() {
-		return users;
-	}
-	public void setUsers(Set<User> users) {
-		this.users = users;
 	}
 	
 	public int compareTo(Object o) {
@@ -94,10 +82,38 @@ public class Role implements Serializable,GrantedAuthority {
 		}
 		return 0;
 	}
-	public Set<Function> getFunctions() {
+	
+	
+	public List<Function> getFunctions() {
 		return functions;
 	}
-	public void setFunctions(Set<Function> functions) {
+	public void setFunctions(List<Function> functions) {
 		this.functions = functions;
 	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public int getSequence() {
+		return sequence;
+	}
+	public void setSequence(int sequence) {
+		this.sequence = sequence;
+	}
+	public String getOldName() {
+		return oldName;
+	}
+	public void setOldName(String oldName) {
+		this.oldName = oldName;
+	}
+	public List<User> getUsers() {
+		return users;
+	}
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+	
+	
 }

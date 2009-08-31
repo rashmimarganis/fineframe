@@ -18,17 +18,20 @@ import com.izhi.platform.service.IFunctionService;
 import com.izhi.platform.service.ILogService;
 import com.izhi.platform.service.IRoleService;
 import com.izhi.platform.service.SecurityFilterService;
+
 @Service("securityFilterService")
-public class SecurityFilterServiceImpl  implements SecurityFilterService {
-	public static final Logger log=LoggerFactory.getLogger(SecurityFilterServiceImpl.class);
+public class SecurityFilterServiceImpl implements SecurityFilterService {
+	public static final Logger log = LoggerFactory
+			.getLogger(SecurityFilterServiceImpl.class);
 	private boolean convertUrlToLowercaseBeforeComparison = false;
 	private boolean useAntPath = true;
-	@Resource(name="roleService")
+	@Resource(name = "roleService")
 	private IRoleService roleService;
-	@Resource(name="functionService")
+	@Resource(name = "functionService")
 	private IFunctionService functionService;
 
 	private ILogService logService;
+
 	public boolean isConvertUrlToLowercaseBeforeComparison() {
 		return convertUrlToLowercaseBeforeComparison;
 	}
@@ -45,7 +48,6 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 	public void setUseAntPath(boolean useAntPath) {
 		this.useAntPath = useAntPath;
 	}
-
 
 	public IRoleService getRoleService() {
 		return roleService;
@@ -64,23 +66,25 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 	}
 
 	@Override
-	public void saveLogOperation(String url,Org org) {
+	public void saveLogOperation(String url, Org org) {
 		if (SecurityUser.isOnline()) {
-			Log log = new Log();
-			log.setOperation(functionService.findFunctionByUrl(url).getFunctionName());
-			log.setTime(new Date());
-			User user = SecurityUser.getUser();
-			log.setUser(user);
-			log.setUrl(url);
-			log.setOrg(org);
-			log.setIp(SecurityUser.getLoginIp());
-			logService.save(log);
+			Function f = functionService.findFunctionByUrl(url);
+			if (f.getLog()) {
+				Log log = new Log();
+				log.setOperation(f.getFunctionName());
+				log.setTime(new Date());
+				User user = SecurityUser.getUser();
+				log.setUser(user);
+				log.setUrl(url);
+				log.setOrg(org);
+				log.setIp(SecurityUser.getLoginIp());
+				logService.save(log);
+			}
 		}
 	}
 
 	@Override
 	public ConfigAttributeDefinition lookupAttributes(String url) {
-		//String url="";
 		if (isUseAntPath()) {
 			int firstQuestionMarkIndex = url.lastIndexOf("?");
 			if (firstQuestionMarkIndex != -1) {
@@ -90,18 +94,15 @@ public class SecurityFilterServiceImpl  implements SecurityFilterService {
 		if (convertUrlToLowercaseBeforeComparison) {
 			url = url.toLowerCase();
 		}
-		ConfigAttributeDefinition o=null;
-		
-		Org org=null;
-		if(SecurityUser.isOnline()){
-			org=SecurityUser.getOrg();
+		ConfigAttributeDefinition o = null;
+
+		Org org = null;
+		if (SecurityUser.isOnline()) {
+			org = SecurityUser.getOrg();
 		}
-		o=roleService.findRolesByUrl(org,url);
-		if(o!=null){
-			Function f=functionService.findFunctionByUrl(url);
-			if(f.getLog()){
-				this.saveLogOperation(url,org);
-			}
+		o = roleService.findRolesByUrl(org, url);
+		if (o != null) {
+			this.saveLogOperation(url, org);
 		}
 		return o;
 	}

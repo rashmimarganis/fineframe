@@ -9,15 +9,21 @@ import com.izhi.platform.model.Org;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.util.PageParameter;
 
-public interface IRoleService extends IBaseService<Role, Integer> {
+public interface IRoleService  {
 	ConfigAttributeDefinition findRolesByUrl(Org org,String url);
-	boolean findIsExist(String oldName);
-	Map<String,Object> findPage(PageParameter pp,Org org);
-	Integer findTotalCount(Org org);
+	boolean findExist(Role o);
+	Map<String,Object> findPage(PageParameter pp,int orgId);
+	Integer findTotalCount(int orgId);
 	Map<String,Object> findPage(PageParameter pp,int orgId,int userId );
-	Map<String,Object>  findRoleById(int id);
 	Role findObjById(int id);
+	
+	Map<String,Object> saveRole(Role r);
+	
+	Map<String,Object> findJsonById(int id);
 	void deleteUserRole(int userId,List<Integer> roleIds);
 	void saveUserRole(int userId,List<Integer> roleIds);
 	void saveUsersRoles(String userIds, List<Integer> roleIds);
+	boolean deleteRole(Integer id);
+	boolean deleteRoles(List<Integer> ids);
+	Role findById(Integer id);
 }

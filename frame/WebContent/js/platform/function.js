@@ -21,6 +21,7 @@ var FunctionFormPanel = function() {
 		name : "parentName",
 		readOnly:true
 	};
+
 	this.nameField = {
 		xtype : 'textfield',
 		fieldLabel : "名称",

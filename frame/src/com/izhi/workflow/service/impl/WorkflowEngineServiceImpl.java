@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import com.izhi.platform.model.Role;
 import com.izhi.platform.model.User;
+import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.workflow.exception.ExceptionMessage;
 import com.izhi.workflow.exception.WorkflowEngineException;
 import com.izhi.workflow.model.ActivityReport;
