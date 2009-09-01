@@ -79,7 +79,7 @@ public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements IUserDao 
 
 
 	@Override
-	public void updateUser(User obj) {
+	public int updateUser(User obj) {
 		String sql="";
 		Object[] vs=null;
 		if(obj.getPassword().trim().equals("")){
@@ -89,7 +89,9 @@ public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements IUserDao 
 			sql="update User o set o.username=?,o.enabled=?,o.email=?,o.password=?,o.locked=?,o.expired=?,o.credentialsExpired=? where o.userId=?";
 			vs=new Object[]{obj.getUsername(),obj.getEnabled(),obj.getEmail(),obj.getPassword(),obj.getLocked(),obj.getExpired(),obj.getCredentialsNonExpired(),obj.getUserId()};
 		}
-		this.getHibernateTemplate().bulkUpdate(sql, vs);
+		int i=this.getHibernateTemplate().bulkUpdate(sql, vs);
+		
+		return i;
 	}
 
 
@@ -165,7 +167,6 @@ public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements IUserDao 
 			WebUser wu=new WebUser();
 			wu.setUserId(u.getUserId());
 			wu.setUsername(u.getUsername());
-			wu.setRealname(u.getRealname());
 			wu.setAge(u.getAge());
 			wu.setAddress(u.getAddress());
 			wu.setGender(u.getGender());
@@ -185,6 +186,33 @@ public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements IUserDao 
 		String sql="update User u set u.validated=true where u.username=? and u.validateCode=?";
 		int i=this.getHibernateTemplate().bulkUpdate(sql, new Object[]{un,code});
 		return i>0;
+	}
+
+
+	@Override
+	public boolean deleteUser(int id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public int saveUser(User obj) {
+		int i=(Integer)this.getHibernateTemplate().save(obj);
+		return i;
+	}
+
+
+	@Override
+	public boolean deleteUser(String username) {
+		int i=this.getHibernateTemplate().bulkUpdate("delete User o where o.username=?",username);
+		return i>0;
+	}
+
+
+	@Override
+	public User findById(int id) {
+		return (User)this.getHibernateTemplate().load(User.class, id);
 	}
 }
 

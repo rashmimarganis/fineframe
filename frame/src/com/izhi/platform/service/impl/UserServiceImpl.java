@@ -21,7 +21,7 @@ import com.izhi.platform.service.IUserService;
 import com.izhi.platform.util.PageParameter;
 
 @Service("userService")
-public class UserServiceImpl extends BaseService implements IUserService,
+public class UserServiceImpl  implements IUserService,
 		UserDetailsService {
 
 	private IUserDao userDao;
@@ -43,32 +43,20 @@ public class UserServiceImpl extends BaseService implements IUserService,
 
 	@Override
 	@CacheFlush(modelId = "userFlushing")
-	public Integer save(User user) {
-		return userDao.save(user);
+	public Integer saveUser(User user) {
+		return userDao.saveUser(user);
 	}
 
 	@Override
 	@CacheFlush(modelId = "userFlushing")
-	public void update(User user) {
-		userDao.update(user);
+	public void updateUser(User user) {
+		userDao.updateUser(user);
 	}
 
 	@Override
 	@CacheFlush(modelId = "userFlushing")
-	public void delete(Integer id) {
-		userDao.delete(id);
-	}
-
-	@Override
-	@CacheFlush(modelId = "userFlushing")
-	public int delete(String ids) {
-		return userDao.delete(ids);
-	}
-
-	@Override
-	@CacheFlush(modelId = "userFlushing")
-	public Integer save(User obj, String oldName) {
-		return null;
+	public void deleteUser(Integer id) {
+		userDao.deleteUser(id);
 	}
 
 	@Override
@@ -132,7 +120,7 @@ public class UserServiceImpl extends BaseService implements IUserService,
 			boolean exist = false;
 			if (obj.getUserId() == 0) {
 				if (!this.findIsExist(obj.getUsername())) {
-					success = userDao.save(obj) > 0;
+					success = userDao.saveUser(obj) > 0;
 				} else {
 					exist = true;
 				}
@@ -166,11 +154,6 @@ public class UserServiceImpl extends BaseService implements IUserService,
 		return userDao.findIsExist(value);
 	}
 
-	@Override
-	@CacheFlush(modelId = "userFlushing")
-	public void updateUser(User user) {
-
-	}
 
 	public Md5PasswordEncoder getEncoder() {
 		return encoder;
@@ -238,42 +221,6 @@ public class UserServiceImpl extends BaseService implements IUserService,
 		this.userDao = userDao;
 	}
 
-	@Override
-	@CacheFlush(modelId = "userFlushing")
-	public void delete(User obj) {
-		userDao.delete(obj);
-
-	}
-
-	@Override
-	@CacheFlush(modelId = "userFlushing")
-	public int delete(String ids, String id) {
-		return userDao.delete(ids, id);
-	}
-
-	@Override
-	@CacheFlush(modelId = "userFlushing")
-	public void deleteAll() {
-		userDao.deleteAll();
-	}
-
-	@Override
-	@Cacheable(modelId = "userCacheing")
-	public List<User> find(String sql) {
-		return userDao.find(sql);
-	}
-
-	@Override
-	@Cacheable(modelId = "userCacheing")
-	public List<User> find(String sql, Object obj) {
-		return userDao.find(sql, obj);
-	}
-
-	@Override
-	@Cacheable(modelId = "userCacheing")
-	public List<User> find(String sql, String[] keys, Object[] objs) {
-		return userDao.find(sql, keys, objs);
-	}
 
 	@Override
 	@Cacheable(modelId = "userCacheing")
@@ -281,11 +228,5 @@ public class UserServiceImpl extends BaseService implements IUserService,
 		return userDao.findById(id);
 	}
 
-	@Override
-	@Cacheable(modelId = "userCacheing")
-	public List<User> findPage(int firstResult, int maxResult,
-			String sortField, String sort) {
-		return userDao.findPage(firstResult, maxResult, sortField, sort);
-	}
 
 }

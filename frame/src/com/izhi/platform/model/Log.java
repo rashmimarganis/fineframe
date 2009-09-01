@@ -80,4 +80,14 @@ public class Log implements Serializable {
 		this.operation = operation;
 	}
 	
+	public boolean equals(Object o) {
+		if(o instanceof Log){
+			Log o_=(Log)o;
+			if(o_.getLogId()==this.getLogId()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

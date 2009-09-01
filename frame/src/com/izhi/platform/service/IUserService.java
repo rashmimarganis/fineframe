@@ -8,7 +8,7 @@ import javax.jws.WebService;
 import com.izhi.platform.model.User;
 import com.izhi.platform.util.PageParameter;
 @WebService(name = "UserService")
-public interface IUserService extends IBaseService<User, Integer> {
+public interface IUserService  {
 	void updateLoginInfo(User user);
 	User findUserByName(String username);
 	User findUserByName(String username,int orgId);
@@ -26,4 +26,7 @@ public interface IUserService extends IBaseService<User, Integer> {
 	Map<String,Object> findInfoById(int id);
 	User findById(int id);
 	Map<String,Object> loadById(int id);
+	Integer saveUser(User user);
+	void deleteUser(Integer id);
+	User findById(Integer id);
 }

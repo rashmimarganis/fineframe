@@ -29,7 +29,7 @@ ComboBoxTree = Ext.extend(Ext.form.ComboBox, {
     allowUnLeafClick:false,
     url:'',
     setFieldValue:function(id,text){
-        this.setRawValue(text);
+        this.setValue(text);
         this.hiddenField.value = id;
     },
     onSelect:function(id){

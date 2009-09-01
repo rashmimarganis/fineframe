@@ -45,7 +45,7 @@ public class UserWebServiceImpl implements IUserWebService {
 	@CacheFlush(modelId = "userFlushing")
 	public boolean saveUser(User user) {
 		if (!this.findExist(user.getUsername())) {
-			return userDao.save(user) > 0;
+			return userDao.saveUser(user) > 0;
 		}
 		return false;
 	}
@@ -98,7 +98,7 @@ public class UserWebServiceImpl implements IUserWebService {
 		user.setValidated(false);
 		org.setOrgId(1);
 		user.setOrg(org);
-		Integer id = userDao.save(user);
+		Integer id = userDao.saveUser(user);
 		u.setUserId(id);
 		return u;
 	}

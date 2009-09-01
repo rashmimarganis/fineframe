@@ -8,10 +8,12 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-
-import net.sf.json.JSONObject;
 
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
@@ -19,11 +21,9 @@ import com.izhi.platform.service.IUserService;
 import com.izhi.platform.webapp.listener.UserCounterListener;
 @Service
 @Scope(value="prototype")
+@Namespace("/user")
 public class UserAction extends BasePageAction {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7910016264537982625L;
 	@Resource(name="userService")
 	private IUserService userService;
@@ -39,12 +39,12 @@ public class UserAction extends BasePageAction {
 	public void setUserService(IUserService service) {
 		this.userService = service;
 	}
-	
-	public String findPage(){
+	@Action("list")
+	public String list(){
 		Map<String, Object> m = new HashMap<String, Object>();
 		m.put("objs", userService.findPage(this.getPageParameter(),orgId));
 		this.out(JSONObject.fromObject(m).toString());
-		return null;
+		return SUCCESS;
 	}
 	/**
 	 * 默认情况下查找当前组织下的用户。
@@ -89,7 +89,6 @@ public class UserAction extends BasePageAction {
 	}
 	
 	public String delete(){
-		userService.delete(ids);
 		int tc=userService.findTotalCount(orgId);
 		boolean success=true;
 		Map<String,Object> m=new HashMap<String, Object>();

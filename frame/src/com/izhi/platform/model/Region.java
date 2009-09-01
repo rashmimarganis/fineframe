@@ -71,4 +71,14 @@ public class Region implements Serializable{
 	public void setChildren(Set<Region> children) {
 		this.children = children;
 	}*/
+	
+	public boolean equals(Object o) {
+		if(o instanceof Region){
+			Region o_=(Region)o;
+			if(o_.getId()==this.getId()){
+				return true;
+			}
+		}
+		return false;
+	}
 }

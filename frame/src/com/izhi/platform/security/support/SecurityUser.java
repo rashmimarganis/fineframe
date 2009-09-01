@@ -92,7 +92,7 @@ public class SecurityUser {
 	public static String getRealname() {
 		User user = getUser();
 		if (user != null) {
-			return user.getRealname();
+			return user.getUsername();
 		}
 		return "";
 	}

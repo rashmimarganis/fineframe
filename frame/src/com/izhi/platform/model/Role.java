@@ -115,6 +115,14 @@ public class Role implements Serializable,GrantedAuthority {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
-	
+	public boolean equals(Object o) {
+		if(o instanceof Role){
+			Role o_=(Role)o;
+			if(o_.getRoleId()==this.getRoleId()){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }

@@ -14,8 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.acegisecurity.GrantedAuthority;
@@ -26,63 +26,63 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 @Entity
 @Table(name = "p_users")
-public class User  implements UserDetails {
+public class User implements UserDetails {
 
 	private static final long serialVersionUID = -6655187104320740141L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="user_id")
+	@Column(name = "user_id")
 	private int userId;
 	@Column(length = 32)
 	private String username;
 	@Column(length = 32)
 	private String password;
-	@Column(name="last_login_time")
+	@Column(name = "last_login_time")
 	private Date lastLoginTime;
-	@Column(name="login_times")
-	private int loginTimes=0;
-	@Column(length=20,name="last_login_ip")
+	@Column(name = "login_times")
+	private int loginTimes = 0;
+	@Column(length = 20, name = "last_login_ip")
 	private String lastLoginIp;
 	@Column(length = 100)
 	private String email;
-	@ManyToMany( fetch = FetchType.EAGER)
-	@JoinTable(name = "p_user_roles", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "p_user_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
-	
-	@Column(name="credentials_expired")
-	private boolean credentialsExpired=true;
-	@Column(name="hint_question")
+
+	@Column(name = "credentials_expired")
+	private boolean credentialsExpired = true;
+	@Column(name = "hint_question")
 	private String hintQuestion;
-	@Column(name="hint_answer")
+	@Column(name = "hint_answer")
 	private String hintAnswer;
-	@Column(name="expired")
-	private boolean expired=true;
-	@Column(name="locked")
-	private boolean locked=true;
+	@Column(name = "expired")
+	private boolean expired = true;
+	@Column(name = "locked")
+	private boolean locked = true;
 	@Basic
-	private boolean enabled=true;
-	@Column(name="login_attempts_max")
-	private int loginAttemptsMax=0;
-	@Column(name="login_attempts")
-	private int loginAttempts=0;
-	@Column(name="concurrent_max")
-	private int concurrentMax=7;
-	@Column(name="password_code")
+	private boolean enabled = true;
+	@Column(name = "login_attempts_max")
+	private int loginAttemptsMax = 0;
+	@Column(name = "login_attempts")
+	private int loginAttempts = 0;
+	@Column(name = "concurrent_max")
+	private int concurrentMax = 7;
+	@Column(name = "password_code")
 	private String passwordCode;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "org_id")
 	private Org org;
-	@Basic
-	private String realname;
+	
 	@Basic
 	private int age;
 	@Basic
 	private String address;
-	@Column(length=1)
+	@Column(length = 1)
 	private String gender;
 	@Basic
 	private String postcode;
+
 	public String getPostcode() {
 		return postcode;
 	}
@@ -119,19 +119,12 @@ public class User  implements UserDetails {
 		return credentialsExpired;
 	}
 
-	@Column(name="validate_code")
+	@Column(name = "validate_code")
 	private String validateCode;
 	@Basic
-	private boolean validated=false;
-	
-	
-	public String getRealname() {
-		return realname;
-	}
+	private boolean validated = false;
 
-	public void setRealname(String realname) {
-		this.realname = realname;
-	}
+	
 
 	public Org getOrg() {
 		return org;
@@ -156,7 +149,6 @@ public class User  implements UserDetails {
 	public void setHintAnswer(String hintAnswer) {
 		this.hintAnswer = hintAnswer;
 	}
-
 
 	public boolean getCredentialsNonExpired() {
 		return credentialsExpired;
@@ -260,27 +252,24 @@ public class User  implements UserDetails {
 
 	@Override
 	public GrantedAuthority[] getAuthorities() {
-		if(roles!=null){
-		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>(roles.size());
-    	for(Role role : roles) {
-    		grantedAuthorities.add(new GrantedAuthorityImpl(role.getRoleName()));
-    	}
-        return grantedAuthorities.toArray(new GrantedAuthority[roles.size()]);
+		if (roles != null) {
+			List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>(
+					roles.size());
+			for (Role role : roles) {
+				grantedAuthorities.add(new GrantedAuthorityImpl(role
+						.getRoleName()));
+			}
+			return grantedAuthorities
+					.toArray(new GrantedAuthority[roles.size()]);
 		}
-		/*GrantedAuthority[] ga=null;
-		if(roles!=null){
-			ga=roles.toArray(new GrantedAuthority[0]);
-			return ga;
-		}
-		}else{
-			
-		}*/
+
 		return new GrantedAuthority[0];
 	}
 
 	public boolean isEnabled() {
 		return this.getEnabled();
 	}
+
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
@@ -299,21 +288,22 @@ public class User  implements UserDetails {
 	public int hashCode() {
 		return (username != null ? username.hashCode() : 0);
 	}
+
 	public String toString() {
 		ToStringBuilder sb = new ToStringBuilder(this,
 				ToStringStyle.DEFAULT_STYLE).append("username", this.username)
 				.append("enabled", this.enabled);
 		GrantedAuthority[] auths = this.getAuthorities();
-		
+
 		if (auths != null) {
 			sb.append("Granted Authorities: ");
-			
+
 			for (int i = 0; i < auths.length; i++) {
 				if (i > 0) {
 					sb.append(", ");
 				}
 				sb.append(auths[i].getAuthority());
-				
+
 			}
 		} else {
 			sb.append("No Granted Authorities");

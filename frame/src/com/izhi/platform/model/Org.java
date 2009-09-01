@@ -77,5 +77,14 @@ public class Org implements Serializable {
 	public void setOldName(String oldName) {
 		this.oldName = oldName;
 	}
-	
+	public boolean equals(Object o) {
+		if(o instanceof Org){
+			Org o_=(Org)o;
+			if(o_.getOrgId()==this.getOrgId()){
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
