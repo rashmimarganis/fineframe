@@ -29,15 +29,16 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	}
 	
 	public void delete(Integer id){
-		String sql="delete Function o where o.functionId =?";
-		this.getHibernateTemplate().bulkUpdate(sql,id);
+		Function f=this.findById(id);
+		f.setRoles(null);
+		f.setParent(null);
+		this.getHibernateTemplate().delete(f);
 	}
 	
 	public int updateFunction(Function obj){
-		//Function f=this.findById(obj.getFunctionId());
-		//obj.setRoles(f.getRoles());
-		this.getHibernateTemplate().update(obj);
-		return 1;
+		String sql="update Function o set o.functionName=?,o.log=?,o.menu=?,o.sequence=?,o.url=? where o.functionId=?";
+		int i=this.getHibernateTemplate().bulkUpdate(sql, new Object[]{obj.getFunctionName(),obj.getLog(),obj.getMenu(),obj.getSequence(),obj.getUrl(),obj.getFunctionId()});
+		return i;
 	}
 
 

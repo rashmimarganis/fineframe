@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -44,7 +45,7 @@ public class Role implements Serializable,GrantedAuthority {
 	@ManyToMany(mappedBy="roles")
 	private List<User> users;
 	
-	@ManyToMany(cascade={CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.LAZY,targetEntity=Function.class)
+	@OneToMany(cascade={CascadeType.REMOVE},fetch = FetchType.LAZY,targetEntity=Function.class)
 	@JoinTable(name = "p_role_functions", joinColumns = {@JoinColumn(name = "role_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "function_id",insertable=false,updatable=false))
 	private List<Function> functions;
 

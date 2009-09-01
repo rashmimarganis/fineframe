@@ -312,7 +312,6 @@ var FunctionApp= function(){
 			
 			var form=formPanel.getForm();
 			formPanel.level=0;
-			alert(formPanel.level);
 			form.findField("obj.functionId").setValue(0);
 			form.findField("obj.parent.functionId").setValue(node.id);
 			form.findField("parentName").setValue(node.text);
@@ -347,10 +346,8 @@ var FunctionApp= function(){
 				if(result.success){
 					Ext.Msg.alert("删除功能","删除成功！");
 					deleteNode=node;
-					var node1=selectNode.nextSibling;
-					if(node1){
-						node1.select();
-					}
+					westPanel.getSelectionModel().selectNext();
+
 					deleteNode.remove();
 				}
 				
