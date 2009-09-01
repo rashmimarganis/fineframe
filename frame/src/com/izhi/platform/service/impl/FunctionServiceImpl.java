@@ -287,4 +287,9 @@ public class FunctionServiceImpl extends BaseService implements
 		return functionDao.findJsonById(id);
 	}
 
+	@Override
+	public List<Map<String, Object>> findRoleFunctions(int rid, int pid) {
+		return functionDao.findRoleFunctions(rid, pid);
+	}
+
 }

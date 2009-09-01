@@ -26,4 +26,6 @@ public interface IRoleService  {
 	boolean deleteRole(Integer id);
 	boolean deleteRoles(List<Integer> ids);
 	Role findById(Integer id);
+	
+	boolean saveRoleFunctions(int rId,List<Integer> fIds);
 }

@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 @Entity
@@ -52,7 +53,6 @@ public class Function implements Serializable {
 	
 	@Column
 	private boolean enabled;
-	
 	
 	public Integer getFunctionId() {
 		return functionId;
@@ -121,5 +121,6 @@ public class Function implements Serializable {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+
 	
 }

@@ -17,6 +17,8 @@ public interface IRoleDao{
 	void deleteUserRole(int userId,int roleId);
 	void saveUserRole(int userId,int roleId);
 	
+	boolean saveRoleFunctions(int rId,List<Integer> fIds);
+	
 	boolean findExist(Role o);
 	int updateRole(Role r);
 	boolean deleteRoles(List<Integer> ids);

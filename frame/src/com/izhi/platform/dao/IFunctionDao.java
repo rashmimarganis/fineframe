@@ -23,4 +23,5 @@ public interface IFunctionDao extends IBaseDao<Function,Integer> {
 	List<Map<String,Object>> findFunctions(Integer pid);
 	
 	List<Map<String, Object>> findJsonById(int id);
+	List<Map<String, Object>> findRoleFunctions(int rid,int pid);
 }

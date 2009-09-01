@@ -82,21 +82,6 @@ public class FunctionAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	public String findByRole() {
-		this.out(service.findRoleFunctions(roleId));
-		return null;
-	}
-
-	public String saveRoleFunction() {
-		boolean success = false;
-		if (service.saveRoleFunction(roleId, functionIds)) {
-			success = true;
-		}
-		Map<String, Object> m = new HashMap<String, Object>();
-		m.put("success", success);
-		this.out(JSONObject.fromObject(m).toString());
-		return null;
-	}
 
 	@Action("delete")
 	public String delete() {

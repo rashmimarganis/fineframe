@@ -39,7 +39,11 @@
 <%@page import="freemarker.template.Template"%>
 <%@page import="freemarker.template.TemplateException"%>
 
-<html>
+
+<%@page import="com.izhi.framework.service.IFrameModelRelationService"%>
+<%@page import="com.izhi.framework.model.FrameModelRelation"%>
+<%@page import="com.izhi.platform.service.IOrgService"%>
+<%@page import="com.izhi.platform.service.IRoleService"%><html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
@@ -47,89 +51,28 @@
 <body>
 <%
 	WebApplicationContext wac=WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
-	IFrameProjectService ps = (IFrameProjectService) wac.getBean("frameProjectService"); 
 		//out.println(JSONObject.fromObject(map).toString());
-	IFrameModelService ms=(IFrameModelService)wac.getBean("frameModelService");
-	IFrameComponentService cs=(IFrameComponentService)wac.getBean("frameComponentService");
+	IFunctionService mrs=(IFunctionService)wac.getBean("functionService");
+	PageParameter pp=new PageParameter();
+	pp.setDir("desc");
+	pp.setSort("roleId");
+	pp.setStart(0);
+	pp.setLimit(10);
+	List<Map<String,Object>> objs=mrs.findRoleFunctions(1,0);
 	
-	FrameProject fp=ps.findProjectById(1);
-	FrameComponent fc=cs.findComponentById(1);
-	FrameModel fm=ms.findModelById(5);
-	
-	out.println(TagUtils.getGenerateFileName(fp,fc,fm));
-	
-	if (fc != null) {
-		Configuration config1=new Configuration();
-		try {
-			config1.setDirectoryForTemplateLoading(new File(WebUtils.getFrameTemplateRoot()));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		config1.setObjectWrapper(new DefaultObjectWrapper());
-		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("p", fp);
-		String ftpl =fc.getTemplate().getFileName()+".ftl";
-
-		if (fc.getLevel().equals(FrameComponent.LEVEL_PROJECT)) {
-			String fileName = TagUtils.getGeneratePackageName(fp, fc)
-					+ TagUtils.getGenerateFileName(fp, fc);
-			File file = new File(fileName);
-			try {
-				if (!file.exists()) {
-
-					file.createNewFile();
-
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			try {
-				Writer out1 = new BufferedWriter(new OutputStreamWriter(
-						new FileOutputStream(file), "UTF-8"));
-				Template tpl = config1.getTemplate(ftpl);
-				tpl.process(data, out1);
-				out.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (TemplateException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			List<FrameModel> models = ms.findModelByProject(1);
-			
-			for (FrameModel m : models) {
-				data.put("m", m);
-				String fileName = TagUtils.getGeneratePackageName(fp, fc,fm)
-				+ TagUtils.getGenerateFileName(fp, fc,fm);
-				File file = new File(fileName);
-				try {
-					if (!file.exists()) {
-
-						file.createNewFile();
-
-					}
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				try {
-					Writer out1 = new BufferedWriter(
-							new OutputStreamWriter(
-									new FileOutputStream(file), "UTF-8"));
-					Template tpl = config1.getTemplate(ftpl);
-					tpl.process(data, out);
-					out.flush();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (TemplateException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
+	out.println(JSONArray.fromObject(objs).toString());
+	/*
+	PageParameter pp=new PageParameter();
+	pp.setDir("desc");
+	pp.setSort("relationId");
+	pp.setStart(0);
+	pp.setLimit(10);
+	List<Map<String,Object>> list=mrs.findNoRelation(5);
+	out.println(list.size());
+	for(Map<String,Object> m:list){
+		out.println(m.get("relationModelLabel"));
 	}
+	*/
 	
 	
 /*

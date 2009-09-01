@@ -29,11 +29,16 @@ ComboBoxTree = Ext.extend(Ext.form.ComboBox, {
     allowUnLeafClick:false,
     url:'',
     setFieldValue:function(id,text){
-        this.setValue(text);
+        this.setRawValue(text);
         this.hiddenField.value = id;
     },
     onSelect:function(id){
         
+    },
+    setValue : function(v){
+        var text = v;
+        Ext.form.ComboBox.superclass.setValue.call(this, text);
+        this.value = v;
     },
 
     store : new Ext.data.SimpleStore({
@@ -75,16 +80,16 @@ ComboBoxTree = Ext.extend(Ext.form.ComboBox, {
         */
         tree.on('click',function(node){
             if (combo.allowUnLeafClick == true){
-                combo.setValue(node.text);
+                combo.setRawValue(node.text);
                 combo.hiddenField.value = node.id;
                 combo.collapse();
-                combo.onSelect(node.id);
+                //combo.onSelect(node.id);
             }
             else if (node.leaf == true){
-                combo.setValue(node.text);
+                combo.setRawValue(node.text);
                 combo.hiddenField.value = node.id;
                 combo.collapse();
-                combo.onSelect(node.id);
+                //combo.onSelect(node.id);
             }
         });
         this.tree = tree;

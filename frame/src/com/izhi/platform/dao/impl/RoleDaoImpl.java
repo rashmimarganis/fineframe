@@ -1,5 +1,6 @@
 package com.izhi.platform.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.dao.IRoleDao;
+import com.izhi.platform.model.Function;
 import com.izhi.platform.model.Role;
 import com.izhi.platform.util.PageParameter;
 
@@ -77,6 +79,7 @@ public class RoleDaoImpl extends HibernateDaoSupport implements IRoleDao {
 		return 1;
 	}
 
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Role findObjById(int id) {
@@ -116,21 +119,28 @@ public class RoleDaoImpl extends HibernateDaoSupport implements IRoleDao {
 	}
 	@Override
 	public boolean deleteRoles(List<Integer> ids) {
+		for(int id:ids){
+			 deleteRole(id);
+		}
+		/*
 		String sql="delete from Role o where o.roleId in(:ids)";
 		Session session=this.getSession();
 		Query q=session.createQuery(sql);
 		q.setParameterList("ids", ids);
-		int i=q.executeUpdate();
-		return i>0;
+		int i=q.executeUpdate();*/
+		return true;
 	}
 
 
 
 	@Override
 	public boolean deleteRole(int id) {
-		String sql="delete from Role where o.roleId=?";
-		int i=this.getHibernateTemplate().bulkUpdate(sql, id);
-		return i>0;
+		Role r=(Role)this.getHibernateTemplate().load(Role.class, id);
+		r.setFunctions(null);
+		r.setOrg(null);
+		r.setUsers(null);
+		this.getHibernateTemplate().delete(r);
+		return true;
 	}
 
 
@@ -142,6 +152,16 @@ public class RoleDaoImpl extends HibernateDaoSupport implements IRoleDao {
 	}
 
 
+	public boolean saveRoleFunctions(int rId,List<Integer> fIds){
+		Role obj=(Role)this.getHibernateTemplate().load(Role.class, rId);
+		List<Function> list=new ArrayList<Function>();
+		for(int fid:fIds){
+			list.add((Function)this.getHibernateTemplate().load(Function.class, fid));
+		}
+		obj.setFunctions(list);
+		this.getHibernateTemplate().update(obj);
+		return true;
+	}
 
 	
 }

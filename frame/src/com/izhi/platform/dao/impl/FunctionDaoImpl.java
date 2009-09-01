@@ -164,4 +164,31 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	public int saveFunction(Function obj) {
 		return (Integer)this.getHibernateTemplate().save(obj);
 	}
+	
+	private boolean isChecked(int rid,int fid){
+		String sql="select count(f) from Function f join f.roles r where r.roleId=? and f.functionId=?";
+		List<Long> l=this.getHibernateTemplate().find(sql,new Object[]{rid,fid});
+		return l.get(0)>0;
+	}
+	public List<Map<String, Object>> findRoleFunctions(int rid,int pid) {
+		
+		List<Map<String, Object>> childrens=new ArrayList<Map<String,Object>>();
+		String sql="select new map(f.functionId as id,f.functionName as text) from Function as f";
+		if(pid==0){
+			sql+=" where f.parent.functionId is null order by f.sequence desc";
+			childrens=this.getHibernateTemplate().find(sql);
+		}else{
+			sql+=" where f.parent.functionId =? order by f.sequence desc";
+			childrens=this.getHibernateTemplate().find(sql,pid);
+		}
+		
+		for(Map<String,Object> c:childrens){
+			Integer id=(Integer)c.get("id");
+			c.put("checked",isChecked(rid,id));
+			List<Map<String, Object>> cc =findRoleFunctions(rid,id);
+			c.put("leaf", cc.size()==0);
+			c.put("children", cc);
+		}
+		return childrens;
+	}
 }

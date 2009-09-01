@@ -296,5 +296,7 @@ public class RoleServiceImpl  implements IRoleService {
 	public boolean findExist(Role o) {
 		return roleDao.findExist(o);
 	}
-
+	public boolean saveRoleFunctions(int rId,List<Integer> fIds){
+		return roleDao.saveRoleFunctions(rId, fIds);
+	}
 }

@@ -197,6 +197,8 @@ html, body {
 }
 .welcome{
 	background:url(image/platform/welcome.jpg) no-repeat fixed center;
+	width:400;
+	height:300;
 	
 }
 	

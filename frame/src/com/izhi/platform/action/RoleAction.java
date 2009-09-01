@@ -1,11 +1,13 @@
 package com.izhi.platform.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -39,6 +41,7 @@ public class RoleAction extends BasePageAction {
 	private int orgId;
 	private int userId;
 	
+	private String fids;
 	private int id;
 	/**
 	 * 多个用户分配同一角色；
@@ -134,6 +137,26 @@ public class RoleAction extends BasePageAction {
 		return null;
 	}
 	
+	@Action("functions")
+	public String findRoleFunctions() {
+		List<Map<String,Object>> l=functionService.findRoleFunctions(id,0);
+		String result=JSONArray.fromObject(l).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
+	@Action("saveFunctions")
+	public String saveRoleFunction(){
+		List<Integer> list=new ArrayList<Integer>();
+		String[] fidsStr=fids.split(",");
+		for(String fid:fidsStr)
+		{
+			list.add(Integer.parseInt(fid));
+		}
+		boolean r=roleService.saveRoleFunctions(id, list);
+		this.getRequest().setAttribute("success", r);
+		return SUCCESS;
+	}
+	
 	public Role getObj() {
 		return obj;
 	}
@@ -186,6 +209,18 @@ public class RoleAction extends BasePageAction {
 
 	public void setIds(List<Integer> ids) {
 		this.ids = ids;
+	}
+
+	public String getFids() {
+		return fids;
+	}
+
+	public void setFids(String fids) {
+		this.fids = fids;
+	}
+
+	public List<Integer> getIds() {
+		return ids;
 	}
 	
 	

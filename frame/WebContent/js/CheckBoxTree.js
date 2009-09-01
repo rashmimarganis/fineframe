@@ -1,28 +1,3 @@
-
-Ext.tree.TreePanel.prototype.checked = {};
-
-/**
- * Retrieve a urlencoded list of id's of checked nodes in the format nodeA=1&node2=1
- * @return {string} url encoded string of node ids that are checked
- */
-Ext.tree.TreePanel.prototype.getChecked = function(){
-	var c = this.checked, i = null, s = [];
-	for( i in c ) {
-		if( c[i] ) {
-			s.push(encodeURIComponent(i) + '=1');
-		}
-	}
-	return s.join('&');
-};
-Ext.tree.CheckBoxTree = Ext.extend(Ext.tree.TreePanel, {
-    lines:false,
-    borderWidth: Ext.isBorderBox ? 0 : 2, // the combined left/right border for each cell
-    cls:'x-column-tree',
-    
-    onRender : function(){
-        Ext.tree.CheckBoxTree.superclass.onRender.apply(this, arguments);
-    }
-});
 Ext.tree.CheckNodeUI = function() {
 	Ext.tree.CheckboxNode.superclass.constructor.apply(this, arguments);
 };
@@ -86,15 +61,16 @@ Ext.tree.CheckNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
 			this.updateExpandIcon();
 		}
 		
+		
 	},
 
 	checked : function() {
 		return this.checkbox.checked;
 	},
-
+	
 	check : function(state, descend) {
 		var _node = this.node;
-		var tree = _node.getOwnerTree();
+		var _tree = _node.getOwnerTree();
 		var parentNode = _node.parentNode;
 		
 		if( typeof state == 'undefined' || state === null ) {
@@ -103,21 +79,23 @@ Ext.tree.CheckNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
 		} else {
 			this.checkbox.checked = state;
 		}
-		tree.checked[_node.id] = state;
+		//_tree.checked[_node.id] = state;
 
 		// do we have parents?
 		if( parentNode !== null && state ) {
 			parentNode.getUI().check(state);
 		}
+		/*
 		if( descend && !_node.isLeaf() ) {
 			var cs = _node.childNodes;
 			for(var i = 0; i < cs.length; i++) {
 			  cs[i].getUI().check(state, true);
 			}
 		}
+		*/
 	},
-
-	toggleCheck : function(state) {
+	
+	toggleCheck : function() {
 		this.check(!this.checkbox.checked, true);
 	}
 });

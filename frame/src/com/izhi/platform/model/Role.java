@@ -46,7 +46,7 @@ public class Role implements Serializable,GrantedAuthority {
 	private List<User> users;
 	
 	@OneToMany(cascade={CascadeType.REMOVE},fetch = FetchType.LAZY,targetEntity=Function.class)
-	@JoinTable(name = "p_role_functions", joinColumns = {@JoinColumn(name = "role_id",insertable=false,updatable=false)}, inverseJoinColumns = @JoinColumn(name = "function_id",insertable=false,updatable=false))
+	@JoinTable(name = "p_role_functions", joinColumns = {@JoinColumn(name = "role_id")}, inverseJoinColumns = @JoinColumn(name = "function_id"))
 	private List<Function> functions;
 
 	public int getRoleId() {

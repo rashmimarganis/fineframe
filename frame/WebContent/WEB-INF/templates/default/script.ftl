@@ -104,6 +104,9 @@
 			}
 			,
 			initMainPanel:function(){
+				var wel=new Ext.Panel({
+					el:'welcome'
+				});
 				mainPanel=new Ext.Panel({
                     region:'center',
                     title:"我的桌面",
@@ -112,6 +115,8 @@
                     frame:false,
                     autoScroll:true
                 });
+                mainPanel.add(wel);
+                
 			},
 			getMainPanelHeight:function(){
 				return mainPanel.getInnerHeight();
