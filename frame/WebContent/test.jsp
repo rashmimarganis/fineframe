@@ -43,7 +43,7 @@
 <%@page import="com.izhi.framework.service.IFrameModelRelationService"%>
 <%@page import="com.izhi.framework.model.FrameModelRelation"%>
 <%@page import="com.izhi.platform.service.IOrgService"%>
-<%@page import="com.izhi.platform.service.IRoleService"%>
+<%@page import="com.izhi.platform.service.IUserService"%>
 <%@page import="com.izhi.platform.service.IPersonService"%><html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -53,15 +53,16 @@
 <%
 	WebApplicationContext wac=WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
 		//out.println(JSONObject.fromObject(map).toString());
-	IPersonService mrs=(IPersonService)wac.getBean("personService");
+	IUserService mrs=(IUserService)wac.getBean("userService");
 	PageParameter pp=new PageParameter();
 	pp.setDir("desc");
-	pp.setSort("personId");
+	pp.setSort("userId");
 	pp.setStart(0);
 	pp.setLimit(10);
-	List<Map<String,Object>> objs=mrs.findPage(pp,1);
+	//List<Map<String,Object>> objs=mrs.findPersons(null);
 	
-	out.println(JSONArray.fromObject(objs).toString());
+	List<Map<String,Object>> m=mrs.findRoles(1,1);
+	out.println(JSONArray.fromObject(m).toString());
 	/*
 	PageParameter pp=new PageParameter();
 	pp.setDir("desc");

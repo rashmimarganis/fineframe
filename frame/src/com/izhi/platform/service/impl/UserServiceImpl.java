@@ -2,9 +2,14 @@ package com.izhi.platform.service.impl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.annotation.Resource;
+
+import org.acegisecurity.providers.dao.SaltSource;
 import org.acegisecurity.providers.encoding.Md5PasswordEncoder;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UserDetailsService;
@@ -15,8 +20,9 @@ import org.springmodules.cache.annotations.CacheFlush;
 import org.springmodules.cache.annotations.Cacheable;
 
 import com.izhi.platform.dao.IUserDao;
+import com.izhi.platform.model.Role;
 import com.izhi.platform.model.User;
-import com.izhi.platform.service.BaseService;
+import com.izhi.platform.service.IRoleService;
 import com.izhi.platform.service.IUserService;
 import com.izhi.platform.util.PageParameter;
 
@@ -24,8 +30,14 @@ import com.izhi.platform.util.PageParameter;
 public class UserServiceImpl  implements IUserService,
 		UserDetailsService {
 
+	@Resource(name="userDao")
 	private IUserDao userDao;
-	private Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+	@Resource(name="roleService")
+	private IRoleService roleService;
+	@Resource(name="passwordEncoder")
+	private Md5PasswordEncoder encoder;
+	@Resource(name="saltSource")
+	private SaltSource saltSource;
 
 	@Override
 	@Cacheable(modelId = "userCacheing")
@@ -41,11 +53,6 @@ public class UserServiceImpl  implements IUserService,
 		userDao.updateLoginInfo(user);
 	}
 
-	@Override
-	@CacheFlush(modelId = "userFlushing")
-	public Integer saveUser(User user) {
-		return userDao.saveUser(user);
-	}
 
 	@Override
 	@CacheFlush(modelId = "userFlushing")
@@ -109,11 +116,12 @@ public class UserServiceImpl  implements IUserService,
 
 	@Override
 	@CacheFlush(modelId = "userFlushing")
-	public Map<String, Object> saveUser(User obj, String oldName) {
+	public Map<String, Object> saveUser(User obj) {
+		String oldName=obj.getOldName();
 		if (obj != null) {
 			if (!obj.getPassword().trim().equals("")) {
 				String password = encoder.encodePassword(obj.getPassword(),
-						null);
+						saltSource.getSalt(obj));
 				obj.setPassword(password);
 			}
 			boolean success = false;
@@ -163,36 +171,26 @@ public class UserServiceImpl  implements IUserService,
 		this.encoder = encoder;
 	}
 
-	// @Override
 
+	@Override
 	@Cacheable(modelId = "userCacheing")
-	public Map<String, Object> findPage(PageParameter pp, String onlineIds,
-			int count) {
+	public Map<String, Object> findOnlinePage(PageParameter pp,int onlineCount) {
 		Map<String, Object> m = new HashMap<String, Object>();
-		List<Map<String, Object>> lm = this.findPage1(pp, onlineIds);
+		List<Map<String, Object>> lm = userDao.findOnlinePage(pp);
 		m.put("objs", lm);
-		m.put("totalCount", count);
+		m.put("totalCount", onlineCount);
 		return m;
 	}
 
 	@Override
 	@Cacheable(modelId = "userCacheing")
-	public List<Map<String, Object>> findPage1(PageParameter pp,
-			String onlineIds) {
-		return userDao.findPage(pp, onlineIds);
+	public Map<String, Object> findJsonById(int id) {
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("data", userDao.findJsonById(id));
+		map.put("success", true);
+		return map;
 	}
 
-	@Override
-	@Cacheable(modelId = "userCacheing")
-	public Map<String, Object> findInfoById(int id) {
-		return userDao.findInfoById(id);
-	}
-
-	@Override
-	@Cacheable(modelId = "userCacheing")
-	public Map<String, Object> loadById(int id) {
-		return userDao.loadById(id);
-	}
 
 	@Override
 	@Cacheable(modelId = "userCacheing")
@@ -226,6 +224,121 @@ public class UserServiceImpl  implements IUserService,
 	@Cacheable(modelId = "userCacheing")
 	public User findById(Integer id) {
 		return userDao.findById(id);
+	}
+
+	@Override
+	public void updateLogout(String username) {
+		userDao.updateLogout(username);
+		
+	}
+
+	@Override
+	public void updateLogout(int userid) {
+		userDao.updateLogout(userid);
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> findRoles(int pid, int userId) {
+		return userDao.findRoles(pid,userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> findRolesByOrg(int orgId, int userId) {
+		return userDao.findRolesByOrg(orgId, userId);
+	}
+
+	@Override
+	public boolean saveUserRoles(int userId, String rids) {
+		User u=this.findById(userId);
+		if(rids==null||rids.trim().equals("")){
+			u.setRoles(null);
+		}else{
+			String[] ridsStr=rids.split(",");
+			Set<Role> roles=new HashSet<Role>();
+			for(String idStr:ridsStr){
+				Integer roleId=Integer.parseInt(idStr);
+				Role role=roleService.findById(roleId);
+				roles.add(role);
+			}
+			u.setRoles(roles);
+		}
+		return userDao.updateUser(u)>0;
+	}
+
+	public IRoleService getRoleService() {
+		return roleService;
+	}
+
+	public void setRoleService(IRoleService roleService) {
+		this.roleService = roleService;
+	}
+
+	public SaltSource getSaltSource() {
+		return saltSource;
+	}
+
+	public void setSaltSource(SaltSource saltSource) {
+		this.saltSource = saltSource;
+	}
+
+	@Override
+	public void updateUserStatus() {
+		userDao.updateUserStatus();
+	}
+
+	@Override
+	public void deleteUsers(List<Integer> ids) {
+		if(ids!=null){
+			for(Integer id:ids){
+				userDao.deleteUser(id);
+			}
+		}
+		
+	}
+
+	@Override
+	public boolean disableUser(List<Integer> ids) {
+		if(ids!=null){
+			for(Integer id:ids){
+				userDao.disableUser(id);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean enableUser(List<Integer> ids) {
+		if(ids!=null){
+			for(Integer id:ids){
+				userDao.enableUser(id);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean lockUser(List<Integer> ids) {
+		if(ids!=null){
+			for(Integer id:ids){
+				userDao.lockUser(id);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean unlockUser(List<Integer> ids) {
+		if(ids!=null){
+			for(Integer id:ids){
+				userDao.unlockUser(id);
+			}
+			return true;
+		}
+		return false;
 	}
 
 

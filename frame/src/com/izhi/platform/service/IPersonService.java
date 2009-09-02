@@ -14,4 +14,5 @@ public interface IPersonService {
 	boolean deletePersons(List<Integer> ids);
 	boolean deletePerson(int id);
 	int savePerson(Person o);
+	List<Map<String, Object>> findPersons(Integer pid);
 }

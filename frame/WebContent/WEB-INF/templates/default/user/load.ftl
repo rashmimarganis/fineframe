@@ -1,1 +1,1 @@
-${result?default("")}
+<#if result?exists>${result}</#if>

@@ -10,7 +10,10 @@ import org.acegisecurity.ui.logout.LogoutHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.izhi.platform.model.User;
+import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.ILogService;
+import com.izhi.platform.service.IUserService;
 
 public class SessionLogoutHandler implements LogoutHandler {
 	final static Logger log=LoggerFactory.getLogger(SessionLogoutHandler.class);
@@ -23,6 +26,8 @@ public class SessionLogoutHandler implements LogoutHandler {
 	public void setLogService(ILogService logService) {
 		this.logService = logService;
 	}
+	
+	private IUserService userService;
 
 	@Override
 	public void logout(HttpServletRequest request,
@@ -30,6 +35,10 @@ public class SessionLogoutHandler implements LogoutHandler {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			// 因为使用了concurrentSessionController 在限制用户登陆,所以登出时移除相应的session信息
+			User u=SecurityUser.getUser();
+			if(u!=null){
+				userService.updateLogout(u.getUserId());
+			}
 			sessionRegistry.removeSessionInformation(session.getId());
 			try{
 				request.getSession().invalidate();
@@ -41,6 +50,14 @@ public class SessionLogoutHandler implements LogoutHandler {
 
 	public void setSessionRegistry(SessionRegistry sessionRegistry) {
 		this.sessionRegistry = sessionRegistry;
+	}
+
+	public IUserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(IUserService userService) {
+		this.userService = userService;
 	}
 
 }

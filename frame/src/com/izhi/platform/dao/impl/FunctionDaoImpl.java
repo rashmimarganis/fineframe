@@ -118,7 +118,7 @@ public class FunctionDaoImpl extends BaseDaoImpl<Function, Integer> implements I
 	@Override
 	public List<Map<String, Object>> findMenus(int orgId, int userId, int pid) {
 		List<Map<String, Object>> childrens=new ArrayList<Map<String,Object>>();
-		String sql="select new map(f.functionId as id,f.functionName as text,f.url as url) from User u join u.roles r join r.functions  f where u.org.id=? and u.id=? and f.parent.functionId=? order by f.sequence desc ";
+		String sql="select distinct new map(f.functionId as id,f.functionName as text,f.url as url) from Function f join f.roles r  join r.users u where r.org.id=? and u.userId=? and f.parent.functionId=? order by f.sequence desc ";
 		childrens=this.getHibernateTemplate().find(sql, new Object[]{orgId,userId,pid});
 		for(Map<String,Object> c:childrens){
 			Integer id=(Integer)c.get("id");

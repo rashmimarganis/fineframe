@@ -32,8 +32,6 @@ public class RoleDaoImpl extends HibernateDaoSupport implements IRoleDao {
 		return q.list();
 	}
 
-	
-
 	@Override
 	public int findTotalCount(int orgId) {
 		int i = 0;
@@ -59,20 +57,6 @@ public class RoleDaoImpl extends HibernateDaoSupport implements IRoleDao {
 		return q.list();
 	}
 
-	@Override
-	public void deleteUserRole(int userId, int roleId) {
-		String sql = "delete from UserRole o where o.userId=? and o.roleId=?";
-		this.getHibernateTemplate().bulkUpdate(sql,
-				new Object[] { userId, roleId });
-	}
-
-	@Override
-	public void saveUserRole(int userId, int roleId) {
-		/*
-		 * UserRole ur=new UserRole(); ur.setRoleId(roleId);
-		 * ur.setUserId(userId); this.getHibernateTemplate().save(ur);
-		 */
-	}
 
 	public int updateRole(Role r){
 		this.getHibernateTemplate().update(r);

@@ -15,24 +15,66 @@ var UserFormPanel = function() {
 		xtype : 'textfield',
 		fieldLabel : "帐户",
 		allowBlank : false,
-		name : "obj.userName"
+		name : "obj.username"
+	};
+	this.oldNameField = {
+			xtype : 'hidden',
+			fieldLabel : "旧帐户",
+			allowBlank : false,
+			name : "obj.oldName"
+		};
+	this.passwordField = {
+		xtype : 'textfield',
+		fieldLabel : "密码",
+		inputType:'password',
+		name : "obj.password"
+	};
+	this.repasswordField = {
+		xtype : 'textfield',
+		fieldLabel : "重复密码",
+		inputType:'password',
+		name : "obj.repassword"
+	};
+	this.enabledField = {
+		xtype : 'checkbox',
+		fieldLabel : "可用",
+		name : "obj.enabled",
+		inputValue:'true'
+	};
+	this.lockedField = {
+		xtype : 'checkbox',
+		fieldLabel : "锁定",
+		name : "obj.locked",
+		inputValue:'true'
+	};
+	this.concurrentMaxField = {
+		xtype : 'numberfield',
+		fieldLabel : "并发数",
+		allowBlank : false,
+		name : "obj.concurrentMax",
+		value:'-1'
 	};
 	
-	this.titleField = {
-			xtype : 'textfield',
-			fieldLabel : "中文名称",
-			allowBlank : false,
-			name : "obj.title"
-		};
 	this.orgField = {
-            xtype:'combotree',
-            fieldLabel:'所属组织',
-            name:'obj.org.orgId',
-            allowUnLeafClick:true,
-            treeHeight:200,
-            url:'org/tree.jhtm',
-            onSelect:function(id){
-            }
+        xtype:'combotree',
+        fieldLabel:'所属组织',
+        name:'obj.org.orgId',
+        allowUnLeafClick:true,
+        treeHeight:200,
+        url:'org/tree.jhtm',
+        onSelect:function(id){
+        }
+	};
+	this.personField = {
+        xtype:'persontree',
+        fieldLabel:'关联人员',
+        name:'obj.person.personId',
+        allowUnLeafClick:false,
+        treeHeight:200,
+        url:'person/tree.jhtm',
+        onSelect:function(id){
+			
+        }
 	};
 	this.sortField = {
 		xtype : 'numberfield',
@@ -56,13 +98,17 @@ var UserFormPanel = function() {
 			id : 'userId'
 		}, [
 		    {name:'obj.userId', mapping:'userId'},
-		    {name:'obj.userName',mapping:'userName'}, 
-		    {name:'obj.title',mapping:'title'},
+		    {name:'obj.username',mapping:'username'}, 
+		    {name:'obj.oldName',mapping:'username'}, 
+		    {name:'obj.enabled',mapping:'enabled'},
+		    {name:'obj.locked',mapping:'locked'},
+		    {name:'obj.concurrentMax',mapping:'concurrentMax'},
 		    {name:'obj.org.orgId',mapping:'orgId'},
+		    {name:'obj.person.personId',mapping:'personId'},
 		    {name:'obj.sequence',mapping:'sequence'}
 		    ]
 		),
-		items : [this.idField,this.nameField,this.titleField,this.orgField,this.sortField]
+		items : [this.idField,this.nameField,this.oldNameField,this.passwordField,this.repasswordField,this.personField ,this.orgField,this.enabledField,this.lockedField,this.concurrentMaxField,this.sortField]
 	});
 };
 Ext.extend(UserFormPanel, Ext.form.FormPanel, {
@@ -76,6 +122,7 @@ Ext.extend(UserFormPanel, Ext.form.FormPanel, {
 				var json = action.response.responseText;
 				var o = eval("(" + json + ")");
 				if(o.success){
+					_form.findField("obj.person.personId").setFieldValue(o.data[0].personId,o.data[0].realname);
 					_form.findField("obj.org.orgId").setFieldValue(o.data[0].orgId,o.data[0].orgName);
 				}
 			},
@@ -90,49 +137,15 @@ Ext.extend(UserFormPanel, Ext.form.FormPanel, {
 				});
 			}
 		});
-	},
-	save:function(){
-		var _form=this.getForm();
-    	if (_form.isValid()) {
-			_form.submit( {
-				waitMsg : '正在保存数据...',
-				url : 'user/save.jhtm',
-				failure : function(form, action) {
-					var json = action.response.responseText;
-					var o = eval("(" + json + ")");
-					Ext.MessageBox.show( {
-						title : '出现错误',
-						msg : o.message,
-						buttons : Ext.MessageBox.OK,
-						icon : Ext.MessageBox.ERROR
-					});
-				},
-				success : function(form1, action) {
-					var json = action.response.responseText;
-					var o = eval("(" + json + ")");
-					if(o.success){
-						form1.findField("obj.userId").setValue(o.id);
-						Ext.Msg.alert("保存用户","用户保存成功");
-					}else{
-						Ext.Msg.alert("保存用户","用户保存失败！");
-					}
-
-				}
-			});
-		}else{
-			Ext.Masg.alert('验证信息','请把用户信息填写正确！');
-		}
 	}
 });
 
 UserGridPanel=function(){
 	this.orgId=0;
-	this.userFunctionWindow=new UserFunctionWindow();
 	this.window=new UserWindow();
 	this.window.gridPanel=this;
 	var _win=this.window;
 	var _grid=this;
-	var _userFunctionWindow=this.userFunctionWindow;
 	var sm = new Ext.grid.CheckboxSelectionModel();
 	this.store = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
@@ -143,7 +156,7 @@ UserGridPanel=function(){
             totalProperty: 'totalCount',
             id: 'userId',
             fields: [
-                'userId','userName', 'title','orgName','sequence'
+                'userId','username', 'title','realname','enabled','locked','concurrentMax','online','orgName','sequence'
             ]
         }
         ),
@@ -163,22 +176,30 @@ UserGridPanel=function(){
         dataIndex: 'userId',
         width: 20
      },{
-        id: 'userName', 
-        header: "编号",
-        dataIndex: 'userName',
+        id: 'username', 
+        header: "帐号",
+        dataIndex: 'username',
         width: 100
      },{
-        header: "名称",
-        dataIndex: 'title',
-        width: 100
+        header: "姓名",
+        dataIndex: 'realname',
+        width: 100,
+        sortable:false
      },{
-         header: "排序",
-         dataIndex: 'sequence',
-         width: 100
+         header: "可用",
+         dataIndex: 'enabled',
+         width: 100,
+         renderer:rendererEnabled
       },{
-		header:"所属组织",
-		dataIndex:'orgName',
-		width:100
+          header: "锁定",
+          dataIndex: 'locked',
+          width: 100,
+          renderer:rendererEnabled
+       },{
+		header:"在线",
+		dataIndex:'online',
+		width:100,
+		 renderer:rendererEnabled
 	}]);
 
     this.cm.defaultSortable = true;
@@ -197,7 +218,7 @@ UserGridPanel=function(){
 					forceFit : true
 				},
 				bbar : new Ext.PagingToolbar( {
-					pageSize : 10,
+					pageSize : 18,
 					store : _grid.store,
 					displayInfo : true
 				}),
@@ -219,19 +240,28 @@ UserGridPanel=function(){
 							scope : this,
 							handler : _grid.deleteInfo
 						},'-',{
-							text: '分配权限',
-				            iconCls: 'x-btn-text-icon menu-config',
-				            scope: this,
-							handler:function(){
-								_grid.loadFunctions();
-							}
-						} 
+							text : '停用帐户',
+							iconCls : 'x-btn-text-icon disabled',
+							scope : this,
+							handler : _grid.disableInfo
+						},'-',{
+							text : '启用帐户',
+							iconCls : 'x-btn-text-icon enabled',
+							scope : this,
+							handler : _grid.enableInfo
+						},'-',{
+							text : '锁定帐户',
+							iconCls : 'x-btn-text-icon lock',
+							scope : this,
+							handler : _grid.lockInfo
+						},'-',{
+							text : '解锁帐户',
+							iconCls : 'x-btn-text-icon unlock',
+							scope : this,
+							handler : _grid.unlockInfo
+						}
 				],
-				renderTo : 'userGridPanel',
-				onRowdbclick:function(){
-					//this.attrWindow.loadInfo(sm.getSelected('attributeId'));
-				}
-				
+				renderTo : 'userGridPanel'				
 			});
     
 };
@@ -245,10 +275,13 @@ Ext.extend(UserGridPanel, Ext.grid.GridPanel, {
 		if(node){
 			form.findField("obj.org.orgId").setFieldValue(node.id,node.text);
 		}
-		form.findField("obj.title").setValue("");
-		form.findField("obj.userName").setValue("");
+		form.findField("obj.person.personId").setFieldValue(0,'');
+		form.findField("obj.username").setValue("");
+		form.findField("obj.locked").setValue(false);
+		form.findField("obj.concurrentMax").setValue(0);
+		form.findField("obj.enabled").setValue(false);
 		form.findField("obj.sequence").setValue(0);
-		form.findField("obj.userName").focus(false,true);
+		form.findField("obj.username").focus(false,true);
 		
 	},
 	loadInfo:function(){
@@ -290,6 +323,126 @@ Ext.extend(UserGridPanel, Ext.grid.GridPanel, {
 			Ext.Msg.alert("删除用户",rep.repsonseText);
 		}
 	},
+lockInfo:function(){
+		
+		var node=this.getSelectionModel().getSelected();
+		if(!node){
+			Ext.Msg.alert("锁定用户",'请选择要锁定的帐户！');
+			return;
+		}
+		
+		if(!confirm("确定要锁定选中的帐户吗？")){
+			return;
+		}
+		var url='user/lock.jhtm?'+this.getSelectedIds();
+		Ext.Ajax.request({
+			url:url,
+			success:success,
+			failure:failure
+		});
+		var _grid=this;
+		function success(rep){
+			eval("var result="+rep.responseText);
+			if(result.success){
+				Ext.Msg.alert("锁定用户","锁定用户成功！");
+				_grid.reloadData();
+			}
+			
+		}
+		function failure(rep){
+			Ext.Msg.alert("锁定用户",rep.repsonseText);
+		}
+	},
+unlockInfo:function(){
+		
+		var node=this.getSelectionModel().getSelected();
+		if(!node){
+			Ext.Msg.alert("解锁用户",'请选择要解锁的帐户！');
+			return;
+		}
+		
+		if(!confirm("确定要解锁选中的帐户吗？")){
+			return;
+		}
+		var url='user/unlock.jhtm?'+this.getSelectedIds();
+		Ext.Ajax.request({
+			url:url,
+			success:success,
+			failure:failure
+		});
+		var _grid=this;
+		function success(rep){
+			eval("var result="+rep.responseText);
+			if(result.success){
+				Ext.Msg.alert("解锁帐户","解锁帐户成功！");
+				_grid.reloadData();
+			}
+			
+		}
+		function failure(rep){
+			Ext.Msg.alert("解锁帐户",rep.repsonseText);
+		}
+	},
+enableInfo:function(){
+		
+		var node=this.getSelectionModel().getSelected();
+		if(!node){
+			Ext.Msg.alert("启用用户",'请选择帐户！');
+			return;
+		}
+		
+		if(!confirm("确定要启用选定的帐户吗？")){
+			return;
+		}
+		var url='user/enable.jhtm?'+this.getSelectedIds();
+		Ext.Ajax.request({
+			url:url,
+			success:success,
+			failure:failure
+		});
+		var _grid=this;
+		function success(rep){
+			eval("var result="+rep.responseText);
+			if(result.success){
+				Ext.Msg.alert("启用用户","启用帐户成功！");
+				_grid.reloadData();
+			}
+			
+		}
+		function failure(rep){
+			Ext.Msg.alert("启用用户",rep.repsonseText);
+		}
+	},
+disableInfo:function(){
+		
+		var node=this.getSelectionModel().getSelected();
+		if(!node){
+			Ext.Msg.alert("停用用户",'请选择至少一个帐户！');
+			return;
+		}
+		
+		if(!confirm("确定要停用选定的帐户吗？")){
+			return;
+		}
+		var url='user/disable.jhtm?'+this.getSelectedIds();
+		Ext.Ajax.request({
+			url:url,
+			success:success,
+			failure:failure
+		});
+		var _grid=this;
+		function success(rep){
+			eval("var result="+rep.responseText);
+			if(result.success){
+				Ext.Msg.alert("停用用户","停用用户成功！");
+				_grid.reloadData();
+			}
+			
+		}
+		function failure(rep){
+			Ext.Msg.alert("停用用户",rep.repsonseText);
+		}
+	},
 	loadData:function(orgId){
 		this.store.proxy=new Ext.data.HttpProxy({
             url: 'user/list.jhtm?orgId='+orgId
@@ -319,8 +472,8 @@ Ext.extend(UserGridPanel, Ext.grid.GridPanel, {
 	loadFunctions:function(){
 		var selection=this.getSelectionModel().getSelected();
 		if(selection){
-			this.userFunctionWindow.show();
-			this.userFunctionWindow.loadData(selection.get("userId"));
+			this.userRoleWindow.show();
+			this.userRoleWindow.loadData(selection.get("userId"));
 		}else{
 			Ext.Msg.alert("显示用户","请选择一个用户！");
 		}
@@ -338,7 +491,7 @@ UserWindow=function(){
 	UserWindow.superclass.constructor.call(this, {
 		title : '用户信息',
 		width : 420,
-		height : 280,
+		height : 380,
 		resizable : true,
 		plain : false,
 		border : false,
@@ -388,148 +541,7 @@ Ext.extend(UserWindow, Ext.Window, {
 	}
 });
 
-UserFunctionTree=function(){
-	var _tree=this;
-	this.userId=0;
-	this.loader= new Ext.tree.TreeLoader({
-        dataUrl:'user/functions.jhtm?id='+_tree.userId
-       
-    });
-	var root = new Ext.tree.AsyncTreeNode({
-        text: '全部功能',
-        draggable:false,
-        id:'0'
-    });
-	UserFunctionTree.superclass.constructor.call(this, {
-		layout:'fit',
-        el:'userFunctionTree',
-        autoScroll:true,
-        animate:false,
-        enableDD:false,
-        draggable:false,
-		split:true,
-		border:true,
-		width:465,
-		minSize: 180,
-		maxSize: 250,
-		rootVisible:true,
-		lines:true,
-        containerScroll: true,
-        loader:_tree.loader,
-        root:root
-	});
-	this.on('checkchange', function(node, checked) {   
-		node.expand();   
-		node.attributes.checked = checked;   
-		/*var parent=node.parentNode;
-		if(parent){
-			if(checked){
-				if(!parent.attributes.checked){
-					parent.ui.toggleCheck(checked); 
-					parent.attributes.checked = checked; 
-					//parent.fireEvent('checkchange', parent, checked); 
-				}
-			}
-		}*/
-		node.eachChild(function(child) {   
-			child.ui.toggleCheck(checked);   
-			child.attributes.checked = checked;   
-			child.fireEvent('checkchange', child, checked);   
-		});   
-		
-	}, this);  
 
-};
-Ext.extend(UserFunctionTree,Ext.tree.TreePanel,{
-	onBeforeClick: function(node,e){
-		node.getUI().toggleCheck(true);
-	},
-	reload:function(rId){
-		this.userId=rId;
-		var userId=this.userId;
-		var _tree=this;
-		
-			this.loader=new Ext.tree.TreeLoader({
-				dataUrl:'user/functions.jhtm?id='+_tree.userId
-				
-	        });
-	
-		
-		var root=this.getRootNode();
-		root.reload(function(){
-			_tree.expandAll();
-		});
-	},
-	getSelections:function(){
-		var root=this.getRootNode();
-		if(root.hasChildNodes()){
-			return this.getChecked("id");
-		}else{
-			return '';
-		}
-	}
-});
-
-UserFunctionWindow=function(){
-	this.gridPanel;
-	this.treePanel=new UserFunctionTree();
-	var _tree=this.treePanel;
-	var _win=this;
-	var _gridPanel=this.gridPanel;
-	UserFunctionWindow.superclass.constructor.call(this, {
-		title : '功能结构树',
-		width:350,
-		height:480,
-		resizable : true,
-		plain : false,
-		border : false,
-		modal : true,
-		autoScroll : true,
-		layout : 'fit',
-		closeAction : 'hide',
-		items : this.treePanel,
-		buttons : [ {
-			text : '保存',
-			handler : function() {
-				var userId=_tree.userId;
-				var fids=_tree.getSelections();
-				if(fids==''){
-					Ext.Msg.alert("保存用户","请至少选择一个功能！");
-					return;
-				}
-				var url='user/saveFunctions.jhtm?id='+userId+'&fids='+fids;
-				Ext.Ajax.request({
-					url:url,
-					success:success,
-					failure:failure
-				});
-				function success(rep){
-					eval("var result="+rep.responseText);
-					if(result.success){
-						Ext.Msg.alert("保存","用户关联功能配置成功！");
-					}else{
-						Ext.Msg.alert("保存","用户关联功能配置失败！");
-					}
-				}
-				function failure(rep){
-					Ext.Msg.alert("保存用户",rep.repsonseText);
-				}
-			}
-		}, {
-			text : '取消',
-			handler : function() {
-				_win.hide();
-			},
-			tooltip : '关闭窗口'
-		} ]
-	});
-};
-
-Ext.extend(UserFunctionWindow, Ext.Window, {
-	loadData : function(id) {
-		this.treePanel.reload(id);
-	}
-});
 
 var UserApp= function(){
 	

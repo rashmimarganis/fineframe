@@ -187,8 +187,6 @@ public class FunctionServiceImpl extends BaseService implements
 		if(obj.getFunctionId()==0){
 			i=functionDao.saveFunction(obj);
 		}else{
-			log.debug("IsMenu:"+obj.getMenu());
-			log.debug("IsLog:"+obj.getLog());
 			i=functionDao.updateFunction(obj);
 			action="update";
 		}

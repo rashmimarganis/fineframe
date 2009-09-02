@@ -72,9 +72,6 @@ public class UserWebServiceImpl implements IUserWebService {
 		User user = new User();
 		user.setUsername(u.getUsername());
 		user.setEmail(u.getEmail());
-		user.setAddress(u.getAddress());
-		user.setAge(u.getAge());
-		user.setPostcode(u.getPostcode());
 		user.setPassword(u.getPassword());
 		user.setHintAnswer(u.getHintAnswer());
 		user.setHintQuestion(u.getHintQuestion());

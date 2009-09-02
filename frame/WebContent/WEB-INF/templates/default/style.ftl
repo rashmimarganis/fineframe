@@ -69,7 +69,7 @@ html, body {
 		background-image: url(js/resources/images/unvalidate.gif) !important;
 	}
 	.unlock {
-		background-image: url(js/resources/images/lock_delete.gif) !important;
+		background-image: url(js/resources/images/unlock.gif) !important;
 	}
 	.enabled {
 		background-image: url(js/resources/images/default/dd/drop-yes.gif) !important;
@@ -172,6 +172,16 @@ html, body {
 	.relation {
 		background-image: url(js/resources/images/relation.gif) !important;
 	}
+	.userMale {
+		background-image: url(js/resources/images/user_male.gif) !important;
+	}
+	.userFemale {
+		background-image: url(js/resources/images/user_female.gif) !important;
+	}
+	.userRole {
+		background-image: url(js/resources/images/user_suit.gif) !important;
+	}
+	
 	.search-item {
     font:normal 11px tahoma, arial, helvetica, sans-serif;
     padding:3px 10px 3px 10px;

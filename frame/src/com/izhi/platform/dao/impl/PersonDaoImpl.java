@@ -1,5 +1,6 @@
 package com.izhi.platform.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +85,39 @@ public class PersonDaoImpl extends HibernateDaoSupport implements IPersonDao {
 	public int updatePerson(Person o) {
 		this.getHibernateTemplate().update(o);
 		return 1;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> findPersons(int pid1) {
+		Integer pid=null;
+		if(pid1!=0){
+			pid=pid1;
+		}
+		List<Map<String, Object>> childrens=new ArrayList<Map<String,Object>>();
+		String sql="select new map('o_'||o.orgId as id,o.name as text,0 as person,o.orgId as pid) from Org o";
+		if(pid==null){
+			sql+=" where o.parent.orgId is null order by o.sort desc";
+			childrens=this.getHibernateTemplate().find(sql);
+		}else{
+			sql+=" where o.parent.orgId =? order by o.sort desc";
+			childrens=this.getHibernateTemplate().find(sql,pid);
+		}
+		
+		for(Map<String,Object> c:childrens){
+			Integer id=(Integer)c.get("pid");
+			List<Map<String, Object>> cc =findPersons(id);
+			cc.addAll(this.findPersonsByOrg(id));
+			c.put("leaf", cc.size()==0);
+			c.put("children", cc);
+		}
+		return childrens;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> findPersonsByOrg(int orgId) {
+		String sql="select new map(o.personId as id,o.realname as text,1 as person,'true' as leaf,(case when o.gender='m' then 'userMale' else 'userFemale' end)as iconCls) from Person o where o.org.orgId=?";
+		return this.getHibernateTemplate().find(sql,orgId);
 	}
 
 }

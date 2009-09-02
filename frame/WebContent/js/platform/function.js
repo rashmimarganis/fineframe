@@ -45,9 +45,7 @@ var FunctionFormPanel = function() {
 	
     this.menuField = {
     	xtype:'checkbox',
-    	autoShow:true,
         width: 520,
-        boxLabel:'是',
         inputValue:'true',
         fieldLabel: '菜单',
         name:'obj.menu'
@@ -55,10 +53,8 @@ var FunctionFormPanel = function() {
     
     this.logField = {
     	xtype:'checkbox',
-    	autoShow:true,
         width: 520,
         inputValue:'true',
-        boxLabel:'是',
         fieldLabel: '记录',
         name:'obj.log'
     };

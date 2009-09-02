@@ -189,34 +189,7 @@ public class RoleServiceImpl  implements IRoleService {
 		return map;
 	}
 
-	@Override
-	@CacheFlush(modelId = "roleFlushing")
-	public void deleteUserRole(int userId, List<Integer> roleIds) {
-		for (int roleId : roleIds) {
-			roleDao.deleteUserRole(userId, roleId);
-		}
-	}
 
-	@Override
-	@CacheFlush(modelId = "roleFlushing")
-	public void saveUserRole(int userId, List<Integer> roleIds) {
-		for (int roleId : roleIds) {
-			roleDao.saveUserRole(userId, roleId);
-		}
-	}
-
-	@Override
-	@CacheFlush(modelId = "roleFlushing")
-	public void saveUsersRoles(String userIds, List<Integer> roleIds) {
-		for (int roleId : roleIds) {
-			String _userIds[] = userIds.split(",");
-			Integer userId = 0;
-			for (String _userId_string : _userIds) {
-				userId = Integer.parseInt(_userId_string);
-				roleDao.saveUserRole(userId, roleId);
-			}
-		}
-	}
 
 	public String getDefaultAuthorityRole() {
 		return defaultAuthorityRole;

@@ -10,7 +10,8 @@ public class HibernateJsonBeanProcessorMatcher extends JsonBeanProcessorMatcher 
     
     private static Logger log = Logger.getLogger(HibernateJsonBeanProcessorMatcher.class);
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Object getMatch(Class target, Set set) {
         if (target.getName().contains("$$EnhancerByCGLIB$$")) {
             log.warn("Found Lazy-References in Hibernate object "

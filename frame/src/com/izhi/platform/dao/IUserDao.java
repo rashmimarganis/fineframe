@@ -10,10 +10,13 @@ import com.izhi.web.model.WebUser;
 public interface IUserDao {
 	User findUserByName(String username);
 	User findUserByName(String username,int orgId);
-	Map<String,Object> loadById(int id);
 	User findById(int id);
 	void updateLoginInfo(User obj);
 	void updatePassword(String username,String password);
+	
+	void updateLogout(String username);
+	void updateLogout(int userid);
+	
 	boolean findUserByPersonId(Integer id);
 	int findTotalCount(Integer orgId);
 	List<Map<String,Object>> findPage(PageParameter pp,Integer orgId);
@@ -24,11 +27,23 @@ public interface IUserDao {
 	boolean deleteUser(String username);
 	int saveUser(User obj);
 	
-	int deleteUserRoles(String userIds);
-	Map<String,Object> findInfoById(int id);
-	List<Map<String,Object>> findPage(PageParameter pp,String onlineIds);
+	
+	List<Map<String,Object>> findJsonById(int id);
+	List<Map<String,Object>> findOnlinePage(PageParameter pp);
+	
 	
 	boolean validateUser(String un,String code);
 	WebUser findUser(String username);
+	List<Map<String,Object>> findRoles(int pid,int userId);
+	List<Map<String, Object>> findRolesByOrg(int orgId,int userId);
 	
+	void updateUserStatus();
+	
+	boolean lockUser(int id);
+	
+	boolean disableUser(int id);
+	
+	boolean unlockUser(int id);
+	
+	boolean enableUser(int id);
 }

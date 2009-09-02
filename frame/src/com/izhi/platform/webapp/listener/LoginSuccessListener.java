@@ -36,8 +36,8 @@ public class LoginSuccessListener implements ApplicationListener {
 			Object obj=auth.getDetails();
 			String ip=((WebAuthenticationDetails)obj).getRemoteAddress();
 			User user=(User)auth.getPrincipal();
-			//SecurityUser.setCurrentOrg(user.getPerson().getOrg());
 			user.setLastLoginIp(ip);
+			user.setOnline(true);
 			Log spLog = new Log();
 			spLog.setIp(ip);
 			spLog.setUser(user);

@@ -126,21 +126,6 @@ public class RoleAction extends BasePageAction {
 		this.out(JSONObject.fromObject(roleService.findPage(this.getPageParameter(), orgId, userId)).toString());
 		return null;
 	}
-	@Action(value="deleteUserRoles")
-	public String deleteUserRoles(){
-		roleService.deleteUserRole(userId, roleIds);
-		return null;
-	}
-	@Action(value="saveUserRoles")
-	public String saveUserRoles(){
-		roleService.saveUserRole(userId, roleIds);
-		return null;
-	}
-	@Action(value="saveUsersRoles")
-	public String saveUsersRoles(){
-		roleService.saveUsersRoles(userIds, roleIds);
-		return null;
-	}
 	
 	@Action("functions")
 	public String findRoleFunctions() {

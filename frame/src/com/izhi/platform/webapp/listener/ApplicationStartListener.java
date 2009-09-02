@@ -15,6 +15,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.izhi.framework.tag.TagUtils;
 import com.izhi.platform.util.SpringUtils;
 import com.izhi.platform.util.WebUtils;
+import com.izhi.platform.service.IUserService;
 
 public class ApplicationStartListener extends ContextLoaderListener implements
 		ServletContextListener {
@@ -26,6 +27,9 @@ public class ApplicationStartListener extends ContextLoaderListener implements
 		SpringUtils.setContext(wac);
 		String webRoot=event.getServletContext().getRealPath("/");
 		WebUtils.setWebRoot(webRoot);
+		
+		IUserService userService=(IUserService)SpringUtils.getBean("userService");
+		userService.updateUserStatus();
 		/*
 		 * 初始化Freemarker标签
 		 */

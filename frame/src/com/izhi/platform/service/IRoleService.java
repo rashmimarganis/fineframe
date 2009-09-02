@@ -20,9 +20,6 @@ public interface IRoleService  {
 	Map<String,Object> saveRole(Role r);
 	
 	Map<String,Object> findJsonById(int id);
-	void deleteUserRole(int userId,List<Integer> roleIds);
-	void saveUserRole(int userId,List<Integer> roleIds);
-	void saveUsersRoles(String userIds, List<Integer> roleIds);
 	boolean deleteRole(Integer id);
 	boolean deleteRoles(List<Integer> ids);
 	Role findById(Integer id);

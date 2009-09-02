@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.GrantedAuthorityImpl;
@@ -37,8 +38,10 @@ public class User implements UserDetails {
 	private String username;
 	@Column(length = 32)
 	private String password;
-	@Column(name = "last_login_time")
+	@Column(name = "last_login_time",nullable=true)
 	private Date lastLoginTime;
+	@Column(name = "last_logout_time",nullable=true)
+	private Date lastLogoutTime;
 	@Column(name = "login_times")
 	private int loginTimes = 0;
 	@Column(length = 20, name = "last_login_ip")
@@ -56,11 +59,11 @@ public class User implements UserDetails {
 	@Column(name = "hint_answer")
 	private String hintAnswer;
 	@Column(name = "expired")
-	private boolean expired = true;
+	private boolean expired ;
 	@Column(name = "locked")
-	private boolean locked = true;
+	private boolean locked ;
 	@Basic
-	private boolean enabled = true;
+	private boolean enabled;
 	@Column(name = "login_attempts_max")
 	private int loginAttemptsMax = 0;
 	@Column(name = "login_attempts")
@@ -73,47 +76,16 @@ public class User implements UserDetails {
 	@ManyToOne
 	@JoinColumn(name = "org_id")
 	private Org org;
+
+	@ManyToOne
+	@JoinColumn(name="person_id")
+	private Person person;
 	
-	@Basic
-	private int age;
-	@Basic
-	private String address;
-	@Column(length = 1)
-	private String gender;
-	@Basic
-	private String postcode;
-
-	public String getPostcode() {
-		return postcode;
-	}
-
-	public void setPostcode(String postcode) {
-		this.postcode = postcode;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+	@Transient
+	private String oldName;
+	
+	@Transient
+	private String repassword;
 
 	public boolean isCredentialsExpired() {
 		return credentialsExpired;
@@ -124,8 +96,11 @@ public class User implements UserDetails {
 	@Basic
 	private boolean validated = false;
 
+	@Column
+	private boolean online;
 	
-
+	@Column
+	private int sequence;
 	public Org getOrg() {
 		return org;
 	}
@@ -372,6 +347,54 @@ public class User implements UserDetails {
 
 	public void setValidated(boolean validated) {
 		this.validated = validated;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+
+	public String getOldName() {
+		return oldName;
+	}
+
+	public void setOldName(String oldName) {
+		this.oldName = oldName;
+	}
+
+	public boolean isOnline() {
+		return online;
+	}
+
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+
+	public String getRepassword() {
+		return repassword;
+	}
+
+	public void setRepassword(String repassword) {
+		this.repassword = repassword;
+	}
+
+	public Date getLastLogoutTime() {
+		return lastLogoutTime;
+	}
+
+	public void setLastLogoutTime(Date lastLogoutTime) {
+		this.lastLogoutTime = lastLogoutTime;
+	}
+
+	public int getSequence() {
+		return sequence;
+	}
+
+	public void setSequence(int sequence) {
+		this.sequence = sequence;
 	}
 
 }

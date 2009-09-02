@@ -70,6 +70,11 @@ public class PersonServiceImpl implements IPersonService{
 	public void setPersonDao(IPersonDao personDao) {
 		this.personDao = personDao;
 	}
+
+	@Override
+	public List<Map<String, Object>> findPersons(Integer pid) {
+		return personDao.findPersons(pid);
+	}
 	
 	
 

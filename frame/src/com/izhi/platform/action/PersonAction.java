@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -69,6 +70,13 @@ public class PersonAction extends BasePageAction {
 	public String load(){
 		Map<String,Object> m=personService.findJsonById(id);
 		String r=JSONObject.fromObject(m).toString();
+		this.getRequest().setAttribute("result", r);
+		return SUCCESS;
+	}
+	@Action("tree")
+	public String tree(){
+		List<Map<String,Object>> m=personService.findPersons(0);
+		String r=JSONArray.fromObject(m).toString();
 		this.getRequest().setAttribute("result", r);
 		return SUCCESS;
 	}

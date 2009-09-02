@@ -1,1 +1,1 @@
-${result?default("{'objs':[],totalCount:'0'}")}
+${result?default("")}

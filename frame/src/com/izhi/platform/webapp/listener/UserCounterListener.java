@@ -23,8 +23,6 @@ import org.acegisecurity.ui.WebAuthenticationDetails;
 import org.acegisecurity.ui.webapp.AuthenticationProcessingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.izhi.platform.model.Log;
 import com.izhi.platform.model.Org;
@@ -32,6 +30,8 @@ import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.ILogService;
 import com.izhi.platform.service.IUserService;
+
+import com.izhi.platform.util.SpringUtils;
 
 public class UserCounterListener implements ServletContextListener,
 		HttpSessionAttributeListener {
@@ -115,9 +115,10 @@ public class UserCounterListener implements ServletContextListener,
 			usersSession = (Map<String, HttpSession>) servletContext.getAttribute(USERS_SESSION);
 			usersSession.remove(user.getUsername());
 			servletContext.setAttribute(USERS_SESSION, usersSession);
-			WebApplicationContext wac = WebApplicationContextUtils
-			.getWebApplicationContext(servletContext);
-			ILogService logService = (ILogService) wac.getBean("logService");
+			
+			ILogService logService = (ILogService) SpringUtils.getBean("logService");
+			IUserService userService=(IUserService)SpringUtils.getBean("userService");
+			userService.updateLogout(user.getUserId());
 			Org org=SecurityUser.getOrg();
 			Log spLog = new Log();
 			spLog.setOperation("成功退出系统");
@@ -147,8 +148,7 @@ public class UserCounterListener implements ServletContextListener,
 						user = (User) obj;
 					} else {
 						String username = obj.toString();
-						IUserService userService = (IUserService) WebApplicationContextUtils
-								.getWebApplicationContext(servletContext).getBean(
+						IUserService userService = (IUserService) SpringUtils.getBean(
 										"userService");
 						user = userService.findUserByName(username);
 					}
@@ -163,8 +163,7 @@ public class UserCounterListener implements ServletContextListener,
 				
 			}else if (event.getName().equals(AuthenticationProcessingFilter.ACEGI_SECURITY_LAST_USERNAME_KEY)) {
 	            String username = (String) event.getValue();
-	            IUserService userService = (IUserService) WebApplicationContextUtils
-				.getWebApplicationContext(servletContext).getBean(
+	            IUserService userService = (IUserService) SpringUtils.getBean(
 						"userService");
 	            User user = userService.findUserByName(username);
 	            String ip="";
@@ -189,6 +188,7 @@ public class UserCounterListener implements ServletContextListener,
             Authentication auth = securityContext.getAuthentication();
             if (auth != null && (auth.getPrincipal() instanceof User)) {
                 User user = (User) auth.getPrincipal();
+                
                 removeUser(user);
             }
 		}

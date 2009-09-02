@@ -61,7 +61,7 @@
 		<property name="authenticationFailureUrl"
 			value="/errors/userPswError.html" />
 		<property name="alwaysUseDefaultTargetUrl" value="true"></property>
-		<property name="defaultTargetUrl" value="/index.jhtm" />
+		<property name="defaultTargetUrl" value="/home.jhtm" />
 		<property name="useRelativeContext" value="false"></property>
 		<property name="filterProcessesUrl" value="/j_security_check"></property>
 		<property name="rememberMeServices" ref="rememberMeServices" />

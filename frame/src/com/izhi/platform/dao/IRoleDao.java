@@ -14,9 +14,6 @@ public interface IRoleDao{
 	
 	List<Map<String,Object>> findJsonById(int id);
 	
-	void deleteUserRole(int userId,int roleId);
-	void saveUserRole(int userId,int roleId);
-	
 	boolean saveRoleFunctions(int rId,List<Integer> fIds);
 	
 	boolean findExist(Role o);
@@ -26,4 +23,6 @@ public interface IRoleDao{
 	boolean deleteRole(int id);
 	
 	int saveRole(Role r);
+	
+	
 }
