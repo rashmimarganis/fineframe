@@ -127,12 +127,10 @@ Ext.extend(RoleFormPanel, Ext.form.FormPanel, {
 
 RoleGridPanel=function(){
 	this.orgId=0;
-	this.roleFunctionWindow=new RoleFunctionWindow();
 	this.window=new RoleWindow();
 	this.window.gridPanel=this;
 	var _win=this.window;
 	var _grid=this;
-	var _roleFunctionWindow=this.roleFunctionWindow;
 	var sm = new Ext.grid.CheckboxSelectionModel();
 	this.store = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
@@ -218,20 +216,9 @@ RoleGridPanel=function(){
 							iconCls : 'x-btn-text-icon delete',
 							scope : this,
 							handler : _grid.deleteInfo
-						},'-',{
-							text: '分配权限',
-				            iconCls: 'x-btn-text-icon menu-config',
-				            scope: this,
-							handler:function(){
-								_grid.loadFunctions();
-							}
-						} 
+						}
 				],
-				renderTo : 'roleGridPanel',
-				onRowdbclick:function(){
-					//this.attrWindow.loadInfo(sm.getSelected('attributeId'));
-				}
-				
+				renderTo : 'roleGridPanel'
 			});
     
 };
@@ -315,15 +302,6 @@ Ext.extend(RoleGridPanel, Ext.grid.GridPanel, {
 		}
 		return ids;
 		
-	},
-	loadFunctions:function(){
-		var selection=this.getSelectionModel().getSelected();
-		if(selection){
-			this.roleFunctionWindow.show();
-			this.roleFunctionWindow.loadData(selection.get("roleId"));
-		}else{
-			Ext.Msg.alert("显示角色","请选择一个角色！");
-		}
 	}
 });
 
@@ -388,148 +366,6 @@ Ext.extend(RoleWindow, Ext.Window, {
 	}
 });
 
-RoleFunctionTree=function(){
-	var _tree=this;
-	this.roleId=0;
-	this.loader= new Ext.tree.TreeLoader({
-        dataUrl:'role/functions.jhtm?id='+_tree.roleId
-       
-    });
-	var root = new Ext.tree.AsyncTreeNode({
-        text: '全部功能',
-        draggable:false,
-        id:'0'
-    });
-	RoleFunctionTree.superclass.constructor.call(this, {
-		layout:'fit',
-        el:'roleFunctionTree',
-        autoScroll:true,
-        animate:false,
-        enableDD:false,
-        draggable:false,
-		split:true,
-		border:true,
-		width:465,
-		minSize: 180,
-		maxSize: 250,
-		rootVisible:true,
-		lines:true,
-        containerScroll: true,
-        loader:_tree.loader,
-        root:root
-	});
-	this.on('checkchange', function(node, checked) {   
-		node.expand();   
-		node.attributes.checked = checked;   
-		/*var parent=node.parentNode;
-		if(parent){
-			if(checked){
-				if(!parent.attributes.checked){
-					parent.ui.toggleCheck(checked); 
-					parent.attributes.checked = checked; 
-					//parent.fireEvent('checkchange', parent, checked); 
-				}
-			}
-		}*/
-		node.eachChild(function(child) {   
-			child.ui.toggleCheck(checked);   
-			child.attributes.checked = checked;   
-			child.fireEvent('checkchange', child, checked);   
-		});   
-		
-	}, this);  
-
-};
-Ext.extend(RoleFunctionTree,Ext.tree.TreePanel,{
-	onBeforeClick: function(node,e){
-		node.getUI().toggleCheck(true);
-	},
-	reload:function(rId){
-		this.roleId=rId;
-		var roleId=this.roleId;
-		var _tree=this;
-		
-			this.loader=new Ext.tree.TreeLoader({
-				dataUrl:'role/functions.jhtm?id='+_tree.roleId
-				
-	        });
-	
-		
-		var root=this.getRootNode();
-		root.reload(function(){
-			_tree.expandAll();
-		});
-	},
-	getSelections:function(){
-		var root=this.getRootNode();
-		if(root.hasChildNodes()){
-			return this.getChecked("id");
-		}else{
-			return '';
-		}
-	}
-});
-
-RoleFunctionWindow=function(){
-	this.gridPanel;
-	this.treePanel=new RoleFunctionTree();
-	var _tree=this.treePanel;
-	var _win=this;
-	var _gridPanel=this.gridPanel;
-	RoleFunctionWindow.superclass.constructor.call(this, {
-		title : '功能结构树',
-		width:350,
-		height:480,
-		resizable : true,
-		plain : false,
-		border : false,
-		modal : true,
-		autoScroll : true,
-		layout : 'fit',
-		closeAction : 'hide',
-		items : this.treePanel,
-		buttons : [ {
-			text : '保存',
-			handler : function() {
-				var roleId=_tree.roleId;
-				var fids=_tree.getSelections();
-				if(fids==''){
-					Ext.Msg.alert("保存角色","请至少选择一个功能！");
-					return;
-				}
-				var url='role/saveFunctions.jhtm?id='+roleId+'&fids='+fids;
-				Ext.Ajax.request({
-					url:url,
-					success:success,
-					failure:failure
-				});
-				function success(rep){
-					eval("var result="+rep.responseText);
-					if(result.success){
-						Ext.Msg.alert("保存","角色关联功能配置成功！");
-					}else{
-						Ext.Msg.alert("保存","角色关联功能配置失败！");
-					}
-				}
-				function failure(rep){
-					Ext.Msg.alert("保存角色",rep.repsonseText);
-				}
-			}
-		}, {
-			text : '取消',
-			handler : function() {
-				_win.hide();
-			},
-			tooltip : '关闭窗口'
-		} ]
-	});
-};
-
-Ext.extend(RoleFunctionWindow, Ext.Window, {
-	loadData : function(id) {
-		this.treePanel.reload(id);
-	}
-});
 
 var RoleApp= function(){
 	

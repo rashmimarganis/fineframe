@@ -78,9 +78,14 @@ public class RoleAction extends BasePageAction {
 		this.userId = userId;
 	}
 	@Action(value="index")
-	public String execute(){
+	public String index(){
 		return SUCCESS;
 	}
+	@Action(value="right")
+	public String right(){
+		return SUCCESS;
+	}
+	
 	@Action("save")
 	public String save(){
 		if(obj==null||obj.getOrg()==null||obj.getOrg().getOrgId()==0){

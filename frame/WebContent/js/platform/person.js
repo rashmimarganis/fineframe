@@ -334,6 +334,10 @@ PersonGridPanel=function(){
 };
 Ext.extend(PersonGridPanel, Ext.grid.GridPanel, {
 	addInfo:function(){
+		if(PersonApp.getSelectedNode().id==0){
+			Ext.Msg.alert("添加人员","请先从左面选择一个组织！");
+			return;
+		}
 		this.window.show();
 		var form=this.window.formPanel.getForm();
 		var node=westPanel.getSelectionModel().getSelectedNode();
@@ -553,22 +557,13 @@ var PersonApp= function(){
 		        })
 		    });
 			westPanel.getSelectionModel().on({
-		        'beforeselect' : function(sm, node){
-					selectNode=node;
-					if(node.id!='0'){
+				'selectionchange' : function(sm, node){
+		        	if(node.id!='0'){
 						if(!node.expanded){
 							node.expand();
 						};
 						gridPanel.loadData(node.id);
 					}
-		        
-		        },
-				'selectionchange' : function(sm, node){
-		        	/*
-		        	if(node.id!=0){
-		        		formPanel.loadData(node.id);
-		        	}
-		        	*/
 		        },
 		        scope:this
 		    });
@@ -582,7 +577,6 @@ var PersonApp= function(){
 			westPanel.render();
 			root.select();
 			root.expand();
-			selectNode=root;
 			
 		},
 		deleteInfo:function(){
