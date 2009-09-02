@@ -73,7 +73,11 @@ Ext.ux.OrgType = [
 	['org', '组织','组织'],
 	['dep', '部门','部门']
 ];
-
+Ext.namespace('Ext.ux.PersonGender');
+Ext.ux.PersonGender = [
+                        ['m', '男', '男'],
+                        ['f', '女', '女']
+                    ];
 function rendererEnabled(v){
 	if(v){
 		return '<img src="js/resources/images/default/menu/checked.gif">';

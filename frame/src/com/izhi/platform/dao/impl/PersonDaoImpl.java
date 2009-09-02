@@ -51,9 +51,9 @@ public class PersonDaoImpl extends HibernateDaoSupport implements IPersonDao {
 		String sql="select new map(o.personId as personId,o.realname as realname,o.gender as gender,o.age as age,o.address as address,o.birthday as birthday,o.homeTelephone as homeTelephone,o.officeTelephone as officeTelephone,o.email as email,o.mobilephone as mobilephone,o.org.orgId as orgId,o.org.name as orgName,o.sequence as sequence) from Person o where o.org.orgId=:orgId";
 		
 		if(pp.getSort()!=null){
-			sql+=" "+pp.getSort();
+			sql+=" order by o."+pp.getSort();
 			if(pp.getDir()!=null){
-				sql+=" o."+pp.getDir();
+				sql+=" "+pp.getDir();
 			}else{
 				sql+=" desc";
 			}

@@ -268,18 +268,31 @@ Cookies.getCookieVal = function(offset){
    return unescape(document.cookie.substring(offset, endstr));
 };
 
-function renderDate(v) {
+function formatDate(v) {
 	if (v == null) {
 		return '';
 	}
 	var month = v.month * 1 + 1;
 	var year = v.year * 1 + 1900;
-	var date = v.date;
-	var hours = v.hours;
-	var minutes = v.minutes;
-	var seconds = v.seconds;
+	var date = v.date*1;
+	
+	if(month<10){
+		month="0"+month;
+	}
+	if(date<10){
+		date="0"+date;
+	}
+	return year + '-' + month + '-' + date;
 
-	return year + '-' + month + '-' + date + ' ' + hours + ':'
-			+ minutes + ':' + seconds;
+}
 
+function formatGender(v){
+	if(v=='m'){
+		return '男';
+	}else if(v=='f'){
+		return '女';
+	}else{
+		return '';
+	}
+	
 }

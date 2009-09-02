@@ -27,17 +27,32 @@ var PersonFormPanel = function() {
 			xtype : 'textfield',
 			fieldLabel : "地址",
 			allowBlank : false,
+			width:260,
 			name : "obj.address"
 		};
-	this.genderField = {
-		xtype : 'textfield',
-		fieldLabel : "性别",
-		allowBlank : false,
-		name : "obj.gender"
-	};
+	
+    this.genderField = new Ext.form.ComboBox({
+        store:  new Ext.data.SimpleStore({
+            fields: ['value', 'name', 'tip'],
+            data : Ext.ux.PersonGender 
+        }),
+        fieldLabel: '性别',
+        displayField:'name',
+        valueField:'value',
+        readOnly:true,
+        typeAhead: true,
+        allowBlank:false,
+        mode: 'local',
+        triggerAction: 'all',
+        emptyText:'请选择类型...',
+        selectOnFocus:true,
+        hiddenName: 'obj.gender'
+    });
+	
 	this.emailField = {
+		xtype:'textfield',
 		vtype:'email',
-		fieldLabel : "email",
+		fieldLabel : "Email",
 		allowBlank : false,
 		name : "obj.email"
 	};
@@ -51,7 +66,7 @@ var PersonFormPanel = function() {
 	this.homeTelephoneField = {
 		xtype : 'textfield',
 		fieldLabel : "家庭电话",
-		allowBlank : false,
+		allowBlank : true,
 		name : "obj.homeTelephone"
 	};
 	
@@ -59,14 +74,14 @@ var PersonFormPanel = function() {
 	this.officeTelephoneField = {
 		xtype : 'textfield',
 		fieldLabel : "办公电话",
-		allowBlank : false,
+		allowBlank : true,
 		name : "obj.officeTelephone"
 	};
 	
 	this.mobilephoneField = {
 		xtype : 'textfield',
 		fieldLabel : "手机",
-		allowBlank : false,
+		allowBlank : true,
 		name : "obj.mobilephone"
 	};
 	this.orgField = {
@@ -75,6 +90,7 @@ var PersonFormPanel = function() {
             name:'obj.org.orgId',
             allowUnLeafClick:true,
             treeHeight:200,
+            allowBlank:false,
             url:'org/tree.jhtm',
             onSelect:function(id){
             }
@@ -82,15 +98,18 @@ var PersonFormPanel = function() {
 	
 	this.birthdayField =new Ext.form.DateField({
         fieldLabel: '生日',
-        name: 'obj.homeTelephone',
+        name: 'obj.birthday',
         width:190,
+        format: "Y-m-d",
+        width:120,
+        selectOnFocus:true,
         allowBlank:false
     });
 	PersonFormPanel.superclass.constructor.call(this, {
 		bodyStyle : 'padding:2px 2px 0',
 		frame : true,
 		width:230,
-		labelWidth:60,
+		labelWidth:90,
         height:200,
 		waitMsgTarget:'main',
 		reader : new Ext.data.JsonReader( 
@@ -102,7 +121,6 @@ var PersonFormPanel = function() {
 		    {name:'obj.personId', mapping:'personId'},
 		    {name:'obj.realname',mapping:'realname'}, 
 		    {name:'obj.age',mapping:'age'},
-		    {name:'obj.birthday',mapping:'birthday'},
 		    {name:'obj.homeTelephone',mapping:'homeTelephone'},
 		    {name:'obj.officeTelephone',mapping:'officeTelephone'},
 		    {name:'obj.address',mapping:'address'},
@@ -115,8 +133,8 @@ var PersonFormPanel = function() {
 		items : [
 		         this.idField,
 		         this.realnameField,
-		         this.ageField,
 		         this.genderField,
+		         this.ageField,
 		         this.birthdayField,
 		         this.orgField,
 		         this.emailField,
@@ -137,9 +155,12 @@ Ext.extend(PersonFormPanel, Ext.form.FormPanel, {
 			waitMsg : '正在加载数据....',
 			success:function(form, action){
 				var json = action.response.responseText;
+				
 				var o = eval("(" + json + ")");
 				if(o.success){
 					_form.findField("obj.org.orgId").setFieldValue(o.data[0].orgId,o.data[0].orgName);
+					var r=formatDate(o.data[0].birthday);
+					_form.findField("obj.birthday").setRawValue(r);
 				}
 			},
 			failure : function(form, action) {
@@ -163,6 +184,7 @@ Ext.extend(PersonFormPanel, Ext.form.FormPanel, {
 				failure : function(form, action) {
 					var json = action.response.responseText;
 					var o = eval("(" + json + ")");
+					
 					Ext.MessageBox.show( {
 						title : '出现错误',
 						msg : o.message,
@@ -204,7 +226,7 @@ PersonGridPanel=function(){
             totalProperty: 'totalCount',
             id: 'personId',
             fields: [
-                'personId','realname', 'age','gender','email','address','email','homeTelephone','officeTelephone','address','sequence'
+                'personId','realname', 'age','mobilephone','birthday','gender','email','address','email','homeTelephone','officeTelephone','address','sequence'
             ]
         }
         ),
@@ -231,7 +253,8 @@ PersonGridPanel=function(){
      },{
         header: "性别",
         dataIndex: 'gender',
-        width: 100
+        width: 100,
+        renderer:formatGender
      },{
          header: "年龄",
          dataIndex: 'age',
@@ -239,7 +262,8 @@ PersonGridPanel=function(){
       },{
 		header:"生日",
 		dataIndex:'birthday',
-		width:100
+		width:100,
+		renderer:formatDate
       },{
 		header:"email",
 		dataIndex:'email',
@@ -298,13 +322,15 @@ PersonGridPanel=function(){
 							handler : _grid.deleteInfo
 						} 
 				],
-				renderTo : 'personGridPanel',
-				onRowdbclick:function(){
-					//this.attrWindow.loadInfo(sm.getSelected('attributeId'));
-				}
-				
+				renderTo : 'personGridPanel'
 			});
-    
+    _grid.on("dblclick",function(index,record){
+    	var select=this.getSelectionModel().getSelected();
+    	if(select){
+    		_win.loadData(select.get("personId"));
+    		_win.show();
+    	}
+    });
 };
 Ext.extend(PersonGridPanel, Ext.grid.GridPanel, {
 	addInfo:function(){
@@ -317,14 +343,15 @@ Ext.extend(PersonGridPanel, Ext.grid.GridPanel, {
 			form.findField("obj.org.orgId").setFieldValue(node.id,node.text);
 		}
 		form.findField("obj.realname").setValue("");
-		form.findField("obj.age").setValue("");
-		form.findField("obj.gender").setValue("");
+		form.findField("obj.age").setValue("0");
+		form.findField("obj.gender").setValue("m");
 		form.findField("obj.address").setValue("");
-		form.findField("obj.email").setValue("");
+		form.findField("obj.email").setValue("@");
 		form.findField("obj.birthday").setValue("");
 		form.findField("obj.homeTelephone").setValue("");
 		form.findField("obj.officeTelephone").setValue("");
 		form.findField("obj.mobilephone").setValue("");
+		form.findField("obj.sequence").setValue(0);
 		form.findField("obj.realname").focus(false,true);
 		
 	},
@@ -406,7 +433,7 @@ PersonWindow=function(){
 	PersonWindow.superclass.constructor.call(this, {
 		title : '人员信息',
 		width : 420,
-		height : 280,
+		height : 400,
 		resizable : true,
 		plain : false,
 		border : false,

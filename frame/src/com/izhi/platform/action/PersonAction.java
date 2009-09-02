@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -20,7 +22,7 @@ import com.izhi.platform.service.IPersonService;
 public class PersonAction extends BasePageAction {
 
 	private static final long serialVersionUID = 4086445761876791307L;
-	
+	@Resource(name="personService")
 	private IPersonService personService;
 	
 	private Person obj;

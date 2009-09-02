@@ -30,13 +30,13 @@ public class Person implements Serializable{
 
 	@Column(nullable=false)
 	private String realname;
-	@Basic
+	@Column
 	private String gender;
-	@Basic
+	@Column
 	private int age;
-	@Basic
+	@Column
 	private String address;
-	@Basic
+	@Column
 	private Date birthday;
 	@Column(nullable=false)
 	private String email;
@@ -46,9 +46,9 @@ public class Person implements Serializable{
 	
 	@Column(name="office_telephone")
 	private String officeTelephone;
-	
+	@Column
 	private String mobilephone;
-	@Basic
+	@Column
 	private int sequence;
 
 	@ManyToOne(cascade={CascadeType.REMOVE})
