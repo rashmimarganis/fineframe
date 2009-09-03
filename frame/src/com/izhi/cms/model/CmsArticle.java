@@ -1,5 +1,6 @@
 package com.izhi.cms.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -16,8 +18,7 @@ import com.izhi.platform.model.User;
 
 @Entity
 @Table(name="cms_article")
-@PrimaryKeyJoinColumn(name="content_id")
-public class CmsArticle extends CmsArticleContent{
+public class CmsArticle implements Serializable{
 
 	private static final long serialVersionUID = -4257721490292504448L;
 
@@ -25,6 +26,12 @@ public class CmsArticle extends CmsArticleContent{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="article_id")
 	private int articleId;
+
+	private String title;
+	
+	@OneToOne
+	@PrimaryKeyJoinColumn
+	private CmsArticleContent content;
 	
 	private Date created;
 	
@@ -46,15 +53,6 @@ public class CmsArticle extends CmsArticleContent{
 	@ManyToOne
 	@JoinColumn(name="category_id")
 	private CmsCategory category;
-	
-	
-	public int getArticleId() {
-		return articleId;
-	}
-
-	public void setArticleId(int articleId) {
-		this.articleId = articleId;
-	}
 
 	public Date getCreated() {
 		return created;
@@ -118,6 +116,30 @@ public class CmsArticle extends CmsArticleContent{
 
 	public void setCategory(CmsCategory category) {
 		this.category = category;
+	}
+
+	public int getArticleId() {
+		return articleId;
+	}
+
+	public void setArticleId(int articleId) {
+		this.articleId = articleId;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public CmsArticleContent getContent() {
+		return content;
+	}
+
+	public void setContent(CmsArticleContent content) {
+		this.content = content;
 	}
 	
 	

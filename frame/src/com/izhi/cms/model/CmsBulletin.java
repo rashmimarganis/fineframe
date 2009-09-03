@@ -1,5 +1,6 @@
 package com.izhi.cms.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -7,16 +8,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
 import com.izhi.platform.model.User;
 @Entity
 @Table(name="cms_bulletin")
-@PrimaryKeyJoinColumn(name="content_id")
-public class CmsBulletin extends CmsBulletinContent{
+public class CmsBulletin implements Serializable{
 
 	private static final long serialVersionUID = -6642985361055404064L;
-
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="bulletin_id")
@@ -33,6 +34,10 @@ public class CmsBulletin extends CmsBulletinContent{
 	private String keywords;
 	
 	private String summary;
+	
+	@OneToOne
+	@PrimaryKeyJoinColumn
+	private CmsBulletinContent content;
 
 	public int getBulletinId() {
 		return bulletinId;
@@ -88,6 +93,14 @@ public class CmsBulletin extends CmsBulletinContent{
 
 	public void setSummary(String summary) {
 		this.summary = summary;
+	}
+
+	public CmsBulletinContent getContent() {
+		return content;
+	}
+
+	public void setContent(CmsBulletinContent content) {
+		this.content = content;
 	}
 	
 	

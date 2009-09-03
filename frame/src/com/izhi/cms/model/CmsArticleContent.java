@@ -18,22 +18,23 @@ public class CmsArticleContent implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="content_id")
-	private int articleContentId;
+	@Column(name="article_id")
+	private int articleId;
 	@Lob
-	private String content;
+	private String value;
 
-	public int getArticleContentId() {
-		return articleContentId;
+	
+	public String getValue() {
+		return value;
 	}
-	public void setArticleContentId(int articleContentId) {
-		this.articleContentId = articleContentId;
+	public void setValue(String value) {
+		this.value = value;
 	}
-	public String getContent() {
-		return content;
+	public int getArticleId() {
+		return articleId;
 	}
-	public void setContent(String content) {
-		this.content = content;
+	public void setArticleId(int articleId) {
+		this.articleId = articleId;
 	}
 
 	

@@ -25,18 +25,16 @@ public class CmsModel implements Serializable {
 	private int modelId;
 	@Column(name="model_name")
 	private String name;
-	@Column(name="model_label")
-	private String label;
-	@Column(name="model_note")
-	private String note;
 	
 	@Column(name="table_name")
 	private String tableName;
 	
-	@OneToMany
+	@Column(name="entity_class")
+	private String entityClass;
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<CmsFunction> functions;
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="model_id",updatable=false,insertable=false,nullable=true)
 	private List<CmsAttribute> attributes;
 	public String getName() {
@@ -46,12 +44,6 @@ public class CmsModel implements Serializable {
 		this.name = name;
 	}
 	
-	public String getNote() {
-		return note;
-	}
-	public void setNote(String note) {
-		this.note = note;
-	}
 	
 	public int getModelId() {
 		return modelId;
@@ -59,13 +51,6 @@ public class CmsModel implements Serializable {
 	public void setModelId(int modelId) {
 		this.modelId = modelId;
 	}
-	public String getLabel() {
-		return label;
-	}
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
 	public List<CmsAttribute> getAttributes() {
 		return attributes;
 	}
@@ -83,6 +68,12 @@ public class CmsModel implements Serializable {
 	}
 	public void setFunctions(List<CmsFunction> functions) {
 		this.functions = functions;
+	}
+	public String getEntityClass() {
+		return entityClass;
+	}
+	public void setEntityClass(String entityClass) {
+		this.entityClass = entityClass;
 	}
 	
 	

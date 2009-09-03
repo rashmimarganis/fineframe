@@ -38,7 +38,7 @@
 	</bean>
 	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
 	<context:component-scan
-		base-package="com.izhi.platform,com.izhi.web,com.izhi.framework,com.izhi.workflow" />
+		base-package="com.izhi.platform,com.izhi.cms,com.izhi.web,com.izhi.framework,com.izhi.workflow" />
 
 	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
@@ -93,6 +93,7 @@
 				<value>com.izhi.platform.model</value>
 				<value>com.izhi.framework.model</value>
 				<value>com.izhi.workflow.model</value>
+				<value>com.izhi.cms.model</value>
 			</list>
 		</property>
 	</bean>

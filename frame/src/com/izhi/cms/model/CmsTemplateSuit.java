@@ -23,7 +23,9 @@ public class CmsTemplateSuit implements Serializable{
 	
 	@Column(name="package_title")
 	private String title;
-
+	
+	@Column(name="is_default")
+	private boolean _default;
 	
 
 	public String getPackageName() {
@@ -48,6 +50,14 @@ public class CmsTemplateSuit implements Serializable{
 
 	public void setSuitId(int suitId) {
 		this.suitId = suitId;
+	}
+
+	public boolean isDefault() {
+		return _default;
+	}
+
+	public void setDefault(boolean _default) {
+		this._default = _default;
 	}
 
 	

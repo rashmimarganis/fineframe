@@ -17,22 +17,25 @@ public class CmsBulletinContent implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="content_id")
-	private int contentId;
+	@Column(name="bulletin_id")
+	private int bulletinId;
 	@Lob
-	private String content;
-	public int getContentId() {
-		return contentId;
+	private String _value;
+	
+	
+	public String getValue() {
+		return _value;
 	}
-	public void setContentId(int contentId) {
-		this.contentId = contentId;
+	public void setValue(String _value) {
+		this._value = _value;
 	}
-	public String getContent() {
-		return content;
+	public int getBulletinId() {
+		return bulletinId;
 	}
-	public void setContent(String content) {
-		this.content = content;
+	public void setBulletinId(int bulletinId) {
+		this.bulletinId = bulletinId;
 	}
+	
 	
 	
 }

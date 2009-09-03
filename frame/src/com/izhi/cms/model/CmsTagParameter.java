@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="cms_parameter")
-public class CmsParameter implements Serializable{
+public class CmsTagParameter implements Serializable{
 
 	private static final long serialVersionUID = 4058237989661902812L;
 	

@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -30,6 +31,7 @@ public class CmsTag implements Serializable{
 	private CmsTemplate template;
 	
 	@OneToMany
+	@JoinTable(name = "p_tag_attribute", joinColumns = {@JoinColumn(name = "tag_id")}, inverseJoinColumns = @JoinColumn(name = "attribute_id"))
 	private List<CmsAttribute> attributes;
 	
 	@Column(name="paged")
@@ -38,10 +40,13 @@ public class CmsTag implements Serializable{
 	@Column(name="max_result")
 	private int maxResult;
 	
-	
+	@ManyToOne
+	@JoinColumn(name="category_id")
 	private CmsCategory category;
 	
-	private List<CmsParameter> parameters;
+	@OneToMany
+	@JoinColumn(name="tag_id")
+	private List<CmsTagParameter> parameters;
 
 	public CmsModel getModel() {
 		return model;
@@ -91,11 +96,11 @@ public class CmsTag implements Serializable{
 		this.category = category;
 	}
 
-	public List<CmsParameter> getParameters() {
+	public List<CmsTagParameter> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(List<CmsParameter> parameters) {
+	public void setParameters(List<CmsTagParameter> parameters) {
 		this.parameters = parameters;
 	}
 
