@@ -1,30 +1,30 @@
 package com.izhi.platform.action;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.annotation.Resource;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.izhi.platform.model.Org;
+import com.izhi.platform.model.Site;
 import com.izhi.platform.model.User;
 import com.izhi.platform.security.support.SecurityUser;
+import com.izhi.platform.service.ISiteService;
 @Service
 @Scope("prototype")
-@Action("/index")
 public class HomeAction extends BaseAction {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	private Map<String,Object> site=new HashMap<String, Object>();
+	private Site site;
 	private User user;
 	private Org org;
+	@Resource(name="siteService")
+	private ISiteService siteService;
+	@Action("/home")
 	public String execute(){
 		user=SecurityUser.getUser();
-		site.put("name", "FineCMS网站管理系统");
-		
+		site=siteService.getSite();
+		org=SecurityUser.getOrg();
 		return SUCCESS;
 	}
 	public User getUser() {
@@ -34,8 +34,25 @@ public class HomeAction extends BaseAction {
 	public Org getOrg() {
 		return org;
 	}
-	public Map<String, Object> getSite() {
+	
+	public ISiteService getSiteService() {
+		return siteService;
+	}
+	public void setSiteService(ISiteService siteService) {
+		this.siteService = siteService;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public void setOrg(Org org) {
+		this.org = org;
+	}
+	public Site getSite() {
 		return site;
+	}
+	public void setSite(Site site) {
+		this.site = site;
 	}
 
 }

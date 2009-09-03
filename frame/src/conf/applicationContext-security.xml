@@ -34,7 +34,7 @@
 
 	<bean id="logoutFilter"
 		class="org.acegisecurity.ui.logout.LogoutFilter">
-		<constructor-arg value="/login.jsp" />
+		<constructor-arg value="/login.jhtm" />
 		<constructor-arg>
 			<list>
 				<ref bean="rememberMeServices" />
@@ -43,7 +43,7 @@
 				<ref bean="customSessionLogoutHandler" />
 			</list>
 		</constructor-arg>
-		<property name="filterProcessesUrl" value="/logout.jsp" />
+		<property name="filterProcessesUrl" value="/logout.jhtm" />
 	</bean>
 	<bean id="customSessionLogoutHandler"
 		class="com.izhi.platform.webapp.security.SessionLogoutHandler">
@@ -88,6 +88,15 @@
 		<property name="rememberMeServices" ref="rememberMeServices" />
 	</bean>
 
+	 <bean id="concurrentSessionFilter"  
+           class="org.acegisecurity.concurrent.ConcurrentSessionFilter">  
+     	 <property name="sessionRegistry">  
+         	<ref local="sessionRegistry" />  
+     	 </property>  
+   		 <property name="expiredUrl">  
+        	<value>/login.jhtm</value>  
+    	 </property>  
+     </bean>  
 	<bean id="anonymousProcessingFilter"
 		class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
 		<property name="key" value="anonymous" />
@@ -99,7 +108,7 @@
 		<property name="authenticationEntryPoint">
 			<bean
 				class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
-				<property name="loginFormUrl" value="/login.jsp" />
+				<property name="loginFormUrl" value="/login.jhtm" />
 				<property name="forceHttps" value="false" />
 			</bean>
 		</property>
@@ -155,8 +164,8 @@
 		<property name="providers">
 			<list>
 				<ref local="daoAuthenticationProvider" />
-				<ref local="anonymousAuthenticationProvider" />
 				<ref local="rememberMeAuthenticationProvider" />
+				<ref local="anonymousAuthenticationProvider" />
 			</list>
 		</property>
 		<property name="sessionController">
@@ -194,7 +203,7 @@
 
 	<bean id="rememberMeAuthenticationProvider"
 		class="org.acegisecurity.providers.rememberme.RememberMeAuthenticationProvider">
-		<property name="key" value="aizhi_rememeber_me" />
+		<property name="key" value="izhiRocks" />
 	</bean>
 
 	<bean id="passwordEncoder"

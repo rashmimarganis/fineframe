@@ -16,18 +16,24 @@ import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
+import freemarker.template.TemplateMethodModel;
 
 public final class TagUtils {
-	private static Map<String, TemplateDirectiveModel> tags = new HashMap<String, TemplateDirectiveModel>();
-
-	public static void addTag(String name, TemplateDirectiveModel tag) {
-		tags.put(name, tag);
+	private static Map<String, TemplateDirectiveModel> directives = new HashMap<String, TemplateDirectiveModel>();
+	private static Map<String, TemplateMethodModel> methods = new HashMap<String, TemplateMethodModel>();
+	public static void addDirective(String name, TemplateDirectiveModel tag) {
+		directives.put(name, tag);
 	}
 
-	public static Map<String, TemplateDirectiveModel> getTags() {
-		return tags;
+	public static void addMethod(String name, TemplateMethodModel tag) {
+		methods.put(name, tag);
 	}
-
+	public static Map<String, TemplateDirectiveModel> getDirectives() {
+		return directives;
+	}
+	public static Map<String, TemplateMethodModel> getMethods() {
+		return methods;
+	}
 	public static String getGenerateFileName(FrameProject fp,
 			FrameComponent fc, FrameModel fm) {
 		String fn = null;

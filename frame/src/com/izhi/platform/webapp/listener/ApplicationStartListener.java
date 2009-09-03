@@ -43,10 +43,15 @@ public class ApplicationStartListener extends ContextLoaderListener implements
 	  * Freemarker标签初始化
 	  */
 	 public void initTag(ServletContext app){
-		 Collection<String> vs=TagUtils.getTags().keySet();
+		 Collection<String> vs=TagUtils.getDirectives().keySet();
 		 for(String v:vs){
-			 app.setAttribute(v, TagUtils.getTags().get(v));
+			 app.setAttribute(v, TagUtils.getDirectives().get(v));
 		 }
+		 Collection<String> ms=TagUtils.getMethods().keySet();
+		 for(String v:ms){
+			 app.setAttribute(v, TagUtils.getMethods().get(v));
+		 }
+		 
 	 }
 	 
 }

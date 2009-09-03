@@ -240,7 +240,7 @@ PersonGridPanel=function(){
 	});
 	
 	
-	this.cm = new Ext.grid.ColumnModel([sm,{
+	this.columns = new Ext.grid.ColumnModel([sm,{
         id: 'personId',
         header: "ID",
         dataIndex: 'personId',
@@ -254,7 +254,9 @@ PersonGridPanel=function(){
         header: "性别",
         dataIndex: 'gender',
         width: 100,
-        renderer:formatGender
+        renderer:function(v){
+    	 	return formatGender(v);
+    	 	}
      },{
          header: "年龄",
          dataIndex: 'age',
@@ -263,7 +265,9 @@ PersonGridPanel=function(){
 		header:"生日",
 		dataIndex:'birthday',
 		width:100,
-		renderer:formatDate
+		renderer:function(v){
+    	  return formatDate(v);
+      	}
       },{
 		header:"email",
 		dataIndex:'email',
@@ -280,15 +284,16 @@ PersonGridPanel=function(){
   		header:"手机",
   		dataIndex:'mobilephone',
   		width:100
-        },
+        }
       ]);
 
-    this.cm.defaultSortable = true;
+    this.columns.defaultSortable = true;
     PersonGridPanel.superclass.constructor.call(
 			this,
 			{
 				layout : 'fit',
 				sm : sm,
+				cm : this.columns,
 				trackMouseOver : true,
 				frame : false,
 				autoScroll : true,
@@ -517,7 +522,7 @@ var PersonApp= function(){
  	     	{
                    region:'center',
  				   split:true,
- 				  layout:'fit',
+ 				   layout:'fit',
  				   collapsible:false,
                    title:'人员列表',
                    el:'personPanel',
@@ -525,7 +530,7 @@ var PersonApp= function(){
                    border:true,
                    width:300,
                    split:true,
-                   autoScroll:true,
+                   autoScroll:false,
                    items:[gridPanel]
               	}
  		     );

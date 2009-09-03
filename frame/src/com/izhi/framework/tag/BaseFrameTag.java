@@ -21,10 +21,10 @@ public abstract class BaseFrameTag implements TemplateDirectiveModel,Initializin
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		String name=getName();
-		if(TagUtils.getTags().containsKey(name)){
+		if(TagUtils.getDirectives().containsKey(name)){
 			log.error("["+name+"]相同的名字的标签已经存在，请重新选择一个名字！");
 		}else{
-			TagUtils.addTag(name, this);
+			TagUtils.addDirective(name, this);
 			
 		
 		}
@@ -32,8 +32,8 @@ public abstract class BaseFrameTag implements TemplateDirectiveModel,Initializin
 
 
 	public static Map<String, Object> getModel() {
-		Collection<String> ps=TagUtils.getTags().keySet();
-		Map<String,TemplateDirectiveModel> tags=TagUtils.getTags();
+		Collection<String> ps=TagUtils.getDirectives().keySet();
+		Map<String,TemplateDirectiveModel> tags=TagUtils.getDirectives();
 		for(String s:ps){
 			model.put(s, tags.get(s));
 		}

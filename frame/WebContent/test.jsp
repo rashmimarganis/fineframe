@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@page import="org.springframework.web.context.WebApplicationContext"%>
 <%@page
@@ -44,16 +44,20 @@
 <%@page import="com.izhi.framework.model.FrameModelRelation"%>
 <%@page import="com.izhi.platform.service.IOrgService"%>
 <%@page import="com.izhi.platform.service.IUserService"%>
-<%@page import="com.izhi.platform.service.IPersonService"%><html>
+<%@page import="com.izhi.platform.service.IPersonService"%>
+<%@page import="com.izhi.platform.service.ISiteService"%>
+<%@page import="com.izhi.platform.util.SpringUtils"%><html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 </head>
 <body>
 <%
-	WebApplicationContext wac=WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
+ISiteService s=(ISiteService)SpringUtils.getBean("siteService");
+out.println(s.getSite().getSiteName());
 		//out.println(JSONObject.fromObject(map).toString());
-	IUserService mrs=(IUserService)wac.getBean("userService");
+	/*
+		IUserService mrs=(IUserService)wac.getBean("userService");
 	PageParameter pp=new PageParameter();
 	pp.setDir("desc");
 	pp.setSort("userId");
@@ -62,7 +66,7 @@
 	//List<Map<String,Object>> objs=mrs.findPersons(null);
 	
 	List<Map<String,Object>> m=mrs.findRoles(1,1);
-	out.println(JSONArray.fromObject(m).toString());
+	*/
 	/*
 	PageParameter pp=new PageParameter();
 	pp.setDir("desc");

@@ -1,5 +1,11 @@
-<table >
-<caption>服务器信息</caption>
+<table id="system_status" cellpadding="2px">
+<thead>
+        <tr style="background:#eeeeee;">
+            <th>名称</th>
+            <th>数据</th>
+        </tr>
+</thead>
+<tbody>
 <tr>
 <td>服务器启动时间：</td><td>${serverInfo.startDate?string("yyyy-MM-dd HH:mm:ss")}</td>
 </tr>
@@ -47,5 +53,6 @@ JVM Vendor：</td><td>${serverInfo.javaVmVendor}
 最大内存：</td><td>${serverInfo.maxMemory}
 </td>
 </tr>
-<tr><td colspan="2" class="align_c"><input class="button_style" type="button" value="&nbsp;刷新状态&nbsp;" onclick="javascript:loadPage('${base}/system/status.jhtm');"></td></tr>
+<tr><td colspan="2" class="align_c"><input class="button_style" type="button" value="&nbsp;刷新状态&nbsp;" onclick="javascript:FineCmsMain.loadUrl('${base}/system/status.jhtm');"></td></tr>
+</tbody>
 </table>

@@ -580,7 +580,6 @@ var UserApp= function(){
                    border:true,
                    width:300,
                    split:true,
-                   autoScroll:true,
                    items:[gridPanel]
               	}
  		     );
