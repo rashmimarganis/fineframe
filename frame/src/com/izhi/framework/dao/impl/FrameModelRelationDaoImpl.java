@@ -123,6 +123,7 @@ public class FrameModelRelationDaoImpl extends HibernateDaoSupport implements IF
 		return (l.get(0)).intValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findNoRelation(int mid) {
 		String sql="select new map(m.modelId as modelId,m.name as name,m.label as label) from FrameModel as m where m.modelId not in(select o.relationModel.modelId from FrameModelRelation  as o where o.model.modelId=:mid) and  m.modelId!=:mid";
@@ -133,6 +134,7 @@ public class FrameModelRelationDaoImpl extends HibernateDaoSupport implements IF
 		return l;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int findNoRelationTotalCount(int mid) {
 		String sql="select count(m) from FrameModel as m where m.modelId not in(select o.relationModel.modelId from FrameModelRelation  as o where o.model.modelId=:mid) and m.modelId!=:mid";

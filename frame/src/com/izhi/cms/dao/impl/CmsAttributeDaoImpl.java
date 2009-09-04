@@ -45,8 +45,8 @@ public class CmsAttributeDaoImpl extends HibernateDaoSupport implements ICmsAttr
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Map<String, Object>> findPage(PageParameter pp) {
-		String sql="select new map(o.modelId as modelId,o.name as name,o.tableName as tableName,o.entityClass as entityClass) from CmsAttribute o ";
+	public List<Map<String, Object>> findPage(PageParameter pp,int modelId) {
+		String sql="select new map(o.modelId as modelId,o.name as name,o.tableName as tableName,o.entityClass as entityClass) from CmsAttribute o where o.model.modelId=:modelId";
 		if(pp!=null){
 			if(pp.getSort()!=null){
 				sql+=" order by o."+pp.getSort();
@@ -56,6 +56,7 @@ public class CmsAttributeDaoImpl extends HibernateDaoSupport implements ICmsAttr
 			}
 			Session s=this.getSession();
 			Query q=s.createQuery(sql);
+			q.setInteger("modelId", modelId);
 			q.setFirstResult(pp.getStart());
 			q.setMaxResults(pp.getLimit());
 			
@@ -66,9 +67,9 @@ public class CmsAttributeDaoImpl extends HibernateDaoSupport implements ICmsAttr
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public int findTotalCount() {
-		String sql="select count(o) from CmsAttribute o";
-		List<Long> l=this.getHibernateTemplate().find(sql);
+	public int findTotalCount(int modelId) {
+		String sql="select count(o) from CmsAttribute o where o.model.modelId=?";
+		List<Long> l=this.getHibernateTemplate().find(sql,modelId);
 		return l.get(0).intValue();
 	}
 

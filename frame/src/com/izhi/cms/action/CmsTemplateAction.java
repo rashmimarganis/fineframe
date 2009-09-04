@@ -13,19 +13,18 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.cms.model.CmsModel;
-import com.izhi.cms.service.ICmsModelService;
+import com.izhi.cms.model.CmsTemplate;
+import com.izhi.cms.service.ICmsTemplateService;
 import com.izhi.platform.action.BasePageAction;
 @Service
 @Scope("prototype")
-@Namespace("/cms/model")
-public class CmsModelAction extends BasePageAction{
-
+@Namespace("/cms/template")
+public class CmsTemplateAction extends BasePageAction{
 	private static final long serialVersionUID = 3892345222936288848L;
-	@Resource(name="cmsModelService")
-	private ICmsModelService cmsModelService;
+	@Resource(name="cmsTemplateService")
+	private ICmsTemplateService cmsTemplateService;
 	
-	private CmsModel obj;
+	private CmsTemplate obj;
 	
 	private List<Integer> ids;
 	
@@ -39,8 +38,8 @@ public class CmsModelAction extends BasePageAction{
 	@Action("list")
 	public String list(){
 		Map<String,Object> map=new HashMap<String, Object>();
-		map.put("totalCount", cmsModelService.findTotalCount());
-		map.put("objs", cmsModelService.findPage(this.getPageParameter()));
+		map.put("totalCount", cmsTemplateService.findTotalCount());
+		map.put("objs", cmsTemplateService.findPage(this.getPageParameter()));
 		String result=JSONObject.fromObject(map).toString();
 		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
@@ -48,7 +47,7 @@ public class CmsModelAction extends BasePageAction{
 	@Action("save")
 	public String save(){
 		if(obj!=null){
-			int id=cmsModelService.saveModel(obj);
+			int id=cmsTemplateService.saveTemplate(obj);
 			Map<String,Object> map=new HashMap<String, Object>();
 			map.put("success", id>0);
 			map.put("id", id);
@@ -60,7 +59,7 @@ public class CmsModelAction extends BasePageAction{
 	@Action("load")
 	public String load(){
 		if(id!=0){
-			List<Map<String,Object>> m=cmsModelService.findJsonById(id);
+			List<Map<String,Object>> m=cmsTemplateService.findJsonById(id);
 			Map<String,Object> map=new HashMap<String, Object>();
 			map.put("data", m);
 			map.put("success", true);
@@ -72,8 +71,8 @@ public class CmsModelAction extends BasePageAction{
 	@Action("delete")
 	public String delete(){
 		if(ids!=null){
-			boolean success=cmsModelService.deleteModels(ids);
-			int totalCount=cmsModelService.findTotalCount();
+			boolean success=cmsTemplateService.deleteTemplates(ids);
+			int totalCount=cmsTemplateService.findTotalCount();
 			Map<String,Object> map=new HashMap<String, Object>();
 			map.put("success", success);
 			map.put("totalCount", totalCount);
@@ -82,16 +81,16 @@ public class CmsModelAction extends BasePageAction{
 		return SUCCESS;
 	}
 	
-	public ICmsModelService getCmsModelService() {
-		return cmsModelService;
+	public ICmsTemplateService getCmsTemplateService() {
+		return cmsTemplateService;
 	}
-	public void setCmsModelService(ICmsModelService cmsModelService) {
-		this.cmsModelService = cmsModelService;
+	public void setCmsTemplateService(ICmsTemplateService cmsTemplateService) {
+		this.cmsTemplateService = cmsTemplateService;
 	}
-	public CmsModel getObj() {
+	public CmsTemplate getObj() {
 		return obj;
 	}
-	public void setObj(CmsModel obj) {
+	public void setObj(CmsTemplate obj) {
 		this.obj = obj;
 	}
 	public List<Integer> getIds() {

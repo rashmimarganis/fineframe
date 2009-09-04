@@ -13,19 +13,19 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.izhi.cms.model.CmsModel;
-import com.izhi.cms.service.ICmsModelService;
+import com.izhi.cms.model.CmsTemplateSuit;
+import com.izhi.cms.service.ICmsTemplateSuitService;
 import com.izhi.platform.action.BasePageAction;
 @Service
 @Scope("prototype")
-@Namespace("/cms/model")
-public class CmsModelAction extends BasePageAction{
+@Namespace("/cms/suit")
+public class CmsTemplateSuitAction extends BasePageAction{
 
 	private static final long serialVersionUID = 3892345222936288848L;
-	@Resource(name="cmsModelService")
-	private ICmsModelService cmsModelService;
+	@Resource(name="cmsTemplateSuitService")
+	private ICmsTemplateSuitService cmsTemplateSuitService;
 	
-	private CmsModel obj;
+	private CmsTemplateSuit obj;
 	
 	private List<Integer> ids;
 	
@@ -36,11 +36,12 @@ public class CmsModelAction extends BasePageAction{
 	public String index(){
 		return SUCCESS;
 	}
+	
 	@Action("list")
 	public String list(){
 		Map<String,Object> map=new HashMap<String, Object>();
-		map.put("totalCount", cmsModelService.findTotalCount());
-		map.put("objs", cmsModelService.findPage(this.getPageParameter()));
+		map.put("totalCount", cmsTemplateSuitService.findTotalCount());
+		map.put("objs", cmsTemplateSuitService.findPage(this.getPageParameter()));
 		String result=JSONObject.fromObject(map).toString();
 		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
@@ -48,7 +49,7 @@ public class CmsModelAction extends BasePageAction{
 	@Action("save")
 	public String save(){
 		if(obj!=null){
-			int id=cmsModelService.saveModel(obj);
+			int id=cmsTemplateSuitService.saveSuit(obj);
 			Map<String,Object> map=new HashMap<String, Object>();
 			map.put("success", id>0);
 			map.put("id", id);
@@ -57,23 +58,11 @@ public class CmsModelAction extends BasePageAction{
 		return SUCCESS;
 	}
 	
-	@Action("load")
-	public String load(){
-		if(id!=0){
-			List<Map<String,Object>> m=cmsModelService.findJsonById(id);
-			Map<String,Object> map=new HashMap<String, Object>();
-			map.put("data", m);
-			map.put("success", true);
-			this.getRequest().setAttribute("result", JSONObject.fromObject(map).toString());
-		}
-		return SUCCESS;
-	}
-	
 	@Action("delete")
 	public String delete(){
 		if(ids!=null){
-			boolean success=cmsModelService.deleteModels(ids);
-			int totalCount=cmsModelService.findTotalCount();
+			boolean success=cmsTemplateSuitService.deleteSuits(ids);
+			int totalCount=cmsTemplateSuitService.findTotalCount();
 			Map<String,Object> map=new HashMap<String, Object>();
 			map.put("success", success);
 			map.put("totalCount", totalCount);
@@ -82,16 +71,28 @@ public class CmsModelAction extends BasePageAction{
 		return SUCCESS;
 	}
 	
-	public ICmsModelService getCmsModelService() {
-		return cmsModelService;
+	@Action("load")
+	public String load(){
+		if(id!=0){
+			List<Map<String,Object>> m=cmsTemplateSuitService.findJsonById(id);
+			Map<String,Object> map=new HashMap<String, Object>();
+			map.put("data", m);
+			map.put("success", true);
+			this.getRequest().setAttribute("result", JSONObject.fromObject(map).toString());
+		}
+		return SUCCESS;
 	}
-	public void setCmsModelService(ICmsModelService cmsModelService) {
-		this.cmsModelService = cmsModelService;
+	
+	public ICmsTemplateSuitService getCmsTemplateSuitService() {
+		return cmsTemplateSuitService;
 	}
-	public CmsModel getObj() {
+	public void setCmsTemplateSuitService(ICmsTemplateSuitService cmsTemplateSuitService) {
+		this.cmsTemplateSuitService = cmsTemplateSuitService;
+	}
+	public CmsTemplateSuit getObj() {
 		return obj;
 	}
-	public void setObj(CmsModel obj) {
+	public void setObj(CmsTemplateSuit obj) {
 		this.obj = obj;
 	}
 	public List<Integer> getIds() {

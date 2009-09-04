@@ -37,13 +37,13 @@ public class CmsAttributeServiceImpl implements ICmsAttributeService{
 	}
 
 	@Override
-	public List<Map<String, Object>>  findPage(PageParameter pp) {
-		return cmsAttributeDao.findPage(pp);
+	public List<Map<String, Object>>  findPage(PageParameter pp,int modelId) {
+		return cmsAttributeDao.findPage(pp,modelId);
 	}
 
 	@Override
-	public int findTotalCount() {
-		return cmsAttributeDao.findTotalCount();
+	public int findTotalCount(int modelId) {
+		return cmsAttributeDao.findTotalCount(modelId);
 	}
 
 	@Override

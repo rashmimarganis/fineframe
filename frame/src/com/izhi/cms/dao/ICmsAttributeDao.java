@@ -17,9 +17,9 @@ public interface ICmsAttributeDao {
 
 	CmsAttribute findAttributeById(int id);
 
-	List<Map<String, Object>> findPage(PageParameter pp);
+	List<Map<String, Object>> findPage(PageParameter pp,int modelId);
 
-	int findTotalCount();
+	int findTotalCount(int modelId);
 
 	List<Map<String, Object>> findJsonById(int id);
 }

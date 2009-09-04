@@ -37,13 +37,13 @@ public class CmsFunctionServiceImpl implements ICmsFunctionService{
 	}
 
 	@Override
-	public List<Map<String, Object>>  findPage(PageParameter pp) {
-		return cmsFunctionDao.findPage(pp);
+	public List<Map<String, Object>>  findPage(PageParameter pp,int modelId) {
+		return cmsFunctionDao.findPage(pp,modelId);
 	}
 
 	@Override
-	public int findTotalCount() {
-		return cmsFunctionDao.findTotalCount();
+	public int findTotalCount(int modelId) {
+		return cmsFunctionDao.findTotalCount(modelId);
 	}
 
 	@Override
