@@ -23,6 +23,7 @@
 				<!-- 标准配置 -->
 				<value>WEB-INF/conf/application.properties</value>
 				<value>WEB-INF/conf/site.properties</value>
+				<value>WEB-INF/conf/cms.properties</value>
 				<!-- 服务器生产环境配置 -->
 				<!-- <value>file:/var/myapp/application.server.properties</value> -->
 			</list>
@@ -59,6 +60,7 @@
 	</bean>
 
 	<bean id="frameTemplatePath" class="java.lang.String" ><constructor-arg type="java.lang.String" value="WEB-INF/frame"></constructor-arg></bean>
+	<bean id="cmsTemplatePath" class="java.lang.String" ><constructor-arg type="java.lang.String" value="${cms.templatePath}"></constructor-arg></bean>
 	<!-- 数据源配置,使用应用服务器的数据库连接池 -->
 	<!--
 		<jee:jndi-lookup id="dataSource"

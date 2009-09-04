@@ -31,7 +31,7 @@
 	</script>
 	<script type="text/javascript" src="js/frame/attribute.js"></script>
 	<script type="text/javascript" src="js/frame/modelrelation.js"></script>
-
+	<script type="text/javascript" src="fckeditor/fckeditor.js"></script>
   <div id="west">
   </div>
   <div id="north">

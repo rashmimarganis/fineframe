@@ -86,6 +86,11 @@ Ext.ux.PersonGender = [
                         ['m', '男', '男'],
                         ['f', '女', '女']
                     ];
+Ext.namespace('Ext.ux.TemplateType');
+Ext.ux.TemplateType = [
+                       ['c', '普通模板', '普通模板'],
+                       ['t', '标签模板', '标签模板']
+                        ];
 function rendererEnabled(v){
 	if(v){
 		return '<img src="js/resources/images/default/menu/checked.gif">';

@@ -27,6 +27,9 @@ public class CmsTemplate implements Serializable{
 	private String fileName;
 	@Column(name="template_name")
 	private String name;
+	
+	@Transient
+	private String oldFileName;
 
 	@Column(name="template_type")
 	private String type;
@@ -86,6 +89,14 @@ public class CmsTemplate implements Serializable{
 
 	public void setSuit(CmsTemplateSuit suit) {
 		this.suit = suit;
+	}
+
+	public String getOldFileName() {
+		return oldFileName;
+	}
+
+	public void setOldFileName(String oldFileName) {
+		this.oldFileName = oldFileName;
 	}
 	
 	

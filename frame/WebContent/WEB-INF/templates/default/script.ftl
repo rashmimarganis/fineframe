@@ -6,6 +6,11 @@
 	var mainPanelHeight;
 	var contentPanel;
 	var oTime;
+	
+	var editorInstance;  
+ 	function FCKeditor_OnComplete( instance ) {  
+       editorInstance=instance;  
+    }; 
 	var FineCmsMain=function(){
 		return {
 			init:function(){
