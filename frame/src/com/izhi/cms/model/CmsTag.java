@@ -23,6 +23,10 @@ public class CmsTag implements Serializable{
 	@Column(name="tag_id")
 	private int tagId;
 	
+	private String name;
+	
+	private String title;
+	
 	@ManyToOne
 	@JoinColumn(name="model_id")
 	private CmsModel model;
@@ -110,6 +114,22 @@ public class CmsTag implements Serializable{
 
 	public void setTagId(int tagId) {
 		this.tagId = tagId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	

@@ -21,12 +21,8 @@ public class CmsTemplateSuit implements Serializable{
 	@Column(name="package_name")
 	private String packageName;
 	
-	@Column(name="package_title")
-	private String title;
-	
-	@Column(name="is_default")
-	private boolean _default;
-	
+	@Column(name="name")
+	private String name;
 
 	public String getPackageName() {
 		return packageName;
@@ -36,13 +32,7 @@ public class CmsTemplateSuit implements Serializable{
 		this.packageName = packageName;
 	}
 
-	public String getTitle() {
-		return title;
-	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
 
 	public int getSuitId() {
 		return suitId;
@@ -52,12 +42,14 @@ public class CmsTemplateSuit implements Serializable{
 		this.suitId = suitId;
 	}
 
-	public boolean isDefault() {
-		return _default;
+
+
+	public String getName() {
+		return name;
 	}
 
-	public void setDefault(boolean _default) {
-		this._default = _default;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	

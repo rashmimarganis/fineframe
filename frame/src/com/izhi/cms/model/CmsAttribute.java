@@ -18,24 +18,13 @@ public class CmsAttribute implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="attribute_id")
 	private int attributeId;
+	
 	@Column(name="attribute_label")
 	private String label;
+	
 	@Column(name="attribute_name")
 	private String name;
 
-	
-	@Column(name="is_key")
-	private boolean isKey;
-	
-	@Column(name="required")
-	private boolean required=false;
-	
-	@Column(name="java_class")
-	private String javaClass;
-
-	@Column(name="length")
-	private int length;
-	
 
 	public int getAttributeId() {
 		return attributeId;
@@ -44,7 +33,6 @@ public class CmsAttribute implements Serializable {
 	public void setAttributeId(int attributeId) {
 		this.attributeId = attributeId;
 	}
-
 	
 	public String getName() {
 		return name;
@@ -54,17 +42,6 @@ public class CmsAttribute implements Serializable {
 		this.name = name;
 	}
 
-	
-
-	public int getLength() {
-		return length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
-	}
-
-
 	public String getLabel() {
 		return label;
 	}
@@ -72,36 +49,4 @@ public class CmsAttribute implements Serializable {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-
-	
-	public boolean getIsKey() {
-		return isKey;
-	}
-
-	public void setIsKey(boolean isKey) {
-		this.isKey = isKey;
-	}
-
-	public boolean isRequired() {
-		return required;
-	}
-
-	public void setRequired(boolean required) {
-		this.required = required;
-	}
-
-	public String getJavaClass() {
-		return javaClass;
-	}
-
-	public void setJavaClass(String javaClass) {
-		this.javaClass = javaClass;
-	}
-
-	public void setKey(boolean isKey) {
-		this.isKey = isKey;
-	}
-
-
-	
 }

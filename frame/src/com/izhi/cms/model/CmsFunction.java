@@ -27,7 +27,7 @@ public class CmsFunction implements Serializable{
 	private int functionId;
 	
 	@Column(name="function_name")
-	private String functionName;
+	private String name;
 	
 	@Column(name="url")
 	private String url;
@@ -49,12 +49,12 @@ public class CmsFunction implements Serializable{
 		this.functionId = functionId;
 	}
 
-	public String getFunctionName() {
-		return functionName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFunctionName(String functionName) {
-		this.functionName = functionName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getUrl() {
