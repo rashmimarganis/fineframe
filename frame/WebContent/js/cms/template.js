@@ -303,7 +303,7 @@ CmsTemplateFormPanel = function() {
 		    {name:'obj.templateId', mapping:pk},
 		    {name:'obj.name',mapping:'name'}, 
 		    {name:'obj.fileName',mapping:'fileName'}, 
-		    {name:'obj.oldFileName',mapping:'oldFileName'}, 
+		    {name:'obj.oldFileName',mapping:'fileName'}, 
 		    {name:'obj.suit.suitId',mapping:'templateSuitId'}, 
 		    {name:'obj.content',mapping:'content'}, 
 		    {name:'obj.type',mapping:'type'}

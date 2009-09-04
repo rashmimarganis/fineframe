@@ -12,6 +12,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.izhi.cms.dao.ICmsTemplateDao;
@@ -23,6 +25,7 @@ import com.izhi.platform.util.WebUtils;
 @Service("cmsTemplateService")
 public class CmsTemplateServiceImpl implements ICmsTemplateService {
 
+	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 	@Resource(name = "cmsTemplateDao")
 	private ICmsTemplateDao cmsTemplateDao;
 
@@ -31,12 +34,27 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 
 	@Override
 	public boolean deleteTemplate(int id) {
-		return cmsTemplateDao.deleteTemplate(id);
+		CmsTemplate obj = this.findTemplateById(id);
+		String fileName = this.getFilePath(obj.getFileName());
+		boolean r = cmsTemplateDao.deleteTemplate(id);
+		if (r) {
+			File file = new File(fileName);
+			if (file.exists() && file.isFile()) {
+				boolean r1 = file.delete();
+				log.debug("删除模板文件：" + fileName + " " + r1);
+			}
+
+		}
+		return r;
 	}
 
 	@Override
 	public boolean deleteTemplates(List<Integer> ids) {
-		return cmsTemplateDao.deleteTemplates(ids);
+		boolean r=true;
+		for(Integer id:ids){
+			r=r&&deleteTemplate(id);
+		}
+		return r;
 	}
 
 	@Override
@@ -74,21 +92,27 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 				if (file.exists()) {
 					id = -1;
 				} else {
-					this.saveFile(fileName, obj.getContent());
+					this.saveFile(file, obj.getContent());
 					id = cmsTemplateDao.saveTemplate(obj);
 				}
 			} else {
 				String fileName = this.getFilePath(obj.getFileName());
 
 				if (obj.getFileName().equals(obj.getOldFileName())) {
-					this.saveFile(fileName, obj.getContent());
+					File file = new File(fileName);
+					this.saveFile(file, obj.getContent());
 					id = cmsTemplateDao.updateTemplate(obj);
 				} else {
 					File file = new File(fileName);
 					if (file.exists()) {
 						id = -1;
 					} else {
-						this.saveFile(fileName, obj.getContent());
+						String oldFileName = this.getFilePath(obj
+								.getOldFileName());
+						File oldFile = new File(oldFileName);
+						log.debug("重命名：" + oldFileName + " to " + fileName);
+						oldFile.renameTo(file);
+						this.saveFile(file, obj.getContent());
 						id = cmsTemplateDao.updateTemplate(obj);
 					}
 				}
@@ -136,9 +160,9 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 		return content;
 	}
 
-	public boolean saveFile(String path, String content) {
+	public boolean saveFile(File file, String content) {
 		boolean result = false;
-		File file = new File(path);
+		// File file = new File(path);
 
 		try {
 			if (!file.exists()) {
@@ -146,8 +170,7 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 			}
 			OutputStream os = new FileOutputStream(file);
 			IOUtils.write(content, os);
-			os.flush();
-			os.close();
+			IOUtils.closeQuietly(os);
 			result = true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
