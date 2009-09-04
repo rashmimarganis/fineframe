@@ -46,6 +46,17 @@ public class CmsTemplateSuitAction extends BasePageAction{
 		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}
+	@Action("all")
+	public String all(){
+		int totalCount=(int)cmsTemplateSuitService.findTotalCount();
+		List<Map<String,Object>> l=cmsTemplateSuitService.findAll();
+		Map<String,Object> map =new HashMap<String, Object>();
+		map.put("objs", l);
+		map.put("totalCount",totalCount);
+		String result=JSONObject.fromObject(map).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
 	@Action("save")
 	public String save(){
 		if(obj!=null){

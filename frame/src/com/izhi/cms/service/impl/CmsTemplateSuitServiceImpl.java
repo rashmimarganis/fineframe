@@ -50,8 +50,14 @@ public class CmsTemplateSuitServiceImpl implements ICmsTemplateSuitService{
 	public int saveSuit(CmsTemplateSuit obj) {
 		if(obj!=null){
 			if(obj.getSuitId()==0){
+				if(cmsTemplateSuitDao.findPackageExist(obj.getPackageName())){
+					return -1;
+				}
 				return cmsTemplateSuitDao.saveSuit(obj);
 			}else{
+				if(cmsTemplateSuitDao.findPackageExist(obj.getPackageName(),obj.getOldPackageName())){
+					return -1;
+				}
 				return cmsTemplateSuitDao.updateSuit(obj);
 			}
 		}
@@ -69,6 +75,21 @@ public class CmsTemplateSuitServiceImpl implements ICmsTemplateSuitService{
 
 	public void setCmsTemplateSuitDao(ICmsTemplateSuitDao cmsTemplateSuitDao) {
 		this.cmsTemplateSuitDao = cmsTemplateSuitDao;
+	}
+
+	@Override
+	public List<Map<String, Object>> findAll() {
+		return cmsTemplateSuitDao.findAll();
+	}
+
+	@Override
+	public boolean findPackageExist(String name) {
+		return cmsTemplateSuitDao.findPackageExist(name);
+	}
+
+	@Override
+	public boolean findPackageExist(String name, String oldName) {
+		return cmsTemplateSuitDao.findPackageExist(name,oldName);
 	}
 
 }

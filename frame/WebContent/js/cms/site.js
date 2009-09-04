@@ -6,7 +6,7 @@ var loadUrl='cms/site/load.jhtm';
 var modelTitle='站点';
 var gridPanelDiv='cmsSiteGrid';
 var focusField='obj.name';
-var fields=['siteId','name','watermark', 'title','packageName','htmlPath','siteUrl','description','closed','closeReason','templateSuitName'];
+var fields=['siteId','name','watermark', 'title','packageName','htmlPath','siteUrl','closed','closeReason','templateSuitName'];
 
 CmsSiteGridPanel=function(){
 	this.window=new CmsSiteWindow();
@@ -33,7 +33,7 @@ CmsSiteGridPanel=function(){
 			sm.selectFirstRow();
 		}
 	});
-	
+	this.store.load({params:{start:0,limit:18}});
 	
 	this.cm = new Ext.grid.ColumnModel([sm,{
         id: pk,
@@ -70,7 +70,11 @@ CmsSiteGridPanel=function(){
          header: "关闭状态",
          dataIndex: 'closed',
          width: 100
-      }]);
+      },{
+          header: "模板方案",
+          dataIndex: 'templateSuitName',
+          width: 100
+       }]);
 
     this.cm.defaultSortable = true;
     CmsSiteGridPanel.superclass.constructor.call(
@@ -156,7 +160,6 @@ Ext.extend(CmsSiteGridPanel, Ext.grid.GridPanel, {
 				Ext.Msg.alert("删除"+modelTitle+"","删除"+modelTitle+"成功！");
 				_grid.reloadData();
 			}
-			
 		}
 		function failure(rep){
 			Ext.Msg.alert("删除"+modelTitle,rep.repsonseText);
@@ -315,7 +318,9 @@ CmsSiteFormPanel = function() {
 		    {name:'obj.htmlPath',mapping:'htmlPath'},
 		    {name:'obj.packageName',mapping:'packageName'},
 		    {name:'obj.siteUrl',mapping:'siteUrl'},
-		    {name:'obj.description',mapping:'description'},
+		    {name:'obj.closed',mapping:'closed'},
+		    {name:'obj.closeReason',mapping:'closeReason'},
+		    {name:'obj.watermark',mapping:'watermark'},
 		    {name:'obj.watermarkPic',mapping:'watermarkPic'},
 		    {name:'obj.watermarkPosition',mapping:'watermarkPosition'}
 		    ]
@@ -330,6 +335,12 @@ Ext.extend(CmsSiteFormPanel, Ext.form.FormPanel, {
 		this.getForm().load( {
 			url : url,
 			waitMsg : '正在加载数据....',
+			success:function(form, action){
+				var json = action.response.responseText;
+				var o = eval("(" + json + ")");
+				_form.findField("obj.templateSuit.suitId").setRawValue(o.data[0].templateSuitName);
+				_form.findField("obj.templateSuit.suitId").setValue(o.data[0].templateSuitId);
+			},
 			failure : function(form, action) {
 				var json = action.response.responseText;
 				var o = eval("(" + json + ")");

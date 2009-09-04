@@ -10,6 +10,8 @@
 		return {
 			init:function(){
 				Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+				Ext.QuickTips.init();
+				
 				FineCmsMain.initMenu();
 				FineCmsMain.initMainPanel();
 				var infoPanel=new Ext.Panel({
@@ -166,7 +168,7 @@
 				if (oTime){
 			        clearTimeout(oTime);
 			    }
-			    oTime = setTimeout("FineCmsMain.contentPanelResize()", 20);
+			    oTime = setTimeout("FineCmsMain.contentPanelResize()", 2);
 			},
 			contentPanelResize:function(){
 				mainPanel.syncSize();

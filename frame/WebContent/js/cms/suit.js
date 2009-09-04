@@ -179,6 +179,13 @@ CmsSuitFormPanel = function() {
 		allowBlank : false,
 		name : "obj.name"
 	};
+	
+	this.oldPackageField = {
+			xtype : 'hidden',
+			allowBlank : false,
+			name : "obj.oldPackageName",
+			readOnly:true
+		};
 	this.packageNameField = {
 		xtype : 'textfield',
 		fieldLabel : modelTitle+"目录",
@@ -201,10 +208,11 @@ CmsSuitFormPanel = function() {
 		}, [
 		    {name:'obj.suitId', mapping:pk},
 		    {name:'obj.name',mapping:'name'}, 
-		    {name:'obj.packageName',mapping:'packageName'}
+		    {name:'obj.packageName',mapping:'packageName'},
+		    {name:'obj.oldPackageName',mapping:'packageName'}
 		    ]
 		),
-		items : [this.idField,this.nameField,this.packageNameField]
+		items : [this.idField,this.oldPackageField ,this.nameField,this.packageNameField]
 	});
 };
 Ext.extend(CmsSuitFormPanel, Ext.form.FormPanel, {

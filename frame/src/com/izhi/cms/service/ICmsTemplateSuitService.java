@@ -23,4 +23,8 @@ public interface ICmsTemplateSuitService {
 	int findTotalCount();
 
 	List<Map<String, Object>> findJsonById(int id);
+	List<Map<String, Object>> findAll() ;
+	
+	boolean findPackageExist(String name);
+	boolean findPackageExist(String name,String oldName);
 }

@@ -17,10 +17,10 @@ public class CmsSite implements Serializable{
 
 	private static final long serialVersionUID = 3910368675314836573L;
 
-	public static final String WATERMARK_LEFTTOP="lefttop";
-	public static final String WATERMARK_RIGHTTOP="righttop";
-	public static final String WATERMARK_LEFTBOTTOM="leftbottom";
-	public static final String WATERMARK_RIGHTBOTTOM="rightbottom";
+	public static final String WATERMARK_LEFTTOP="lt";
+	public static final String WATERMARK_RIGHTTOP="rt";
+	public static final String WATERMARK_LEFTBOTTOM="lb";
+	public static final String WATERMARK_RIGHTBOTTOM="rb";
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -30,8 +30,6 @@ public class CmsSite implements Serializable{
 	private String name;
 	
 	private String title;
-	
-	private String description;
 	
 	@Column(name="site_url")
 	private String siteUrl;
@@ -51,9 +49,10 @@ public class CmsSite implements Serializable{
 	@Column(name="watermark_pic")
 	private String watermarkPic;
 	
-	@Column(name="watermark_postion")
-	private String watermarkPostion;
-	
+	@Column(name="watermark_position")
+	private String watermarkPosition;
+	@Column(name="is_watermark")
+	private boolean watermark;
 	public int getSiteId() {
 		return siteId;
 	}
@@ -77,15 +76,6 @@ public class CmsSite implements Serializable{
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 
 	public CmsTemplateSuit getTemplateSuit() {
 		return templateSuit;
@@ -127,12 +117,12 @@ public class CmsSite implements Serializable{
 		this.watermarkPic = watermarkPic;
 	}
 
-	public String getWatermarkPostion() {
-		return watermarkPostion;
+	public String getWatermarkPosition() {
+		return watermarkPosition;
 	}
 
-	public void setWatermarkPostion(String watermarkPostion) {
-		this.watermarkPostion = watermarkPostion;
+	public void setWatermarkPosition(String watermarkPosition) {
+		this.watermarkPosition = watermarkPosition;
 	}
 
 	public String getSiteUrl() {
@@ -141,6 +131,14 @@ public class CmsSite implements Serializable{
 
 	public void setSiteUrl(String siteUrl) {
 		this.siteUrl = siteUrl;
+	}
+
+	public boolean isWatermark() {
+		return watermark;
+	}
+
+	public void setWatermark(boolean watermark) {
+		this.watermark = watermark;
 	}
 
 	

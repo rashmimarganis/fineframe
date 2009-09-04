@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 @Entity
 @Table(name="cms_template_suit")
 public class CmsTemplateSuit implements Serializable{
@@ -20,7 +21,8 @@ public class CmsTemplateSuit implements Serializable{
 	
 	@Column(name="package_name")
 	private String packageName;
-	
+	@Transient
+	private String oldPackageName;
 	@Column(name="name")
 	private String name;
 
@@ -50,6 +52,14 @@ public class CmsTemplateSuit implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getOldPackageName() {
+		return oldPackageName;
+	}
+
+	public void setOldPackageName(String oldPackageName) {
+		this.oldPackageName = oldPackageName;
 	}
 
 	

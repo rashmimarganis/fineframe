@@ -21,6 +21,14 @@ Ext.ux.JavaClassType = [
                          ['Double', 'Double', 'Double'],
                          ['Boolean', 'Boolean', 'Boolean']
     ];
+Ext.namespace('Ext.ux.WatermarkPositionType');
+
+Ext.ux.WatermarkPositionType = [
+                        ['lt', '左上', '左上'],
+                        ['lb', '左下', '左下'],
+                        ['rt', '右上', '右上'],
+                        ['rb', '右下', '右下'],
+                         ];
 Ext.namespace('Ext.ux.templateType');
 
 Ext.ux.templateType = [

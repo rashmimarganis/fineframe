@@ -46,6 +46,7 @@
 <%@page import="com.izhi.platform.service.IUserService"%>
 <%@page import="com.izhi.platform.service.IPersonService"%>
 <%@page import="com.izhi.platform.service.ISiteService"%>
+<%@page import="com.izhi.cms.service.ICmsSiteService"%>
 <%@page import="com.izhi.platform.util.SpringUtils"%><html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -53,8 +54,8 @@
 </head>
 <body>
 <%
-ISiteService s=(ISiteService)SpringUtils.getBean("siteService");
-out.println(s.getSite().getSiteName());
+ICmsSiteService s=(ICmsSiteService)SpringUtils.getBean("cmsSiteService");
+out.println(JSONArray.fromObject(s.findJsonById(1)).toString());
 		//out.println(JSONObject.fromObject(map).toString());
 	/*
 		IUserService mrs=(IUserService)wac.getBean("userService");

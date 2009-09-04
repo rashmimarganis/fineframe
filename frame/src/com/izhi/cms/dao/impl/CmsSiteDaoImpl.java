@@ -32,7 +32,7 @@ public class CmsSiteDaoImpl extends HibernateDaoSupport implements ICmsSiteDao{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
-		String sql="select new map(o.siteId as siteId,o.name as name,o.title as title,o.description as description,o.siteUrl as siteUrl,o.htmlPath as htmlPath,o.closed as closed,o.closeReason as closeReason,o.watermarkPic as watermarkPic,o.watermarkPosition as watermarkerPosition,o.templateSuit.suitId as templateSuitId,o.templateSuit.name as templateSuitName) from CmsSite o where o.siteId=?";
+		String sql="select new map(o.siteId as siteId,o.name as name,o.title as title,o.watermark as watermark,o.siteUrl as siteUrl,o.htmlPath as htmlPath,o.closed as closed,o.closeReason as closeReason,o.watermarkPic as watermarkPic,o.watermarkPosition as watermarkerPosition,o.templateSuit.suitId as templateSuitId,o.templateSuit.name as templateSuitName) from CmsSite o where o.siteId=?";
 		return this.getHibernateTemplate().find(sql, id);
 	}
 
@@ -46,7 +46,7 @@ public class CmsSiteDaoImpl extends HibernateDaoSupport implements ICmsSiteDao{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findPage(PageParameter pp) {
-		String sql="select new map(o.siteId as siteId,o.name as name,o.title as title,o.description as description,o.siteUrl as siteUrl,o.htmlPath as htmlPath,o.closed as closed,o.closeReason as closeReason,o.watermarkPic as watermarkPic,o.watermarkPosition as watermarkerPosition,o.templateSuit.suitId as templateSuitId,o.templateSuit.name as templateSuitName) from CmsSite o ";
+		String sql="select new map(o.siteId as siteId,o.name as name,o.title as title,o.watermark as watermark,o.siteUrl as siteUrl,o.htmlPath as htmlPath,o.closed as closed,o.closeReason as closeReason,o.watermarkPic as watermarkPic,o.watermarkPosition as watermarkerPosition,o.templateSuit.suitId as templateSuitId,o.templateSuit.name as templateSuitName) from CmsSite o ";
 		if(pp!=null){
 			if(pp.getSort()!=null){
 				sql+=" order by o."+pp.getSort();

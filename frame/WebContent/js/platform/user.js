@@ -121,10 +121,8 @@ Ext.extend(UserFormPanel, Ext.form.FormPanel, {
 			success:function(form, action){
 				var json = action.response.responseText;
 				var o = eval("(" + json + ")");
-				if(o.success){
-					_form.findField("obj.person.personId").setFieldValue(o.data[0].personId,o.data[0].realname);
-					_form.findField("obj.org.orgId").setFieldValue(o.data[0].orgId,o.data[0].orgName);
-				}
+				_form.findField("obj.person.personId").setFieldValue(o.data[0].personId,o.data[0].realname);
+				_form.findField("obj.org.orgId").setFieldValue(o.data[0].orgId,o.data[0].orgName);
 			},
 			failure : function(form, action) {
 				var json = action.response.responseText;

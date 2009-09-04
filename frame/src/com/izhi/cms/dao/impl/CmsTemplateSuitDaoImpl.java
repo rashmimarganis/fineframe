@@ -84,4 +84,30 @@ public class CmsTemplateSuitDaoImpl extends HibernateDaoSupport implements ICmsT
 		return 1;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> findAll() {
+		String sql="select new map(o.suitId as suitId,o.name as name,o.packageName as packageName) from CmsTemplateSuit o order by o.suitId";
+		return this.getHibernateTemplate().find(sql);
+	}
+
+	@Override
+	public boolean findPackageExist(String name) {
+		String sql="select count(o) from CmsTemplateSuit o where o.packageName=:name";
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setString("name", name);
+		Long l=(Long)q.uniqueResult();
+		return l>0;
+	}
+	@Override
+	public boolean findPackageExist(String name,String oldName) {
+		String sql="select count(o) from CmsTemplateSuit o where o.packageName=:name and o.packageName!=:oldName";
+		Session s=this.getSession();
+		Query q=s.createQuery(sql);
+		q.setString("name", name);
+		q.setString("oldName", oldName);
+		Long l=(Long)q.uniqueResult();
+		return l>0;
+	}
 }
