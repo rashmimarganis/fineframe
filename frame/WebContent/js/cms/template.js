@@ -394,6 +394,8 @@ CmsTemplateWindow=function(){
 
 						}
 					});
+				}else{
+					Ext.Msg.alert("出现错误","请填写完整信息！");
 				}
 			}
 		}, {
