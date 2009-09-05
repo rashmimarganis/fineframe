@@ -47,7 +47,9 @@
 <%@page import="com.izhi.platform.service.IPersonService"%>
 <%@page import="com.izhi.platform.service.ISiteService"%>
 <%@page import="com.izhi.cms.service.ICmsSiteService"%>
-<%@page import="com.izhi.platform.util.SpringUtils"%><html>
+<%@page import="com.izhi.platform.util.SpringUtils"%>
+<%@page import="org.logicalcobwebs.proxool.ProxoolFacade"%>
+<%@page import="org.logicalcobwebs.proxool.admin.StatisticsIF"%><html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
@@ -55,7 +57,13 @@
 <body>
 <%
 ICmsSiteService s=(ICmsSiteService)SpringUtils.getBean("cmsSiteService");
-out.println(JSONArray.fromObject(s.findJsonById(1)).toString());
+///out.println(JSONArray.fromObject(s.findJsonById(1)).toString());
+
+StatisticsIF[] statisticsArray = ProxoolFacade.getStatistics("MySqlPool"); 
+out.println(statisticsArray.length);
+for(StatisticsIF s1:statisticsArray){
+	out.println(s1.getServedPerSecond());
+}
 		//out.println(JSONObject.fromObject(map).toString());
 	/*
 		IUserService mrs=(IUserService)wac.getBean("userService");

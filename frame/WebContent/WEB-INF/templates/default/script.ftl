@@ -67,6 +67,9 @@
 		            width: 200,
 		            minSize: 175,
 		            maxSize: 400,
+		            defaults: {
+				        bodyStyle: 'padding:5px'
+				    },
 		            collapsible: true,
 		            margins:'0 0 0 0',
 		            layout:'accordion',
@@ -99,7 +102,7 @@
 	                loader:new Ext.tree.TreeLoader({dataUrl:'${base}/menu.jhtm?pid='+id}),
 	                root:root,
 	                border:false,
-	                margins:'3 3 3 3',
+	                margins:'8 8 8 8',
 	                rootVisible:false
 	            });
 	            tree.on('click',function(node){

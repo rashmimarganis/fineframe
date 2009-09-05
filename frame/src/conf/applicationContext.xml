@@ -42,21 +42,18 @@
 		base-package="com.izhi.platform,com.izhi.cms,com.izhi.web,com.izhi.framework,com.izhi.workflow" />
 
 	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
+	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource"
+		destroy-method="close" >
 		<!-- Connection Info -->
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
+		<property name="driver" value="${jdbc.driver}" />
+		<property name="driverUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
-
-		<!-- Connection Pooling DBCP -->
-		<property name="initialSize" value="5" />
-		<property name="maxActive" value="100" />
-		<property name="maxIdle" value="30" />
-		<property name="maxWait" value="1000" />
-		<property name="poolPreparedStatements" value="true" />
-		<property name="defaultAutoCommit" value="false" />
+		<property name="alias" value="${jdbc.alias}" />
+		<property name="houseKeepingTestSql" value="${jdbc.houseKeepingTestSql}"/>
+		<property name="maximumConnectionCount" value="${jdbc.maximumConnectionCount}"/>
+		<property name="minimumConnectionCount" value="${jdbc.minimumConnectionCount}"/>
+		<property name="delegateProperties" value="characterEncoding=${jdbc.characterEncoding}"/>
 	</bean>
 
 	<bean id="frameTemplatePath" class="java.lang.String" ><constructor-arg type="java.lang.String" value="WEB-INF/frame"></constructor-arg></bean>

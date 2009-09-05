@@ -33,7 +33,21 @@ public class CmsModel implements Serializable {
 	private String entityClass;
 	@OneToMany(fetch=FetchType.LAZY)
 	private List<CmsFunction> functions;
+	@Column(name="has_child")
+	private boolean hasChild;
 	
+	@Column(name="is_show")
+	private boolean show;
+	
+	@Column(name="sequence")
+	private int sequence;
+	
+	public int getSequence() {
+		return sequence;
+	}
+	public void setSequence(int sequence) {
+		this.sequence = sequence;
+	}
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="model_id",updatable=false,insertable=false,nullable=true)
 	private List<CmsAttribute> attributes;
@@ -74,6 +88,18 @@ public class CmsModel implements Serializable {
 	}
 	public void setEntityClass(String entityClass) {
 		this.entityClass = entityClass;
+	}
+	public boolean isHasChild() {
+		return hasChild;
+	}
+	public void setHasChild(boolean hasChild) {
+		this.hasChild = hasChild;
+	}
+	public boolean isShow() {
+		return show;
+	}
+	public void setShow(boolean show) {
+		this.show = show;
 	}
 	
 	

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -31,6 +32,13 @@ public class CmsModelAction extends BasePageAction{
 	
 	private int id;
 	
+	@Action("tree")
+	
+	public String tree(){
+		String result=JSONArray.fromObject(cmsModelService.findTree()).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
 	
 	@Action("index")
 	public String index(){

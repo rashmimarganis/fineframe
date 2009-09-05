@@ -22,7 +22,7 @@
 </div>
 
 <script type="text/javascript" src="${base}/js/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="${base}/js/ext-all-debug.js"></script>
+    <script type="text/javascript" src="${base}/js/ext-all.js"></script>
     <script type="text/javascript" src="${base}/js/ext-lang-zh_CN.js"></script>
     <script type="text/javascript" src="${base}/js/frame/common.js"></script>
     <script type="text/javascript" src="js/ComboBoxTree.js"></script>
@@ -30,8 +30,9 @@
 	<script language="javascript" type="text/javascript" src="${base}/script.jhtm">
 	</script>
 	<script type="text/javascript" src="js/frame/attribute.js"></script>
+	<script type="text/javascript" src="js/cms/attribute.js"></script>
 	<script type="text/javascript" src="js/frame/modelrelation.js"></script>
-	<script type="text/javascript" src="fckeditor/fckeditor.js"></script>
+	<!--<script type="text/javascript" src="fckeditor/fckeditor.js"></script>-->
   <div id="west">
   </div>
   <div id="north">

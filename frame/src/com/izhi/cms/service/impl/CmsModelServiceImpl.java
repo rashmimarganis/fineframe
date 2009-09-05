@@ -71,4 +71,9 @@ public class CmsModelServiceImpl implements ICmsModelService{
 		this.cmsModelDao = cmsModelDao;
 	}
 
+	@Override
+	public List<Map<String, Object>> findTree() {
+		return cmsModelDao.findTree();
+	}
+
 }

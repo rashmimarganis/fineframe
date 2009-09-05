@@ -84,4 +84,11 @@ public class CmsModelDaoImpl extends HibernateDaoSupport implements ICmsModelDao
 		return 1;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> findTree() {
+		String sql="select new map(o.modelId as id,o.name as text,1 as leaf) from CmsModel o ";
+		return this.getHibernateTemplate().find(sql);
+	}
+
 }
