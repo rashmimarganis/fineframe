@@ -7,8 +7,12 @@ var modelTitle='模型';
 var gridPanelDiv='cmsModelGrid';
 var focusField='obj.name';
 var fields=['modelId','name', 'tableName','entityClass'];
+var selectModelId=0;
 CmsModelTreePanel=function(){
 	var _tree=this;
+	this.formPanel;
+	this.attributeGrid;
+	this.functionGrid;
 	CmsModelTreePanel.superclass.constructor.call(this, {
 		el:'cmsModelTree',
         autoScroll:true,
@@ -35,7 +39,10 @@ CmsModelTreePanel=function(){
 				if(!node.expanded){
 					node.expand();
 				};
-				//gridPanel.loadData(node.id);
+				selectModelId=node.id;
+				_tree.loadData(node.id);
+				_tree.attributeGrid.loadData(node.id);
+				_tree.functionGrid.loadData(node.id);
 			}
         
         },
@@ -46,19 +53,30 @@ CmsModelTreePanel=function(){
         draggable:false,
         id:'0'
     });
+   
     _tree.setRootNode(_root);
 	
 	_tree.render();
 	//_root.select();
+	 _root.on('expand',function(n){
+	    	//alert(this.hasChildNodes());
+	    	if(this.firstNode){
+	    		this.firstNode.select();
+	    	}
+	    });
 	_root.expand();
 };
 
 
 Ext.extend(CmsModelTreePanel, Ext.tree.TreePanel, {
 	loadData : function(id) {
-		
+		this.formPanel.loadData(id);
 	},
-	
+	getModelId:function(){
+		var tree=this;
+		var id=tree.getSelectionModel().getSelectedNode().id;
+		return id;
+	},
 	loadAttributes:function(id){
 		
 	},
@@ -70,6 +88,7 @@ Ext.extend(CmsModelTreePanel, Ext.tree.TreePanel, {
 
 CmsModelFormPanel=function(){
 	var _formPanel=this;
+	this.treePanel;
 	var _form=this.getForm();
 	this.idField = {
 		xtype : 'textfield',
@@ -108,6 +127,7 @@ CmsModelFormPanel=function(){
 		fieldLabel : "允许子栏目",
 		allowBlank : false,
 		anchor:'95%',
+		inputValue:'true',
 		name : "obj.hasChild"
 	};
 	this.showField = {
@@ -115,6 +135,7 @@ CmsModelFormPanel=function(){
 		fieldLabel : "是否显示",
 		anchor:'95%',
 		allowBlank : false,
+		inputValue:'true',
 		name : "obj.show"
 	};
 	this.sequenceField = {
@@ -178,16 +199,42 @@ Ext.extend(CmsModelFormPanel, Ext.form.FormPanel, {
 				});
 			}
 		});
+	},
+	saveData:function(){
+		var _form=this.getForm();
+		if (_form.isValid()) {
+			_form.submit( {
+				waitMsg : '正在保存数据...',
+				url : saveUrl,
+				failure : function(form, action) {
+					var json = action.response.responseText;
+					var o = eval("(" + json + ")");
+					Ext.MessageBox.show( {
+						title : '出现错误',
+						msg : o.message,
+						buttons : Ext.MessageBox.OK,
+						icon : Ext.MessageBox.ERROR
+					});
+				},
+				success : function(form1, action) {
+					//_win.gridPanel.reloadData();
+
+				}
+			});
+		}
 	}
 });
 
 CmsAttributeGridPanel=function(){
 	var _grid=this;
-	var _win=this.window;
+	var _win=new CmsAttributeWindow();
+	this.modelId;
+	_win.grid=this;
 	var sm = new Ext.grid.CheckboxSelectionModel();
+	var fields=['attributeId','name', 'label'];
 	this.store = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
-            url: listUrl
+            url: 'cms/attribute/list.jhtm?modelId='+_grid.modelId
         }),
         reader: new Ext.data.JsonReader({
             root: 'objs',
@@ -198,27 +245,26 @@ CmsAttributeGridPanel=function(){
         ),
         remoteSort: true
 	});
-    this.store.setDefaultSort(pk, 'asc');
+    this.store.setDefaultSort('attributeId', 'asc');
 	this.store.on('load',function(s,r,o){
 		if(s.getTotalCount()>0){
 			sm.selectFirstRow();
 		}
 	});
-	 this.store.load({params:{start:0,limit:18}});
 	
 	this.cm = new Ext.grid.ColumnModel([sm,{
-        id: pk,
+        id: 'attributeId',
         header: "ID",
-        dataIndex: pk,
+        dataIndex: 'attributeId',
         width: 20
      },{
         id: 'name', 
-        header: modelTitle+"名称",
+        header: "名称",
         dataIndex: 'name',
         width: 100
      },{
-        header: modelTitle+"目录",
-        dataIndex: 'packageName',
+        header: "标签",
+        dataIndex: 'label',
         width: 100,
         sortable:false
      }]);
@@ -267,51 +313,144 @@ CmsAttributeGridPanel=function(){
 
 Ext.extend(CmsAttributeGridPanel, Ext.grid.GridPanel, {
 	loadData : function(id) {
+		this.modelId=id;
+		this.store.proxy= new Ext.data.HttpProxy({
+            url: 'cms/attribute/list.jhtm?modelId='+id
+        });
+		this.store.load({params:{start:0,limit:10}});
+	},
+	addInfo:function(){
+		if(!this.window){
+			this.window=new CmsAttributeWindow();
+		}
+		this.window.show();
+		this.window.formPanel.getForm().reset();
+	},
+	loadInfo:function(){
+		if(!this.window){
+			this.window=new CmsAttributeWindow();
+		}
+		var id=this.getSelectionModel().getSelected().get('attributeId');
+		this.window.show();
+		this.window.formPanel.loadData(id);
+	},
+	deleteInfo:function(){
+		var sm=this.getSelectionModel();
+		var c=this;
+		var _grid1=this;
+		if(sm.getSelected==null){
+			Ext.Msg.alert("删除属性","请先选择一个属性！");
+			return;
+		}else{
+			var s=Ext.Msg.confirm("删除属性","确定要删除选中的属性吗？",function(o){
+				if(o=='yes'){
+					var url='cms/attribute/delete.jhtm?'+_grid1.getSelectedIds();
+					Ext.Ajax.request({
+						url:url,
+						success:success,
+						failure:failure
+					});
+				}else{
+					return;
+				}
+			});
+		}
+		function success(rep){
+			eval("var result="+rep.responseText);
+			var _success=result.success;
+			var totalCount=result.totalCount;
+			var pageSize=10;
+			if(_success){
+				var store=_grid1.store;
+				var lastO= store.lastOptions.params;
+				var start=lastO.start;
+				var totRecords= new Number(totalCount);
+				if(start>0&&start>=totRecords){
+					store.load({params:{start:start-pageSize, limit:pageSize}});
+				}else{
+					store.load({params:{start:start, limit:pageSize}});
+				}
+				Ext.Msg.alert("删除属性","删除属性成功！");
+			}else{
+				Ext.Msg.alert("删除属性","删除属性失败！");
+			}
+			
+		}
+		function failure(rep){
+			alert("删除失败！");
+			alert(rep.responseText);
+		}
+	},
+	getSelectedIds:function(){
+		var ids="";
+		var selections=this.getSelectionModel().getSelections();
+		var size=selections.length;
+		for(var i=0;i<size;i++){
+				var r=selections[i];
+				if(ids.length==0){
+					ids='ids='+r.get("attributeId");
+				}else{
+					ids+="&ids="+r.get("attributeId");
+				}
+		}
+		return ids;
 		
+	},
+	reload:function(){
+		this.store.reload();
 	}
 });
 
 CmsFunctionGridPanel=function(){
 	var _grid=this;
-	var _win=this.window;
+	var _win= new CmsFunctionWindow();
+	_win.grid=this;
+	this.modelId;
 	var sm = new Ext.grid.CheckboxSelectionModel();
+	var fields=['functionId','name', 'url','show'];
+	this.window;
 	this.store = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
-            url: listUrl
+            url: 'cms/function/list.jhtm?modelId=0'
         }),
         reader: new Ext.data.JsonReader({
             root: 'objs',
             totalProperty: 'totalCount',
-            id: pk,
+            id: 'functionId',
             fields:fields 
         }
         ),
         remoteSort: true
 	});
-    this.store.setDefaultSort(pk, 'asc');
+    this.store.setDefaultSort('functionId', 'asc');
 	this.store.on('load',function(s,r,o){
 		if(s.getTotalCount()>0){
 			sm.selectFirstRow();
 		}
 	});
-	 this.store.load({params:{start:0,limit:18}});
 	
 	this.cm = new Ext.grid.ColumnModel([sm,{
-        id: pk,
+        id: 'functionId',
         header: "ID",
-        dataIndex: pk,
-        width: 20
+        dataIndex: 'functionId',
+        width: 30
      },{
         id: 'name', 
-        header: modelTitle+"名称",
+        header: "名称",
         dataIndex: 'name',
-        width: 100
+        width: 60
      },{
-        header: modelTitle+"目录",
-        dataIndex: 'packageName',
-        width: 100,
+        header: "URL",
+        dataIndex: 'url',
+        width: 60,
         sortable:false
-     }]);
+     },{
+         header: "显示",
+         dataIndex: 'show',
+         width: 60,
+         renderer:rendererEnabled,
+         sortable:false
+      }]);
 
     this.cm.defaultSortable = true;
     CmsFunctionGridPanel.superclass.constructor.call(this, {
@@ -355,41 +494,341 @@ CmsFunctionGridPanel=function(){
 };
 Ext.extend(CmsFunctionGridPanel, Ext.grid.GridPanel, {
 	loadData : function(id) {
+		this.modelId=id;
+		this.store.proxy= new Ext.data.HttpProxy({
+	        url: 'cms/function/list.jhtm?modelId='+id
+	    });
+		this.store.load({params:{start:0,limit:10}});
+	},
+	addInfo:function(){
+		if(!this.window){
+			this.window=new CmsFunctionWindow();
+		}
+		this.window.show();
+		this.window.formPanel.getForm().reset();
+		this.window.setModelId(this.modelId);
+	},
+	loadInfo:function(){
+		if(!this.window){
+			this.window=new CmsFunctionWindow();
+		}
+		var id=this.getSelectionModel().getSelected().get('functionId');
+		this.window.show();
+		this.window.formPanel.loadData(id);
+	},
+	deleteInfo:function(){
+		var sm=this.getSelectionModel();
+		var _grid1=this;
+		if(sm.getSelected==null){
+			Ext.Msg.alert("删除功能","请先选择一个功能！");
+			return;
+		}else{
+			var s=Ext.Msg.confirm("删除功能","确定要删除选中的功能吗？",function(o){
+				if(o=='yes'){
+					var url='cms/function/delete.jhtm?'+_grid1.getSelectedIds();
+					Ext.Ajax.request({
+						url:url,
+						success:success,
+						failure:failure
+					});
+				}else{
+					return;
+				}
+			});
+		}
+		function success(rep){
+			eval("var result="+rep.responseText);
+			var _success=result.success;
+			var totalCount=result.totalCount;
+			var pageSize=10;
+			if(_success){
+				var store=_grid1.store;
+				var lastO= store.lastOptions.params;
+				var start=lastO.start;
+				var totRecords= new Number(totalCount);
+				if(start>0&&start>=totRecords){
+					store.load({params:{start:start-pageSize, limit:pageSize}});
+				}else{
+					store.load({params:{start:start, limit:pageSize}});
+				}
+				Ext.Msg.alert("删除功能","删除功能成功！");
+			}else{
+				Ext.Msg.alert("删除功能","删除功能失败！");
+			}
+			
+		}
+		function failure(rep){
+			alert("删除失败！");
+			alert(rep.responseText);
+		}
+	},
+	getSelectedIds:function(){
+		var ids="";
+		var selections=this.getSelectionModel().getSelections();
+		var size=selections.length;
+		for(var i=0;i<size;i++){
+				var r=selections[i];
+				if(ids.length==0){
+					ids='ids='+r.get("functionId");
+				}else{
+					ids+="&ids="+r.get("functionId");
+				}
+		}
+		return ids;
 		
+	},
+	reload:function(){
+		this.store.reload();
 	}
 });
 
-CmsAttributeFormPanel=function(){
-	var _formPanel=this;
-	var _form=this.getForm();
-	CmsAttributeFormPanel.superclass.constructor.call(this, {
-		
+
+
+CmsAttributeFormPanel = function() {
+	this.idField = {
+		xtype : 'hidden',
+		fieldLabel : "id",
+		name : "obj.attributeId",
+		value:'0'
+	};
+	this.nameField = {
+		xtype : 'textfield',
+		fieldLabel : "名称",
+		allowBlank : false,
+		name : "obj.name"
+	};
+	this.labelField = {
+		xtype : 'textfield',
+		fieldLabel : "标签",
+		allowBlank : false,
+		name : "obj.label"
+	};
+	
+    CmsAttributeFormPanel.superclass.constructor.call(this, {
+		bodyStyle : 'padding:2px 2px 0',
+		frame : true,
+		reader : new Ext.data.JsonReader( {
+			root : 'data',
+			successProperty : 'success',
+			totalProperty : 'totalCount',
+			id : 'attributeId'
+		}, [
+		    {name:'obj.attributeId', mapping:'attributeId'},
+		    {name:'obj.name',mapping:'name'}, 
+		    {name:'obj.label',mapping:'label'},
+		    {name:'obj.model.modelId',mapping:'modelId'}
+		    ]
+		),
+		items : [this.idField, this.nameField, this.labelField]
 	});
 };
 Ext.extend(CmsAttributeFormPanel, Ext.form.FormPanel, {
 	loadData : function(id) {
-		
+		var url = 'cms/attribute/load.jhtm?id=' + id;
+		this.getForm().load( {
+			url : url,
+			waitMsg : '正在加载数据....',
+			failure : function(form, action) {
+				var json = action.response.responseText;
+				var o = eval("(" + json + ")");
+				Ext.MessageBox.show( {
+					title : '出现错误',
+					msg : o.message,
+					buttons : Ext.MessageBox.OK,
+					icon : Ext.MessageBox.ERROR
+				});
+			}
+		});
 	}
 });
-CmsFunctionFromPanel=function(){
-	var _formPanel=this;
-	var _form=this.getForm();
-	CmsFunctionFromPanel.superclass.constructor.call(this, {
-		
+
+
+
+
+
+CmsFunctionFormPanel = function() {
+	this.idField = {
+		xtype : 'hidden',
+		fieldLabel : "id",
+		name : "obj.functionId",
+		value:'0'
+	};
+	this.nameField = {
+		xtype : 'textfield',
+		fieldLabel : "名称",
+		allowBlank : false,
+		name : "obj.name"
+	};
+	this.urlField = {
+		xtype : 'textfield',
+		fieldLabel : "URL",
+		allowBlank : false,
+		name : "obj.url"
+	};
+	this.showField = {
+		xtype : 'checkbox',
+		fieldLabel : "显示",
+		allowBlank : false,
+		inputValue:'show',
+		name : "obj.show"
+	};
+	
+	
+	CmsFunctionFormPanel.superclass.constructor.call(this, {
+		bodyStyle : 'padding:2px 2px 0',
+		frame : true,
+		reader : new Ext.data.JsonReader( {
+			root : 'data',
+			successProperty : 'success',
+			totalProperty : 'totalCount',
+			id : 'functionId'
+		}, [
+		    {name:'obj.functionId', mapping:'functionId'},
+		    {name:'obj.name',mapping:'name'}, 
+		    {name:'obj.url',mapping:'url'},
+		    {name:'obj.show',mapping:'show'}
+		    ]
+		),
+		items : [this.idField, this.nameField, this.urlField,this.showField]
 	});
 };
-Ext.extend(CmsFunctionFromPanel, Ext.form.FormPanel, {
+Ext.extend(CmsFunctionFormPanel, Ext.form.FormPanel, {
 	loadData : function(id) {
-		
+		var url = 'cms/function/load.jhtm?id=' + id;
+		this.getForm().load( {
+			url : url,
+			waitMsg : '正在加载数据....',
+			failure : function(form, action) {
+				var json = action.response.responseText;
+				var o = eval("(" + json + ")");
+				Ext.MessageBox.show( {
+					title : '出现错误',
+					msg : o.message,
+					buttons : Ext.MessageBox.OK,
+					icon : Ext.MessageBox.ERROR
+				});
+			}
+		});
 	}
 });
-CmsAttributeWindow=function(){
-	
-};
 
-CmsFunctionWindow=function(){
-	
-};
+CmsAttributeWindow = function() {
+	var _win = this;
+	this.formPanel = new CmsAttributeFormPanel();
+	var _form = this.formPanel.getForm();
+	this.form=_form;
+	this.grid;
+	CmsAttributeWindow.superclass.constructor.call(this, {
+		title : '属性信息',
+		width : 320,
+		height : 180,
+		
+		resizable : true,
+		plain : false,
+		border : false,
+		modal : true,
+		autoScroll : true,
+		layout : 'fit',
+		closeAction : 'hide',
+		items : this.formPanel,
+		buttons : [ {
+			text : '保存',
+			handler : function() {
+				if (_form.isValid()) {
+					
+					_form.submit( {
+						waitMsg : '正在保存数据...',
+						url : 'cms/attribute/save.jhtm?obj.model.modelId='+selectModelId,
+						failure : function(form, action) {
+							var json = action.response.responseText;
+							var o = eval("(" + json + ")");
+							Ext.MessageBox.show( {
+								title : '出现错误',
+								msg : o.message,
+								buttons : Ext.MessageBox.OK,
+								icon : Ext.MessageBox.ERROR
+							});
+						},
+						success : function(form1, action) {
+							_win.grid.reload();
+						}
+					});
+				}
+			}
+		}, {
+			text : '取消',
+			handler : function() {
+				_win.hide();
+			},
+			tooltip : '关闭窗口'
+		}]
+	});
+}
+Ext.extend(CmsAttributeWindow, Ext.Window, {
+	loadData : function(id) {
+		this.formPanel.loadData(id);
+	}
+});
+
+
+
+CmsFunctionWindow = function() {
+	var _win = this;
+	this.formPanel = new CmsFunctionFormPanel();
+	var _form = this.formPanel.getForm();
+	this.grid;
+	CmsFunctionWindow.superclass.constructor.call(this, {
+		title : '属性信息',
+		width : 320,
+		height : 180,
+		
+		resizable : true,
+		plain : false,
+		border : false,
+		modal : true,
+		autoScroll : true,
+		layout : 'fit',
+		closeAction : 'hide',
+		items : this.formPanel,
+		buttons : [ {
+			text : '保存',
+			handler : function() {
+				if (_form.isValid()) {
+					_form.submit( {
+						waitMsg : '正在保存数据...',
+						url : 'cms/function/save.jhtm?obj.model.modelId='+selectModelId,
+						failure : function(form, action) {
+							var json = action.response.responseText;
+							var o = eval("(" + json + ")");
+							Ext.MessageBox.show( {
+								title : '出现错误',
+								msg : o.message,
+								buttons : Ext.MessageBox.OK,
+								icon : Ext.MessageBox.ERROR
+							});
+						},
+						success : function(form1, action) {
+							_win.grid.reload();
+						}
+					});
+				}
+			}
+		}, {
+			text : '取消',
+			handler : function() {
+				_win.hide();
+			},
+			tooltip : '关闭窗口'
+		}]
+	});
+}
+Ext.extend(CmsFunctionWindow, Ext.Window, {
+	loadData : function(id) {
+		this.formPanel.loadData(id);
+	}
+});
+
+
 
 var CmsModelApp=function(){
 	var _treePanel;
@@ -402,11 +841,16 @@ var CmsModelApp=function(){
 			_modelFormPanel=new CmsModelFormPanel();
 			_attributeGridPanel=new CmsAttributeGridPanel();
 		    _functionGridPanel=new CmsFunctionGridPanel();
+		    _treePanel.formPanel=_modelFormPanel;
+		    _modelFormPanel.treePanel=_treePanel;
+		    _treePanel.attributeGrid=_attributeGridPanel;
+		    _treePanel.functionGrid=_functionGridPanel;
 			var westPanel=new Ext.Panel({
 				region:'west',
 				el:'cmsModelTreePanel',
 				contentEl:'cmsModelTree',
 				layout:'fit',
+				frame:false,
 				collapsible:true,
 				split:true,
 				height:200,
@@ -415,6 +859,7 @@ var CmsModelApp=function(){
 			
 			var centerTop=new Ext.Panel({
 				region:'north',
+				frame:false,
 				layout:'fit',
 				height:130,
 				tbar:[{
@@ -429,7 +874,7 @@ var CmsModelApp=function(){
 			            iconCls: 'save',
 						scope:this,
 						handler: function(){
-							
+					  		_modelFormPanel.saveData();
 						}
 					  },'-',{
 				  	text: '删除',
@@ -448,29 +893,43 @@ var CmsModelApp=function(){
 				layout:'fit',
 				items:[_attributeGridPanel]
 			});
-			
+			*/
 			var functionGridPanel=new Ext.Panel({
-				region:'center',
 				layout:'fit',
+				width:200,
+				frame:false,
+				el:'cmsFunctionCenter',
+				height:100,
+				contentEl:'cmsFunctionGrid',
 				items:[_functionGridPanel]
 			});
-			*/
-			var gridPanel=new Ext.TabPanel({
+			var attributeGridPanel=new Ext.Panel({
+				layout:'fit',
+				width:200,
+				frame:false,
+				el:'cmsAttributeCenter',
+				height:100,
+				contentEl:'cmsAttributeGrid',
+				items:[_attributeGridPanel]
+			});
+			
+			var tabPanel=new Ext.TabPanel({
 				height:200,
 				renderTo:'cmsModelTab',
 				activeTab: 0,
-			    items: [{title:'模型属性',layout:'fit',el:'cmsAttributeCenter',contentEl:'cmsAttributeGrid',items:[_attributeGridPanel]},
-			            {title:'模型功能',layout:'fit',el:'cmsFunctionCenter', contentEl:'cmsFunctionGrid',items:[_functionGridPanel]}
+				frame:false,
+			    items: [{title:'模型属性',id:'attribute',frame:false,layout:'fit',items:attributeGridPanel},
+			            {title:'模型功能',id:'function',frame:false,layout:'fit',items:functionGridPanel}
 			    ]
 			});
-			
-			
+			tabPanel.setActiveTab('function');
+			tabPanel.setActiveTab('attribute');
 			var centerPanel=new Ext.Panel({
 				region:'center',
 				layout:'border',
 				title:'模型信息',
 				height:300,
-				items:[centerTop,new Ext.Panel({region:'center',layout:'fit',contentEl:'cmsModelTab',items:[gridPanel]})]
+				items:[centerTop,new Ext.Panel({region:'center',layout:'fit',items:[tabPanel]})]
 			});
 		
 			var modelPanel=new Ext.Panel({

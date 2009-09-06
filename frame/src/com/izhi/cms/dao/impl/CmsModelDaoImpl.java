@@ -32,7 +32,7 @@ public class CmsModelDaoImpl extends HibernateDaoSupport implements ICmsModelDao
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
-		String sql="select new map(o.modelId as modelId,o.name as name,o.tableName as tableName,o.entityClass as entityClass) from CmsModel o where o.modelId=?";
+		String sql="select new map(o.modelId as modelId,o.name as name,o.show as show,o.hasChild as hasChild,o.sequence as sequence,o.tableName as tableName,o.entityClass as entityClass) from CmsModel o where o.modelId=?";
 		return this.getHibernateTemplate().find(sql, id);
 	}
 

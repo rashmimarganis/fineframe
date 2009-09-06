@@ -32,7 +32,8 @@ public class CmsFunction implements Serializable{
 	@Column(name="url")
 	private String url;
 	
-	
+	@Column(name="is_show")
+	private boolean show;
 	@ManyToOne
 	@JoinColumn(name="model_id")
 	private CmsModel model;
@@ -79,6 +80,14 @@ public class CmsFunction implements Serializable{
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public boolean isShow() {
+		return show;
+	}
+
+	public void setShow(boolean show) {
+		this.show = show;
 	}
 
 

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 @Entity
 @Table(name="cms_attribute")
@@ -25,6 +27,9 @@ public class CmsAttribute implements Serializable {
 	@Column(name="attribute_name")
 	private String name;
 
+	@ManyToOne
+	@JoinColumn(name="model_id")
+	private CmsModel model;
 
 	public int getAttributeId() {
 		return attributeId;
@@ -49,4 +54,13 @@ public class CmsAttribute implements Serializable {
 	public void setLabel(String label) {
 		this.label = label;
 	}
+
+	public CmsModel getModel() {
+		return model;
+	}
+
+	public void setModel(CmsModel model) {
+		this.model = model;
+	}
+	
 }

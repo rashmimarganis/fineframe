@@ -46,7 +46,7 @@
 <%@page import="com.izhi.platform.service.IUserService"%>
 <%@page import="com.izhi.platform.service.IPersonService"%>
 <%@page import="com.izhi.platform.service.ISiteService"%>
-<%@page import="com.izhi.cms.service.ICmsSiteService"%>
+<%@page import="com.izhi.cms.service.ICmsAttributeService"%>
 <%@page import="com.izhi.platform.util.SpringUtils"%>
 <%@page import="org.logicalcobwebs.proxool.ProxoolFacade"%>
 <%@page import="org.logicalcobwebs.proxool.admin.StatisticsIF"%><html>
@@ -56,14 +56,17 @@
 </head>
 <body>
 <%
-ICmsSiteService s=(ICmsSiteService)SpringUtils.getBean("cmsSiteService");
+ICmsAttributeService s=(ICmsAttributeService)SpringUtils.getBean("cmsAttributeService");
+PageParameter pp=new PageParameter();
+pp.setDir("desc");
+pp.setSort("attributeId");
+pp.setStart(0);
+pp.setLimit(10);
+List<Map<String,Object>> l=s.findPage(pp,1);
+out.println(JSONArray.fromObject(l).toString());
 ///out.println(JSONArray.fromObject(s.findJsonById(1)).toString());
 
-StatisticsIF[] statisticsArray = ProxoolFacade.getStatistics("MySqlPool"); 
-out.println(statisticsArray.length);
-for(StatisticsIF s1:statisticsArray){
-	out.println(s1.getServedPerSecond());
-}
+
 		//out.println(JSONObject.fromObject(map).toString());
 	/*
 		IUserService mrs=(IUserService)wac.getBean("userService");

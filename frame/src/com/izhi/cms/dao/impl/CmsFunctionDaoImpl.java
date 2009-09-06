@@ -32,7 +32,7 @@ public class CmsFunctionDaoImpl extends HibernateDaoSupport implements ICmsFunct
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
-		String sql="select new map(o.modelId as modelId,o.name as name,o.tableName as tableName,o.entityClass as entityClass) from CmsFunction o where o.modelId=?";
+		String sql="select new map(o.functionId as functionId,o.name as name,o.url as url,o.show as show,o.model.modelId as modelId,o.model.name as modelName) from CmsFunction o where o.functionId=?";
 		return this.getHibernateTemplate().find(sql, id);
 	}
 
@@ -46,7 +46,7 @@ public class CmsFunctionDaoImpl extends HibernateDaoSupport implements ICmsFunct
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findPage(PageParameter pp,int modelId) {
-		String sql="select new map(o.modelId as modelId,o.name as name,o.tableName as tableName,o.entityClass as entityClass) from CmsFunction o where o.model.modelId=:modelId";
+		String sql="select new map(o.functionId as functionId,o.name as name,o.url as url,o.show as show) from CmsFunction o where o.model.modelId=:modelId";
 		if(pp!=null){
 			if(pp.getSort()!=null){
 				sql+=" order by o."+pp.getSort();
