@@ -57,9 +57,7 @@ CmsModelTreePanel=function(){
     _tree.setRootNode(_root);
 	
 	_tree.render();
-	//_root.select();
 	 _root.on('expand',function(n){
-	    	//alert(this.hasChildNodes());
 	    	if(this.firstNode){
 	    		this.firstNode.select();
 	    	}
@@ -77,11 +75,65 @@ Ext.extend(CmsModelTreePanel, Ext.tree.TreePanel, {
 		var id=tree.getSelectionModel().getSelectedNode().id;
 		return id;
 	},
-	loadAttributes:function(id){
+	deleteNode:function(id){
+		var node=this.getSelectionModel().getSelectedNode();
+		if(!node){
+			Ext.Msg.alert("删除"+modelTitle,"请选择"+modelTitle+"！");
+			return;
+		}
 		
-	},
-	loadFunctions:function(id){
-		
+		if(!confirm("确定要删除选中的"+modelTitle+"吗？")){
+			return;
+		}
+		var url=deleteUrl+'?ids='+node.id;
+		Ext.Ajax.request({
+			url:url,
+			success:success,
+			failure:failure
+		});
+		var tree=this;
+		var attributeGrid=this.attributeGrid;
+		var functionGrid=this.functionGrid;
+		function success(rep){
+			eval("var result="+rep.responseText);
+			if(result.success){
+				Ext.Msg.alert("删除"+modelTitle+"","删除"+modelTitle+"成功！");
+				var node1=node.nextSibling;
+				var next=false
+				if(node1){
+					node1.select();
+					next=true;
+					
+				}else{
+					var node2=node.previousSibling;
+					if(node2){
+						node2.select();
+						next=true;
+					}else{
+						tree.addNode();
+						
+					}
+				}
+				if(!next){
+					tree.getRootNode().removeChild(node);
+					tree.formPanel.addData();
+					attributeGrid.store.removeAll();
+					functionGrid.store.removeAll();
+				}else{
+					node.remove();
+					tree.getRootNode().reload();
+				}
+			}
+		}
+		function failure(rep){
+			Ext.Msg.alert("删除"+modelTitle,rep.repsonseText);
+		}
+	}
+	,
+	addNode:function(id,text){
+		var root=this.getRootNode();
+		//var node=Ext.tree.TreeNode({id:id,text:text,leaf:true});
+		root.appendChild({id:id,text:text,leaf:true});
 	}
 });
 
@@ -202,6 +254,7 @@ Ext.extend(CmsModelFormPanel, Ext.form.FormPanel, {
 	},
 	saveData:function(){
 		var _form=this.getForm();
+		var tree=this.treePanel;
 		if (_form.isValid()) {
 			_form.submit( {
 				waitMsg : '正在保存数据...',
@@ -217,17 +270,33 @@ Ext.extend(CmsModelFormPanel, Ext.form.FormPanel, {
 					});
 				},
 				success : function(form1, action) {
-					//_win.gridPanel.reloadData();
-
+					Ext.Msg.alert('保存','保存模型信息成功！');;
+					var json = action.response.responseText;
+					var o = eval("(" + json + ")");
+					var id=o.id;
+					var text=_form.findField("obj.name").getValue();
+					tree.addNode(id,text);
 				}
 			});
 		}
+	},
+	addData:function(){
+		var _form=this.getForm();
+		_form.findField("obj.modelId").setValue(0);
+		_form.findField("obj.name").setValue('');
+		_form.findField("obj.entityClass").setValue('');
+		_form.findField("obj.tableName").setValue('');
+		_form.findField("obj.hasChild").setValue(true);
+		_form.findField("obj.show").setValue(true);
+		_form.findField("obj.name").focus(false,true);
 	}
 });
 
 CmsAttributeGridPanel=function(){
 	var _grid=this;
+	
 	var _win=new CmsAttributeWindow();
+	this.window=_win;
 	this.modelId;
 	_win.grid=this;
 	var sm = new Ext.grid.CheckboxSelectionModel();
@@ -320,16 +389,11 @@ Ext.extend(CmsAttributeGridPanel, Ext.grid.GridPanel, {
 		this.store.load({params:{start:0,limit:10}});
 	},
 	addInfo:function(){
-		if(!this.window){
-			this.window=new CmsAttributeWindow();
-		}
+
 		this.window.show();
 		this.window.formPanel.getForm().reset();
 	},
 	loadInfo:function(){
-		if(!this.window){
-			this.window=new CmsAttributeWindow();
-		}
 		var id=this.getSelectionModel().getSelected().get('attributeId');
 		this.window.show();
 		this.window.formPanel.loadData(id);
@@ -404,6 +468,7 @@ Ext.extend(CmsAttributeGridPanel, Ext.grid.GridPanel, {
 CmsFunctionGridPanel=function(){
 	var _grid=this;
 	var _win= new CmsFunctionWindow();
+	this.window=_win;
 	_win.grid=this;
 	this.modelId;
 	var sm = new Ext.grid.CheckboxSelectionModel();
@@ -501,17 +566,10 @@ Ext.extend(CmsFunctionGridPanel, Ext.grid.GridPanel, {
 		this.store.load({params:{start:0,limit:10}});
 	},
 	addInfo:function(){
-		if(!this.window){
-			this.window=new CmsFunctionWindow();
-		}
 		this.window.show();
 		this.window.formPanel.getForm().reset();
-		this.window.setModelId(this.modelId);
 	},
 	loadInfo:function(){
-		if(!this.window){
-			this.window=new CmsFunctionWindow();
-		}
 		var id=this.getSelectionModel().getSelected().get('functionId');
 		this.window.show();
 		this.window.formPanel.loadData(id);
@@ -669,7 +727,7 @@ CmsFunctionFormPanel = function() {
 		xtype : 'checkbox',
 		fieldLabel : "显示",
 		allowBlank : false,
-		inputValue:'show',
+		inputValue:'true',
 		name : "obj.show"
 	};
 	
@@ -863,25 +921,25 @@ var CmsModelApp=function(){
 				layout:'fit',
 				height:130,
 				tbar:[{
-				  	text: '添加',
+				  	text: '添加模型',
 		            iconCls: 'add',
 					scope:this,
 					handler: function(){
-						
+						_modelFormPanel.addData();
 					}
 				  },'-',{
-					  	text: '保存',
+					  	text: '保存模型',
 			            iconCls: 'save',
 						scope:this,
 						handler: function(){
 					  		_modelFormPanel.saveData();
 						}
 					  },'-',{
-				  	text: '删除',
+				  	text: '删除模型',
 		            iconCls: 'delete',
 					scope:this,
 					handler: function(){
-						
+						  _treePanel.deleteNode();
 					}
 				  }]
 				,

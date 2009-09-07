@@ -1,1 +1,1 @@
-{'success':${success?string}}
+${result?default("")}

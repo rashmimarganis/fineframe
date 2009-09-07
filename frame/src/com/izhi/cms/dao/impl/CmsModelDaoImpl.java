@@ -9,21 +9,36 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.izhi.cms.dao.ICmsModelDao;
+import com.izhi.cms.model.CmsAttribute;
+import com.izhi.cms.model.CmsFunction;
 import com.izhi.cms.model.CmsModel;
 import com.izhi.platform.util.PageParameter;
+
 @Service("cmsModelDao")
-public class CmsModelDaoImpl extends HibernateDaoSupport implements ICmsModelDao{
+public class CmsModelDaoImpl extends HibernateDaoSupport implements
+		ICmsModelDao {
 
 	@Override
 	public boolean deleteModel(int id) {
-		CmsModel m=(CmsModel)this.getHibernateTemplate().load(CmsModel.class, id);
+		CmsModel m = (CmsModel) this.getHibernateTemplate().load(
+				CmsModel.class, id);
+		List<CmsAttribute> cas = m.getAttributes();
+		for (CmsAttribute ca : cas) {
+			this.getHibernateTemplate().delete(ca);
+		}
+		List<CmsFunction> cfs = m.getFunctions();
+		for (CmsFunction cf : cfs) {
+			this.getHibernateTemplate().delete(cf);
+		}
+		m.setAttributes(null);
+		m.setFunctions(null);
 		this.getHibernateTemplate().delete(m);
 		return true;
 	}
 
 	@Override
 	public boolean deleteModels(List<Integer> ids) {
-		for(Integer id:ids){
+		for (Integer id : ids) {
 			this.deleteModel(id);
 		}
 		return true;
@@ -32,33 +47,33 @@ public class CmsModelDaoImpl extends HibernateDaoSupport implements ICmsModelDao
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
-		String sql="select new map(o.modelId as modelId,o.name as name,o.show as show,o.hasChild as hasChild,o.sequence as sequence,o.tableName as tableName,o.entityClass as entityClass) from CmsModel o where o.modelId=?";
+		String sql = "select new map(o.modelId as modelId,o.name as name,o.show as show,o.hasChild as hasChild,o.sequence as sequence,o.tableName as tableName,o.entityClass as entityClass) from CmsModel o where o.modelId=?";
 		return this.getHibernateTemplate().find(sql, id);
 	}
 
 	@Override
 	public CmsModel findModelById(int id) {
-		CmsModel m=(CmsModel)this.getHibernateTemplate().load(CmsModel.class, id);
+		CmsModel m = (CmsModel) this.getHibernateTemplate().load(
+				CmsModel.class, id);
 		return m;
 	}
-
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findPage(PageParameter pp) {
-		String sql="select new map(o.modelId as modelId,o.name as name,o.tableName as tableName,o.entityClass as entityClass) from CmsModel o ";
-		if(pp!=null){
-			if(pp.getSort()!=null){
-				sql+=" order by o."+pp.getSort();
-				if(pp.getDir()!=null){
-					sql+=" "+pp.getDir();
+		String sql = "select new map(o.modelId as modelId,o.name as name,o.tableName as tableName,o.entityClass as entityClass) from CmsModel o ";
+		if (pp != null) {
+			if (pp.getSort() != null) {
+				sql += " order by o." + pp.getSort();
+				if (pp.getDir() != null) {
+					sql += " " + pp.getDir();
 				}
 			}
-			Session s=this.getSession();
-			Query q=s.createQuery(sql);
+			Session s = this.getSession();
+			Query q = s.createQuery(sql);
 			q.setFirstResult(pp.getStart());
 			q.setMaxResults(pp.getLimit());
-			
+
 			return q.list();
 		}
 		return null;
@@ -67,14 +82,14 @@ public class CmsModelDaoImpl extends HibernateDaoSupport implements ICmsModelDao
 	@SuppressWarnings("unchecked")
 	@Override
 	public int findTotalCount() {
-		String sql="select count(o) from CmsModel o";
-		List<Long> l=this.getHibernateTemplate().find(sql);
+		String sql = "select count(o) from CmsModel o";
+		List<Long> l = this.getHibernateTemplate().find(sql);
 		return l.get(0).intValue();
 	}
 
 	@Override
 	public int saveModel(CmsModel obj) {
-		int i=(Integer)this.getHibernateTemplate().save(obj);
+		int i = (Integer) this.getHibernateTemplate().save(obj);
 		return i;
 	}
 
@@ -87,7 +102,7 @@ public class CmsModelDaoImpl extends HibernateDaoSupport implements ICmsModelDao
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findTree() {
-		String sql="select new map(o.modelId as id,o.name as text,1 as leaf) from CmsModel o ";
+		String sql = "select new map(o.modelId as id,o.name as text,1 as leaf) from CmsModel o ";
 		return this.getHibernateTemplate().find(sql);
 	}
 

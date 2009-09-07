@@ -3,6 +3,7 @@ package com.izhi.cms.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +35,7 @@ public class CmsFunction implements Serializable{
 	
 	@Column(name="is_show")
 	private boolean show;
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name="model_id")
 	private CmsModel model;
 	

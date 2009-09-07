@@ -3,6 +3,7 @@ package com.izhi.cms.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,7 +32,8 @@ public class CmsModel implements Serializable {
 	
 	@Column(name="entity_class")
 	private String entityClass;
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(fetch=FetchType.LAZY,cascade = { CascadeType.REMOVE })
+	@JoinColumn(name="model_id",updatable=false,insertable=false)
 	private List<CmsFunction> functions;
 	@Column(name="has_child")
 	private boolean hasChild;
@@ -48,8 +50,8 @@ public class CmsModel implements Serializable {
 	public void setSequence(int sequence) {
 		this.sequence = sequence;
 	}
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name="model_id",updatable=false,insertable=false,nullable=true)
+	@OneToMany(fetch = FetchType.LAZY,cascade = { CascadeType.REMOVE })
+	@JoinColumn(name="model_id",updatable=false,insertable=false)
 	private List<CmsAttribute> attributes;
 	public String getName() {
 		return name;

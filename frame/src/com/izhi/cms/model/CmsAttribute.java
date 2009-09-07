@@ -2,6 +2,7 @@ package com.izhi.cms.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,7 +28,7 @@ public class CmsAttribute implements Serializable {
 	@Column(name="attribute_name")
 	private String name;
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name="model_id")
 	private CmsModel model;
 
