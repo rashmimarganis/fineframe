@@ -1,5 +1,6 @@
 package com.izhi.cms.service.impl;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -11,11 +12,15 @@ import com.izhi.cms.dao.ICmsTemplateSuitDao;
 import com.izhi.cms.model.CmsTemplateSuit;
 import com.izhi.cms.service.ICmsTemplateSuitService;
 import com.izhi.platform.util.PageParameter;
+import com.izhi.platform.util.WebUtils;
 @Service("cmsTemplateSuitService")
 public class CmsTemplateSuitServiceImpl implements ICmsTemplateSuitService{
 
 	@Resource(name="cmsTemplateSuitDao")
 	private ICmsTemplateSuitDao cmsTemplateSuitDao;
+	
+	@Resource(name = "cmsTemplatePath")
+	private String templatePath;
 	@Override
 	public boolean deleteSuit(int id) {
 		return cmsTemplateSuitDao.deleteSuit(id);
@@ -53,10 +58,24 @@ public class CmsTemplateSuitServiceImpl implements ICmsTemplateSuitService{
 				if(cmsTemplateSuitDao.findPackageExist(obj.getPackageName())){
 					return -1;
 				}
+				String fn=getFilePath(obj.getPackageName());
+				File file=new File(fn);
+				if(!file.exists()){
+					file.mkdirs();
+				}
 				return cmsTemplateSuitDao.saveSuit(obj);
 			}else{
 				if(cmsTemplateSuitDao.findPackageExist(obj.getPackageName(),obj.getOldPackageName())){
 					return -1;
+				}
+				String fn=getFilePath(obj.getPackageName());
+				String oldFn=getFilePath(obj.getOldPackageName());
+				File file=new File(fn);
+				File oldFile=new File(oldFn);
+				if(!oldFile.exists()){
+					file.mkdirs();
+				}else{
+					oldFile.renameTo(file);
 				}
 				return cmsTemplateSuitDao.updateSuit(obj);
 			}
@@ -92,4 +111,18 @@ public class CmsTemplateSuitServiceImpl implements ICmsTemplateSuitService{
 		return cmsTemplateSuitDao.findPackageExist(name,oldName);
 	}
 
+	private String getFilePath(String pn) {
+		String file = WebUtils.getWebRoot() + templatePath +pn;
+		return file;
+	}
+
+	public String getTemplatePath() {
+		return templatePath;
+	}
+
+	public void setTemplatePath(String templatePath) {
+		this.templatePath = templatePath;
+	}
+	
+	
 }

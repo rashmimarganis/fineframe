@@ -22,7 +22,7 @@
 </div>
 
 <script type="text/javascript" src="${base}/js/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="${base}/js/ext-all.js"></script>
+    <script type="text/javascript" src="${base}/js/ext-all-debug.js"></script>
     <script type="text/javascript" src="${base}/js/ext-lang-zh_CN.js"></script>
     <script type="text/javascript" src="${base}/js/frame/common.js"></script>
     <script type="text/javascript" src="js/ComboBoxTree.js"></script>
@@ -37,8 +37,8 @@
   </div>
   <div id="north">
      <div class="logo"><a href="${base}" target="_blank"><img src="${base}/skin/default/images/logo.jpg" width="220" height="58" border="0"/></a></div>
-  <p id="info_bar"  > 用户名：<strong class="font_arial white">
-      ${user.username}</strong>    | <a href="${base}/logout.jhtm" class="white">退出登录</a> | <a href="${base}" class="white" target="_blank">网站首页</a></p>
+  <p id="info_bar"  > 用户名：<strong class="font_arial white"><#if user??>${user.person.realname}</#if>
+    </strong>    | <a href="${base}/logout.jhtm" class="white">退出登录</a> | <a href="${base}" class="white" target="_blank">网站首页</a></p>
   
   </div>
   <div id="main">

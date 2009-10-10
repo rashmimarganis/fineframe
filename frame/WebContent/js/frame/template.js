@@ -278,7 +278,7 @@ var FrameTemplateApp= function(){
 				
 				form.on({
 					actioncomplete: function(form, action){
-						FrameMsg.msg("保存模板",action.result.msg);
+						//FrameMsg.msg("保存模板",action.result.msg);
 		               
 						saveBtn.enable();
 						form.reset();
@@ -286,7 +286,7 @@ var FrameTemplateApp= function(){
 		        	},
 		        	actionfailed: function(form, action){
 		                saveBtn.enable();
-		                FrameMsg.msg("保存模板",action.result.msg);
+		                //FrameMsg.msg("保存模板",action.result.msg);
 		        	}
 				});
 				saveBtn=form.addButton({

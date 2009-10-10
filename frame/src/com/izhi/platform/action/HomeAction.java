@@ -21,10 +21,15 @@ public class HomeAction extends BaseAction {
 	@Resource(name="siteService")
 	private ISiteService siteService;
 	@Action("/home")
-	public String execute(){
-		user=SecurityUser.getUser();
-		site=siteService.getSite();
-		org=SecurityUser.getOrg();
+	public String home(){
+		if(SecurityUser.isOnline()){
+			user=SecurityUser.getUser();
+			
+			site=siteService.getSite();
+			org=SecurityUser.getOrg();
+		}
+		System.out.println("==========================User:"+user);
+		log.debug("User:"+user);
 		return SUCCESS;
 	}
 	public User getUser() {

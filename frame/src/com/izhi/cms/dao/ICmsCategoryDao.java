@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.izhi.cms.model.CmsCategory;
-import com.izhi.platform.util.PageParameter;
 
 public interface ICmsCategoryDao {
 	int saveCategory(CmsCategory obj);
@@ -18,9 +17,12 @@ public interface ICmsCategoryDao {
 	CmsCategory findCategoryById(int id);
 
 
-	List<Map<String, Object>> findPage(PageParameter pp);
+	List<Map<String, Object>> findCategory(int cid);
 
 	int findTotalCount();
+	int findTotalCount(int cid);
 
 	List<Map<String, Object>> findJsonById(int id);
+	
+	List<Map<String,Object>> findAll(int id);
 }

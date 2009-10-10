@@ -127,6 +127,9 @@ public class FunctionServiceImpl extends BaseService implements
 	@Override
 	@CacheFlush(modelId = "functionFlushing")
 	public Integer save(Function obj) {
+		if(obj.getParent()!=null&&obj.getParent().getFunctionId()==0){
+			obj.setParent(null);
+		}
 		return functionDao.save(obj);
 	}
 
@@ -184,6 +187,9 @@ public class FunctionServiceImpl extends BaseService implements
 	public Map<String, Object> saveFunction(Function obj) {
 		int i=0;
 		String action="add";
+		if(obj.getParent()!=null&&obj.getParent().getFunctionId()==0){
+			obj.setParent(null);
+		}
 		if(obj.getFunctionId()==0){
 			i=functionDao.saveFunction(obj);
 		}else{

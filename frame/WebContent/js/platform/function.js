@@ -145,6 +145,9 @@ Ext.extend(FunctionFormPanel, Ext.form.FormPanel, {
 			success:function(form,action){
 				var node=westPanel.getSelectionModel().getSelectedNode();
 				if(node.id!=0){
+					if(_form.findField("obj.parent.functionId").getValue()==''){
+						_form.findField("obj.parent.functionId").setValue('0');
+					}
 					if(node.parentNode.id==0){
 						_form.findField("parentName").setValue('无上级');
 					}else{

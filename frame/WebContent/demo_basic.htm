@@ -1,0 +1,30 @@
+ <html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Jalava : Web-based Diagram Editor</title>
+    <script language="JavaScript" src="./js/floweditor/Jalava.js"></script> 	
+	<script language="JavaScript">
+		// initialise Jalava here
+		 function initJalava(){
+		      Jalava.diagram = new Diagram(420, 150, "550", "600");		  
+		      var palette = new Palette(new FlowChartPaletteFactory(), 200, 150, 200);
+		      palette.addItem("rounded", "Start", Palette.DRAG_TOOL, "./img/rounded.gif");
+		      palette.addItem("rect", "Process", Palette.DRAG_TOOL, "./img/rect.gif");
+		      palette.addItem("diamond", "Decision", Palette.DRAG_TOOL, "./img/diamond.gif");
+		      palette.addItem("parallel", "Input/Output", Palette.DRAG_TOOL, "./img/parallel.gif");
+		      palette.addItem("ellipse", "Connector", Palette.DRAG_TOOL, "./img/ellipse.gif");
+		      palette.addItem("connection", "Connection", Palette.CLICK_TOOL, "./img/line.gif");	      
+		      Jalava.propertyPage = new FlowChartPropertyPage(200, 350, 10);
+	    }
+		
+		// start Jalava
+		Jalava.addModule("UrlGradientBlock");
+		Jalava.addModule("FlowChartPropertyPage");
+		Jalava.addModule("FlowChartPaletteFactory");
+		Jalava.start(initJalava);
+
+	</script>
+  </head>
+  <body>
+  </body>
+</html>  

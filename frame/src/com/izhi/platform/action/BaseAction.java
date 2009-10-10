@@ -17,14 +17,16 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.ServletResponseAware;
+import org.apache.struts2.util.ServletContextAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.izhi.platform.security.support.Constants;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class BaseAction extends ActionSupport {
+public class BaseAction extends ActionSupport implements ServletRequestAware,ServletResponseAware,ServletContextAware {
 	/**
 	 * 
 	 */
@@ -32,7 +34,13 @@ public class BaseAction extends ActionSupport {
 	protected Logger log=LoggerFactory.getLogger(this.getClass());
 	private String _dc;
 	private String suit="default";
-
+	
+	protected  HttpServletRequest request;
+	protected  HttpServletResponse response;
+	protected ServletContext application;
+	
+	protected HttpSession session;
+	
 	@SuppressWarnings("unchecked")
 	protected void saveMessage(String msg) {
 		List<String> messages = (List<String>) getRequest().getSession()
@@ -149,5 +157,26 @@ public class BaseAction extends ActionSupport {
 
 	public String getSuit() {
 		return suit;
+	}
+	
+	
+
+	@Override
+	public void setServletRequest(HttpServletRequest request) {
+		this.request=request;
+		this.session=request.getSession();
+	}
+
+
+	@Override
+	public void setServletResponse(HttpServletResponse response) {
+		this.response=response;	
+	}
+
+
+	@Override
+	public void setServletContext(ServletContext application) {
+		this.application=application;
+		
 	}
 }

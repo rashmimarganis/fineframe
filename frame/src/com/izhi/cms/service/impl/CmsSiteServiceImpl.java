@@ -71,4 +71,9 @@ public class CmsSiteServiceImpl implements ICmsSiteService{
 		this.cmsSiteDao = cmsSiteDao;
 	}
 
+	@Override
+	public List<Map<String, Object>> findAll() {
+		return cmsSiteDao.findAll();
+	}
+
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -80,7 +81,13 @@ public class CmsSiteAction extends BasePageAction{
 		}
 		return SUCCESS;
 	}
-	
+	@Action("all")
+	public String all(){
+		List<Map<String,Object>> list=cmsSiteService.findAll();
+		String result=JSONArray.fromObject(list).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
 	public ICmsSiteService getCmsSiteService() {
 		return cmsSiteService;
 	}

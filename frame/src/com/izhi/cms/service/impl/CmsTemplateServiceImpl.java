@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import com.izhi.cms.dao.ICmsTemplateDao;
 import com.izhi.cms.model.CmsTemplate;
+import com.izhi.cms.model.CmsTemplateSuit;
 import com.izhi.cms.service.ICmsTemplateService;
+import com.izhi.cms.service.ICmsTemplateSuitService;
 import com.izhi.platform.util.PageParameter;
 import com.izhi.platform.util.WebUtils;
 
@@ -28,6 +30,8 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 	@Resource(name = "cmsTemplateDao")
 	private ICmsTemplateDao cmsTemplateDao;
+	@Resource(name="cmsTemplateSuitService")
+	private ICmsTemplateSuitService suitService;
 
 	@Resource(name = "cmsTemplatePath")
 	private String templatePath;
@@ -35,7 +39,7 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 	@Override
 	public boolean deleteTemplate(int id) {
 		CmsTemplate obj = this.findTemplateById(id);
-		String fileName = this.getFilePath(obj.getFileName());
+		String fileName = this.getFilePath(obj);
 		boolean r = cmsTemplateDao.deleteTemplate(id);
 		if (r) {
 			File file = new File(fileName);
@@ -61,8 +65,8 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 	public List<Map<String, Object>> findJsonById(int id) {
 		List<Map<String, Object>> list = cmsTemplateDao.findJsonById(id);
 		Map<String, Object> m = list.get(0);
-		String fn = (String) m.get("fileName");
-		String file = this.getFilePath(fn);
+		CmsTemplate obj=cmsTemplateDao.findTemplateById(id);
+		String file = this.getFilePath(obj);
 		m.put("content", this.loadFile(file));
 		return list;
 	}
@@ -86,8 +90,10 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 	public int saveTemplate(CmsTemplate obj) {
 		if (obj != null) {
 			int id = 0;
+			CmsTemplateSuit suit=this.getSuitService().findSuitById(obj.getSuit().getSuitId());
+			obj.setSuit(suit);
 			if (obj.getTemplateId() == 0) {
-				String fileName = this.getFilePath(obj.getFileName());
+				String fileName = this.getFilePath(obj);
 				File file = new File(fileName);
 				if (file.exists()) {
 					id = -1;
@@ -96,7 +102,7 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 					id = cmsTemplateDao.saveTemplate(obj);
 				}
 			} else {
-				String fileName = this.getFilePath(obj.getFileName());
+				String fileName = this.getFilePath(obj);
 
 				if (obj.getFileName().equals(obj.getOldFileName())) {
 					File file = new File(fileName);
@@ -107,8 +113,7 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 					if (file.exists()) {
 						id = -1;
 					} else {
-						String oldFileName = this.getFilePath(obj
-								.getOldFileName());
+						String oldFileName = this.getFilePath(obj);
 						File oldFile = new File(oldFileName);
 						log.debug("重命名：" + oldFileName + " to " + fileName);
 						oldFile.renameTo(file);
@@ -162,7 +167,6 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 
 	public boolean saveFile(File file, String content) {
 		boolean result = false;
-		// File file = new File(path);
 
 		try {
 			if (!file.exists()) {
@@ -181,8 +185,18 @@ public class CmsTemplateServiceImpl implements ICmsTemplateService {
 		return result;
 	}
 
-	private String getFilePath(String fileName) {
-		String file = WebUtils.getWebRoot() + templatePath + fileName + ".ftl";
+	private String getFilePath(CmsTemplate obj) {
+		String file = WebUtils.getWebRoot() + templatePath +obj.getSuit().getPackageName()+File.separator+ obj.getFileName() + ".ftl";
 		return file;
 	}
+
+	public ICmsTemplateSuitService getSuitService() {
+		return suitService;
+	}
+
+	public void setSuitService(ICmsTemplateSuitService suitService) {
+		this.suitService = suitService;
+	}
+	
+	
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-	<substitutionProperty name="log.base" value="/logs/mini-web" />
+	<substitutionProperty name="log.base" value="d:/logs/frame" />
 
 	<jmxConfigurator />
 
@@ -22,8 +22,9 @@
 		</layout>
 	</appender>
 	
-	<logger name="com.izhi">
+	<logger name="com.izhi.platform">
 		<level value="DEBUG" />
+		
 	</logger>
 	<logger name="org.apache.struts2">
 		<level value="INFO" />

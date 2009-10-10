@@ -46,7 +46,7 @@
 <%@page import="com.izhi.platform.service.IUserService"%>
 <%@page import="com.izhi.platform.service.IPersonService"%>
 <%@page import="com.izhi.platform.service.ISiteService"%>
-<%@page import="com.izhi.cms.service.ICmsAttributeService"%>
+<%@page import="com.izhi.cms.service.ICmsCategoryService"%>
 <%@page import="com.izhi.platform.util.SpringUtils"%>
 <%@page import="org.logicalcobwebs.proxool.ProxoolFacade"%>
 <%@page import="org.logicalcobwebs.proxool.admin.StatisticsIF"%><html>
@@ -56,13 +56,13 @@
 </head>
 <body>
 <%
-ICmsAttributeService s=(ICmsAttributeService)SpringUtils.getBean("cmsAttributeService");
+ICmsCategoryService s=(ICmsCategoryService)SpringUtils.getBean("cmsCategoryService");
 PageParameter pp=new PageParameter();
 pp.setDir("desc");
 pp.setSort("attributeId");
 pp.setStart(0);
 pp.setLimit(10);
-List<Map<String,Object>> l=s.findPage(pp,1);
+List<Map<String,Object>> l=s.findCategory(0);
 out.println(JSONArray.fromObject(l).toString());
 ///out.println(JSONArray.fromObject(s.findJsonById(1)).toString());
 
