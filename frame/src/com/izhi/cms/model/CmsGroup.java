@@ -2,58 +2,39 @@ package com.izhi.cms.model;
 
 import java.io.Serializable;
 
-public class CmsGroup implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6446325140053410086L;
-	private int groupId;
-	private String name;
-	private int levelValue;
-	
-	private int defaultGold;
-	
-	private int defaultStore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="cms_member_group")
+
+public class CmsGroup implements Serializable{
+
+	private static final long serialVersionUID = -5722725762800461997L;
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="group_id")
+	private int groupId;
+	@Column(length=32,name="group_name",unique=true)
+	private String groupName;
 	public int getGroupId() {
 		return groupId;
 	}
-
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
-
-	public String getName() {
-		return name;
+	public String getGroupName() {
+		return groupName;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getLevelValue() {
-		return levelValue;
-	}
-
-	public void setLevelValue(int levelValue) {
-		this.levelValue = levelValue;
-	}
-
-	public int getDefaultGold() {
-		return defaultGold;
-	}
-
-	public void setDefaultGold(int defaultGold) {
-		this.defaultGold = defaultGold;
-	}
-
-	public int getDefaultStore() {
-		return defaultStore;
-	}
-
-	public void setDefaultStore(int defaultStore) {
-		this.defaultStore = defaultStore;
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 	
+
 	
+
 }
