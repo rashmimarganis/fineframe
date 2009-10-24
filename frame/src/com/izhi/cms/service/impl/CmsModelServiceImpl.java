@@ -76,4 +76,9 @@ public class CmsModelServiceImpl implements ICmsModelService{
 		return cmsModelDao.findTree();
 	}
 
+	@Override
+	public List<Map<String, Object>> findAll() {
+		return cmsModelDao.findAll();
+	}
+
 }

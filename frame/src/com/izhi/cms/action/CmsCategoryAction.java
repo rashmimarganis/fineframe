@@ -67,7 +67,7 @@ public class CmsCategoryAction extends BaseAction {
 
 	@Action("all")
 	public String all(){
-		List<Map<String,Object>> l=service.findCategory(0);
+		List<Map<String,Object>> l=service.findAll();
 		String result=JSONArray.fromObject(l).toString();
 		this.getRequest().setAttribute("result", result);
 		return SUCCESS;

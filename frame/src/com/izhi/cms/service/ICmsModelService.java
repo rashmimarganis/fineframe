@@ -25,4 +25,7 @@ public interface ICmsModelService {
 	List<Map<String, Object>> findJsonById(int id);
 	
 	List<Map<String,Object>> findTree();
+	List<Map<String,Object>> findAll();
+	
+	
 }

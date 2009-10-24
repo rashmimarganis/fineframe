@@ -74,4 +74,10 @@ public class CmsGroupDaoImpl extends HibernateDaoSupport implements ICmsGroupDao
 		return 1;
 	}
 
+	@Override
+	public List<Map<String, Object>> findAll() {
+		String sql="select new map(o.groupId as id,o.groupName as name) from CmsGroup o";
+		return this.getHibernateTemplate().find(sql);
+	}
+
 }

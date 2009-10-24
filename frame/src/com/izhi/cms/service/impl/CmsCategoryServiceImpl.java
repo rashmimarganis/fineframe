@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import com.izhi.cms.dao.ICmsCategoryDao;
 import com.izhi.cms.model.CmsCategory;
 import com.izhi.cms.service.ICmsCategoryService;
+import com.izhi.cms.service.ICmsSiteService;
 @Service("cmsCategoryService")
 public class CmsCategoryServiceImpl implements ICmsCategoryService{
 
+	@Resource(name="cmsSiteService")
+	private ICmsSiteService cmsSiteService;
 	@Resource(name="cmsCategoryDao")
 	private ICmsCategoryDao categoryDao;
 	@Override
@@ -26,8 +29,8 @@ public class CmsCategoryServiceImpl implements ICmsCategoryService{
 	}
 
 	@Override
-	public List<Map<String, Object>> findAll(int id) {
-		return categoryDao.findAll(id);
+	public List<Map<String, Object>> findAll(int sid,int id) {
+		return categoryDao.findAll(sid,id);
 	}
 
 	@Override
@@ -80,6 +83,27 @@ public class CmsCategoryServiceImpl implements ICmsCategoryService{
 
 	public void setCategoryDao(ICmsCategoryDao categoryDao) {
 		this.categoryDao = categoryDao;
+	}
+
+	@Override
+	public List<Map<String, Object>> findAll() {
+		List<Map<String,Object>> list=cmsSiteService.findAll();
+		for(Map<String,Object> m:list){
+			int id=(Integer)m.get("id");
+			List<Map<String,Object>> children=categoryDao.findAll(id, 0);
+			m.put("children", children);
+			m.put("leaf", children.size()==0);
+			m.put("id", "s_"+id);
+		}
+		return list;
+	}
+
+	public ICmsSiteService getCmsSiteService() {
+		return cmsSiteService;
+	}
+
+	public void setCmsSiteService(ICmsSiteService cmsSiteService) {
+		this.cmsSiteService = cmsSiteService;
 	}
 
 }

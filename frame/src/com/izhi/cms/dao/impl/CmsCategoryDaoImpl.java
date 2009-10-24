@@ -1,4 +1,5 @@
 package com.izhi.cms.dao.impl;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -114,12 +115,42 @@ public class CmsCategoryDaoImpl extends HibernateDaoSupport implements ICmsCateg
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Map<String, Object>> findAll(int id) {
-		String sql="select new map(o.categoryId as id,o.name as text,o.url as url,o.sequence as sequence,o.parent.categoryId as parentId,o.site.siteId as siteId) from  CmsCategory o where o.categoryId!=?";
-		List<Map<String,Object>> list=this.getHibernateTemplate().find(sql,id);
+	public List<Map<String, Object>> findAll(int siteId,int pid) {
+		Integer id=null;
+		if(pid!=0){
+			id=pid;
+		}
+		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+		String sql="select new map(o.categoryId as id,o.name as text) from CmsCategory o where o.site.siteId=? and ";
+		if(id==null){
+			sql+=" o.parent.categoryId is null";
+			list=this.getHibernateTemplate().find(sql,siteId);
+		}else{
+			sql+=" o.parent.categoryId =?";
+			list=this.getHibernateTemplate().find(sql,new Object[]{siteId,id});
+		}
+		
 		for(Map<String,Object> m:list){
 			Integer id_=(Integer)m.get("id");
-			List<Map<String,Object>> _list=findAll(id_);
+			List<Map<String,Object>> _list=findAll(siteId,id_);
+			m.put("children", _list);
+			if(id==null){
+				m.put("parent","s_"+siteId);
+			}else{
+				m.put("parent", pid);
+			}
+			m.put("leaf", _list.size()==0);
+		}
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> findCategoryBySite(int sid) {
+		String sql="select new map(o.categoryId as id,o.name as text,o.url as url,o.sequence as sequence,o.parent.categoryId as parentId,o.site.siteId as siteId) from  CmsCategory o where o.site.siteId=?";
+		List<Map<String,Object>> list=this.getHibernateTemplate().find(sql,sid);
+		for(Map<String,Object> m:list){
+			Integer id_=(Integer)m.get("id");
+			List<Map<String,Object>> _list=findAll(sid,id_);
 			m.put("childeren", _list);
 			m.put("leaf", _list.size()>0);
 		}

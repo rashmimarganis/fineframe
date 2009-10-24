@@ -61,6 +61,9 @@ public class CmsCategory implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="site_id",nullable=false)
 	private CmsSite site;
+	@OneToMany
+	@JoinColumn(name="category_id",nullable=true)
+	private List<CmsCategoryPageTemplate> pageTemplates;
 	
 	public String getName() {
 		return name;
@@ -172,6 +175,14 @@ public class CmsCategory implements Serializable {
 
 	public void setSite(CmsSite site) {
 		this.site = site;
+	}
+
+	public List<CmsCategoryPageTemplate> getPageTemplates() {
+		return pageTemplates;
+	}
+
+	public void setPageTemplates(List<CmsCategoryPageTemplate> templates) {
+		this.pageTemplates = templates;
 	}
 	
 }

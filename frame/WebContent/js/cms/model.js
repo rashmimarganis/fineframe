@@ -13,6 +13,7 @@ CmsModelTreePanel=function(){
 	this.formPanel;
 	this.attributeGrid;
 	this.functionGrid;
+	this.modelPageGrid;
 	CmsModelTreePanel.superclass.constructor.call(this, {
 		el:'cmsModelTree',
         autoScroll:true,
@@ -43,6 +44,7 @@ CmsModelTreePanel=function(){
 				_tree.loadData(node.id);
 				_tree.attributeGrid.loadData(node.id);
 				_tree.functionGrid.loadData(node.id);
+				_tree.modelPageGrid.loadData(node.id);
 			}
         
         },
@@ -94,6 +96,7 @@ Ext.extend(CmsModelTreePanel, Ext.tree.TreePanel, {
 		var tree=this;
 		var attributeGrid=this.attributeGrid;
 		var functionGrid=this.functionGrid;
+		var modelPageGrid=this.modelPageGrid;
 		function success(rep){
 			eval("var result="+rep.responseText);
 			if(result.success){
@@ -119,6 +122,7 @@ Ext.extend(CmsModelTreePanel, Ext.tree.TreePanel, {
 					tree.formPanel.addData();
 					attributeGrid.store.removeAll();
 					functionGrid.store.removeAll();
+					modelPageGrid.store.removeAll();
 				}else{
 					node.remove();
 					tree.getRootNode().reload();
@@ -639,6 +643,169 @@ Ext.extend(CmsFunctionGridPanel, Ext.grid.GridPanel, {
 		this.store.reload();
 	}
 });
+CmsModelPageGridPanel=function(){
+	var _grid=this;
+	var _win= new CmsModelPageWindow();
+	this.window=_win;
+	_win.grid=this;
+	this.modelId;
+	var sm = new Ext.grid.CheckboxSelectionModel();
+	var fields=['pageId','pageName'];
+	this.window;
+	this.store = new Ext.data.Store({
+		proxy: new Ext.data.HttpProxy({
+			url: 'cms/modelpage/list.jhtm?modelId=0'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'objs',
+			totalProperty: 'totalCount',
+			id: 'pageId',
+			fields:fields 
+		}
+		),
+		remoteSort: true
+	});
+	this.store.setDefaultSort('pageId', 'asc');
+	this.store.on('load',function(s,r,o){
+		if(s.getTotalCount()>0){
+			sm.selectFirstRow();
+		}
+	});
+	
+	this.cm = new Ext.grid.ColumnModel([sm,{
+		id: 'pageId',
+		header: "ID",
+		dataIndex: 'pageId',
+		width: 30
+	},{
+		id: 'pageName', 
+		header: "名称",
+		dataIndex: 'pageName',
+		width: 60
+	}]);
+	
+	this.cm.defaultSortable = true;
+	CmsModelPageGridPanel.superclass.constructor.call(this, {
+		layout : 'fit',
+		sm : sm,
+		trackMouseOver : true,
+		frame : false,
+		autoScroll : true,
+		loadMask : true,
+		viewConfig : {
+		enableRowBody : true,
+		showPreview : true,
+		forceFit : true
+	},
+	bbar : new Ext.PagingToolbar( {
+		pageSize : 18,
+		store : _grid.store,
+		displayInfo : true
+	}),
+	tbar : [
+	        
+	        {
+	        	text : '新增页面',
+	        	iconCls : 'x-btn-text-icon add',
+	        	scope : this,
+	        	handler : _grid.addInfo
+	        }, '-', {
+	        	text : '修改页面',
+	        	iconCls : 'x-btn-text-icon edit',
+	        	scope : this,
+	        	handler : _grid.loadInfo
+	        }, '-', {
+	        	text : '删除页面',
+	        	iconCls : 'x-btn-text-icon delete',
+	        	scope : this,
+	        	handler : _grid.deleteInfo
+	        }
+	        ],
+	        renderTo : 'cmsModelPageGrid'	
+	});
+};
+Ext.extend(CmsModelPageGridPanel, Ext.grid.GridPanel, {
+	loadData : function(id) {
+		this.modelId=id;
+		this.store.proxy= new Ext.data.HttpProxy({
+			url: 'cms/modelpage/list.jhtm?modelId='+id
+		});
+		this.store.load({params:{start:0,limit:10}});
+	},
+	addInfo:function(){
+		this.window.show();
+		this.window.formPanel.getForm().reset();
+	},
+	loadInfo:function(){
+		var id=this.getSelectionModel().getSelected().get('pageId');
+		this.window.show();
+		this.window.formPanel.loadData(id);
+	},
+	deleteInfo:function(){
+		var sm=this.getSelectionModel();
+		var _grid1=this;
+		if(sm.getSelected==null){
+			Ext.Msg.alert("删除页面","请先选择一个页面！");
+			return;
+		}else{
+			var s=Ext.Msg.confirm("删除页面","确定要删除选中的页面吗？",function(o){
+				if(o=='yes'){
+					var url='cms/modelpage/delete.jhtm?'+_grid1.getSelectedIds();
+					Ext.Ajax.request({
+						url:url,
+						success:success,
+						failure:failure
+					});
+				}else{
+					return;
+				}
+			});
+		}
+		function success(rep){
+			eval("var result="+rep.responseText);
+			var _success=result.success;
+			var totalCount=result.totalCount;
+			var pageSize=10;
+			if(_success){
+				var store=_grid1.store;
+				var lastO= store.lastOptions.params;
+				var start=lastO.start;
+				var totRecords= new Number(totalCount);
+				if(start>0&&start>=totRecords){
+					store.load({params:{start:start-pageSize, limit:pageSize}});
+				}else{
+					store.load({params:{start:start, limit:pageSize}});
+				}
+				Ext.Msg.alert("删除页面","删除页面成功！");
+			}else{
+				Ext.Msg.alert("删除页面","删除页面失败！");
+			}
+			
+		}
+		function failure(rep){
+			alert("删除失败！");
+			alert(rep.responseText);
+		}
+	},
+	getSelectedIds:function(){
+		var ids="";
+		var selections=this.getSelectionModel().getSelections();
+		var size=selections.length;
+		for(var i=0;i<size;i++){
+			var r=selections[i];
+			if(ids.length==0){
+				ids='ids='+r.get("pageId");
+			}else{
+				ids+="&ids="+r.get("pageId");
+			}
+		}
+		return ids;
+		
+	},
+	reload:function(){
+		this.store.reload();
+	}
+});
 
 
 
@@ -769,6 +936,57 @@ Ext.extend(CmsFunctionFormPanel, Ext.form.FormPanel, {
 		});
 	}
 });
+CmsModelPageFormPanel = function() {
+	this.idField = {
+			xtype : 'hidden',
+			fieldLabel : "id",
+			name : "obj.pageId",
+			value:'0'
+	};
+	this.nameField = {
+			xtype : 'textfield',
+			fieldLabel : "名称",
+			allowBlank : false,
+			name : "obj.pageName"
+	};
+	
+	
+	
+	CmsModelPageFormPanel.superclass.constructor.call(this, {
+		bodyStyle : 'padding:2px 2px 0',
+		frame : true,
+		reader : new Ext.data.JsonReader( {
+			root : 'data',
+			successProperty : 'success',
+			totalProperty : 'totalCount',
+			id : 'pageId'
+		}, [
+		    {name:'obj.pageId', mapping:'pageId'},
+		    {name:'obj.pageName',mapping:'pageName'}
+		    ]
+		),
+		items : [this.idField, this.nameField]
+	});
+};
+Ext.extend(CmsModelPageFormPanel, Ext.form.FormPanel, {
+	loadData : function(id) {
+	var url = 'cms/modelpage/load.jhtm?id=' + id;
+	this.getForm().load( {
+		url : url,
+		waitMsg : '正在加载数据....',
+		failure : function(form, action) {
+		var json = action.response.responseText;
+		var o = eval("(" + json + ")");
+		Ext.MessageBox.show( {
+			title : '出现错误',
+			msg : o.message,
+			buttons : Ext.MessageBox.OK,
+			icon : Ext.MessageBox.ERROR
+		});
+	}
+	});
+}
+});
 
 CmsAttributeWindow = function() {
 	var _win = this;
@@ -836,7 +1054,7 @@ CmsFunctionWindow = function() {
 	var _form = this.formPanel.getForm();
 	this.grid;
 	CmsFunctionWindow.superclass.constructor.call(this, {
-		title : '属性信息',
+		title : '功能信息',
 		width : 320,
 		height : 180,
 		
@@ -885,6 +1103,60 @@ Ext.extend(CmsFunctionWindow, Ext.Window, {
 		this.formPanel.loadData(id);
 	}
 });
+CmsModelPageWindow = function() {
+	var _win = this;
+	this.formPanel = new CmsModelPageFormPanel();
+	var _form = this.formPanel.getForm();
+	this.grid;
+	CmsModelPageWindow.superclass.constructor.call(this, {
+		title : '页面信息',
+		width : 320,
+		height : 180,
+		resizable : true,
+		plain : false,
+		border : false,
+		modal : true,
+		autoScroll : true,
+		layout : 'fit',
+		closeAction : 'hide',
+		items : this.formPanel,
+		buttons : [ {
+			text : '保存',
+			handler : function() {
+			if (_form.isValid()) {
+				_form.submit( {
+					waitMsg : '正在保存数据...',
+					url : 'cms/modelpage/save.jhtm?obj.model.modelId='+selectModelId,
+					failure : function(form, action) {
+					var json = action.response.responseText;
+					var o = eval("(" + json + ")");
+					Ext.MessageBox.show( {
+						title : '出现错误',
+						msg : o.message,
+						buttons : Ext.MessageBox.OK,
+						icon : Ext.MessageBox.ERROR
+					});
+				},
+				success : function(form1, action) {
+					_win.grid.reload();
+				}
+				});
+			}
+		}
+		}, {
+			text : '取消',
+			handler : function() {
+			_win.hide();
+		},
+		tooltip : '关闭窗口'
+		}]
+	});
+}
+Ext.extend(CmsModelPageWindow, Ext.Window, {
+	loadData : function(id) {
+	this.formPanel.loadData(id);
+}
+});
 
 
 
@@ -893,16 +1165,19 @@ var CmsModelApp=function(){
 	var _modelFormPanel;
 	var _attributeGridPanel;
 	var _functionGridPanel;
+	var _modelPageGridPanel;
 	return {
 		init:function(){
 			_treePanel=new CmsModelTreePanel();
 			_modelFormPanel=new CmsModelFormPanel();
 			_attributeGridPanel=new CmsAttributeGridPanel();
 		    _functionGridPanel=new CmsFunctionGridPanel();
+		    _modelPageGridPanel=new CmsModelPageGridPanel();
 		    _treePanel.formPanel=_modelFormPanel;
 		    _modelFormPanel.treePanel=_treePanel;
 		    _treePanel.attributeGrid=_attributeGridPanel;
 		    _treePanel.functionGrid=_functionGridPanel;
+		    _treePanel.modelPageGrid=_modelPageGridPanel;
 			var westPanel=new Ext.Panel({
 				region:'west',
 				el:'cmsModelTreePanel',
@@ -970,6 +1245,15 @@ var CmsModelApp=function(){
 				contentEl:'cmsAttributeGrid',
 				items:[_attributeGridPanel]
 			});
+			var modelPageGridPanel=new Ext.Panel({
+				layout:'fit',
+				width:200,
+				frame:false,
+				el:'cmsModelPageCenter',
+				height:100,
+				contentEl:'cmsModelPageGrid',
+				items:[_modelPageGridPanel]
+			});
 			
 			var tabPanel=new Ext.TabPanel({
 				height:200,
@@ -977,9 +1261,11 @@ var CmsModelApp=function(){
 				activeTab: 0,
 				frame:false,
 			    items: [{title:'模型属性',id:'attribute',frame:false,layout:'fit',items:attributeGridPanel},
-			            {title:'模型功能',id:'function',frame:false,layout:'fit',items:functionGridPanel}
+			            {title:'模型功能',id:'function',frame:false,layout:'fit',items:functionGridPanel},
+			            {title:'页面管理',id:'page',frame:false,layout:'fit',items:modelPageGridPanel}
 			    ]
 			});
+			tabPanel.setActiveTab('page');
 			tabPanel.setActiveTab('function');
 			tabPanel.setActiveTab('attribute');
 			var centerPanel=new Ext.Panel({

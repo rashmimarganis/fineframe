@@ -1,0 +1,55 @@
+<!--
+  $Id: grapheditor.html,v 1.4 2009/09/25 09:51:33 gaudenz Exp $
+  Copyright (c) 2006-2009, JGraph Ltd
+  
+  Graph Editor example for mxGraph. This example demonstrates using
+  mxGraph inside an ExtJs panel, and integrating tooltips, popupmenus,
+  toolbars and dialogs into mxGraph.
+-->
+<html>
+<head>
+    <title>Graph Editor</title>
+ 
+ 	<link rel="stylesheet" type="text/css" href="/ext3/resources/css/ext-all.css" />
+	<link rel="stylesheet" type="text/css" href="/ext3/resources/css/xtheme-blue.css" />
+	<script type="text/javascript" src="/ext3/adapter/ext/ext-base.js"></script>
+	<script type="text/javascript" src="/ext3/ext-all.js"></script>
+
+	<!-- Sets the basepath for the library if not in same directory -->
+	<script type="text/javascript">
+		mxBasePath = '/mxgraph/javascript/examples/editors/';
+	</script>
+
+	<!-- Loads and initiaizes the library -->
+	<script type="text/javascript" src="/mxgraph/mxResource.js"></script>
+	<script type="text/javascript" src="/mxgraph/mxClient.js"></script>
+	<script type="text/javascript" src="/mxgraph/mxEvent.js"></script>
+	<script type="text/javascript" src="/mxgraph/mxConstants.js"></script>
+	<script type="text/javascript" src="/mxgraph/mxLog.js"></script>
+	<script type="text/javascript" src="/mxgraph/mxUtil.js"></script>
+	<script type="text/javascript" src="/mxgraph/mxclient_ff1.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/grapheditor.css" />
+
+    <script type="text/javascript" src="js/GraphEditor.js"></script>
+    <script type="text/javascript" src="js/MainPanel.js"></script>
+    <script type="text/javascript" src="js/LibraryPanel.js"></script>
+    <script type="text/javascript" src="js/DiagramStore.js"></script>
+    <script type="text/javascript" src="js/DiagramPanel.js"></script>
+
+	<script type="text/javascript">
+		// Replaces the built-in alert dialog with ExtJs message dialog (can't
+		// replace confirm and prompt as they are callback-based and we require
+		// a synchronous call with a return value).
+		// Ext.MessageBox.prompt('Prompt', message, null, null, null, defaultValue);
+		// Ext.MessageBox.confirm('Confirm', message);
+		mxUtils.alert = function(message)
+		{
+			Ext.example.msg(message, '', '');
+		};
+	</script>
+</head>
+<body onload="main();">
+<div id="header"><div style="float:right;margin:5px;" class="x-small-editor"></div></div>
+</body>
+</html>

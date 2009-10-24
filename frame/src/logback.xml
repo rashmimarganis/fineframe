@@ -22,7 +22,7 @@
 		</layout>
 	</appender>
 	
-	<logger name="com.izhi.platform">
+	<logger name="com.izhi">
 		<level value="DEBUG" />
 		
 	</logger>

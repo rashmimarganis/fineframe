@@ -44,6 +44,16 @@ public class CmsModelAction extends BasePageAction{
 	public String index(){
 		return SUCCESS;
 	}
+	@Action("all")
+	public String all(){
+		Map<String,Object> m=new HashMap<String, Object>();
+		List<Map<String,Object>> l=cmsModelService.findAll();
+		m.put("objs", l);
+		m.put("totalCount", l.size());
+		String result=JSONObject.fromObject(m).toString();
+		this.getRequest().setAttribute("result", result);
+		return SUCCESS;
+	}
 	@Action("list")
 	public String list(){
 		Map<String,Object> map=new HashMap<String, Object>();

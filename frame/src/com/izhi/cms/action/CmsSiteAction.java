@@ -84,7 +84,10 @@ public class CmsSiteAction extends BasePageAction{
 	@Action("all")
 	public String all(){
 		List<Map<String,Object>> list=cmsSiteService.findAll();
-		String result=JSONArray.fromObject(list).toString();
+		Map<String,Object> m=new HashMap<String, Object>();
+		m.put("objs", list);
+		m.put("totalCount", list.size());
+		String result=JSONObject.fromObject(m).toString();
 		this.getRequest().setAttribute("result", result);
 		return SUCCESS;
 	}

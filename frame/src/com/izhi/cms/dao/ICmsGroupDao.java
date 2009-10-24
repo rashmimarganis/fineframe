@@ -8,6 +8,7 @@ import com.izhi.platform.util.PageParameter;
 
 public interface ICmsGroupDao{
 	List<Map<String,Object>>  findPage(PageParameter pp);
+	List<Map<String,Object>>  findAll();
 	int findTotalCount();
 	CmsGroup findObjById(int id);
 	List<Map<String,Object>> findJsonById(int id);

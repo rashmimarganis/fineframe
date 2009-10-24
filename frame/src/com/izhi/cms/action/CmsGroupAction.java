@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -56,7 +57,15 @@ public class CmsGroupAction extends BasePageAction{
 		}
 		return SUCCESS;
 	}
-	
+	@Action("all")
+	public String all(){
+		List<Map<String,Object>> objs=groupService.findAll();
+		Map<String,Object> result=new HashMap<String, Object>();
+		result.put("objs", objs);
+		result.put("totalCount", objs.size());
+		this.getRequest().setAttribute("result", JSONObject.fromObject(result).toString());
+		return SUCCESS;
+	}
 	@Action("load")
 	public String load(){
 		if(id!=0){

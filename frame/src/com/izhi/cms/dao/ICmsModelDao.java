@@ -23,6 +23,7 @@ public interface ICmsModelDao {
 	int findTotalCount();
 
 	List<Map<String, Object>> findJsonById(int id);
+	List<Map<String, Object>> findAll();
 	
 	List<Map<String,Object>> findTree();
 }

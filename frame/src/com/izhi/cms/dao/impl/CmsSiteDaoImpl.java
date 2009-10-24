@@ -87,7 +87,7 @@ public class CmsSiteDaoImpl extends HibernateDaoSupport implements ICmsSiteDao{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findAll() {
-		String sql="select new map(o.siteId as id,o.name as name) from CmsSite o";
+		String sql="select new map(o.siteId as id,o.name as text) from CmsSite o";
 		return this.getHibernateTemplate().find(sql);
 	}
 

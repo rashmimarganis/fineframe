@@ -7,5 +7,7 @@
 </div>
 <div id="cmsFunctionCenter"><div id="cmsFunctionGrid"></div></div>
 </div>
+<div id="cmsModelPageCenter"><div id="cmsModelPageGrid"></div></div>
+</div>
 </div>
 <script type="text/javascript" src="js/cms/model.js"></script>

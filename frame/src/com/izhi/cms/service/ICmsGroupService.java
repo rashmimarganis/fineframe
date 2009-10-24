@@ -17,4 +17,6 @@ public interface ICmsGroupService  {
 	boolean deleteGroups(List<Integer> ids);
 	CmsGroup findById(Integer id);
 	
+	List<Map<String,Object>> findAll();
+	
 }

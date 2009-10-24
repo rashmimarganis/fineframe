@@ -24,5 +24,7 @@ public interface ICmsCategoryService {
 
 	List<Map<String, Object>> findJsonById(int id);
 	
-	List<Map<String,Object>> findAll(int id);
+	List<Map<String,Object>> findAll(int siteId,int id);
+	
+	List<Map<String,Object>> findAll();
 }

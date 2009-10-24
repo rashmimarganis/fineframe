@@ -71,4 +71,8 @@ public class CmsGroupServiceImpl implements ICmsGroupService{
 		return groupDao.findJsonById(id);
 	}
 
+	@Override
+	public List<Map<String, Object>> findAll() {
+		return groupDao.findAll();
+	}
 }

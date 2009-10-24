@@ -17,6 +17,7 @@ public interface ICmsCategoryDao {
 	CmsCategory findCategoryById(int id);
 
 
+	List<Map<String,Object>> findCategoryBySite(int sid);
 	List<Map<String, Object>> findCategory(int cid);
 
 	int findTotalCount();
@@ -24,5 +25,5 @@ public interface ICmsCategoryDao {
 
 	List<Map<String, Object>> findJsonById(int id);
 	
-	List<Map<String,Object>> findAll(int id);
+	List<Map<String,Object>> findAll(int sid,int id);
 }

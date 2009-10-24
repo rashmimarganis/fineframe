@@ -106,4 +106,10 @@ public class CmsModelDaoImpl extends HibernateDaoSupport implements
 		return this.getHibernateTemplate().find(sql);
 	}
 
+	@Override
+	public List<Map<String, Object>> findAll() {
+		String sql="select new map(o.modelId as id,o.name as text) from CmsModel o";
+		return this.getHibernateTemplate().find(sql);
+	}
+
 }

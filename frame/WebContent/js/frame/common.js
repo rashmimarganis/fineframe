@@ -91,6 +91,11 @@ Ext.ux.TemplateType = [
                        ['c', '普通模板', '普通模板'],
                        ['t', '标签模板', '标签模板']
                         ];
+Ext.namespace('Ext.ux.CmsCategoryType');
+Ext.ux.CmsCategoryType = [
+                       ['op', '单页面栏目', '单页面'],
+                       ['co', '内容栏目', '内容页面']
+                        ];
 function rendererEnabled(v){
 	if(v){
 		return '<img src="js/resources/images/default/menu/checked.gif">';

@@ -13,14 +13,14 @@ import com.izhi.platform.security.support.SecurityUser;
 import com.izhi.platform.service.ISiteService;
 @Service
 @Scope("prototype")
-public class HomeAction extends BaseAction {
+public class FineCmsAction extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	private Site site;
 	private User user;
 	private Org org;
 	@Resource(name="siteService")
 	private ISiteService siteService;
-	@Action("/home")
+	@Action("/finecms")
 	public String home(){
 		if(SecurityUser.isOnline()){
 			user=SecurityUser.getUser();
