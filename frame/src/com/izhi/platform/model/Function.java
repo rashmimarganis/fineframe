@@ -37,9 +37,9 @@ public class Function implements Serializable {
 	@Column(length=255)
 	private String url;
 	@Column(name="is_menu")
-	private Boolean menu;
+	private boolean menu;
 	@Column(name="is_log")
-	private Boolean log;
+	private boolean log;
 	@ManyToOne(optional=true)
 	@NotFound(action=NotFoundAction.IGNORE)
 	@JoinColumn(name="parent_id",updatable=false,insertable=true,nullable=true)
@@ -91,16 +91,16 @@ public class Function implements Serializable {
 		this.enabled = enabled;
 	}
 
-	public Boolean getMenu() {
+	public boolean getMenu() {
 		return menu;
 	}
-	public void setMenu(Boolean menu) {
+	public void setMenu(boolean menu) {
 		this.menu = menu;
 	}
-	public Boolean getLog() {
+	public boolean getLog() {
 		return log;
 	}
-	public void setLog(Boolean log) {
+	public void setLog(boolean log) {
 		this.log = log;
 	}
 
