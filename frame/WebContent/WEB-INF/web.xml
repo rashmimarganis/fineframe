@@ -258,9 +258,8 @@
 	  <url-pattern>/dbAdmin</url-pattern>
   </servlet-mapping> 
   <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>index.jhtm</welcome-file>
-    <welcome-file>login.jsp</welcome-file>
+    <welcome-file>finecms.jhtm</welcome-file>
+    <welcome-file>login.jhtm</welcome-file>
   </welcome-file-list>
   <session-config>
     <session-timeout>20</session-timeout>
