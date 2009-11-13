@@ -212,6 +212,8 @@ CmsCategoryFormPanel=function(){
         allowBlank:false,
         hiddenName: 'obj.model.modelId'
     });
+    
+   
     this.groupStore=new Ext.data.Store({    
     	proxy: new Ext.data.HttpProxy({url: 'cms/group/all.jhtm'}),    
     	reader: new Ext.data.JsonReader({    
@@ -223,7 +225,7 @@ CmsCategoryFormPanel=function(){
     
     this.groupField = new Ext.form.ComboBox({
     	store: this.groupStore,
-    	fieldLabel: '选择权限',
+    	fieldLabel: '访问权限',
     	displayField:'name',
     	valueField:'id',
     	typeAhead: true,
@@ -304,6 +306,9 @@ CmsCategoryFormPanel=function(){
                 ]
                  
 	});
+	 this.modelField.on('select',function(){
+	    	alert(this.getValue());
+	    });
 };
 
 Ext.extend(CmsCategoryFormPanel, Ext.form.FormPanel, {
@@ -389,7 +394,9 @@ var CmsCategoryApp=function(){
 				height:200,
 				items:[_treePanel]
 			});
-			
+			var modelPanel=new Ext.Panel({
+				
+			});
 			var centerTop=new Ext.Panel({
 				region:'north',
 				frame:false,
