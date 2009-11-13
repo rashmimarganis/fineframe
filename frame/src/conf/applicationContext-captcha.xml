@@ -37,15 +37,15 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd" default-la
 	</bean>
 	
 	<bean id="backGenUni" class="com.octo.captcha.component.image.backgroundgenerator.UniColorBackgroundGenerator" >
-			<constructor-arg index="0"><value>70</value></constructor-arg>
-			<constructor-arg index="1"><value>24</value></constructor-arg>
+			<constructor-arg index="0"><value>80</value></constructor-arg>
+			<constructor-arg index="1"><value>40</value></constructor-arg>
 	</bean>
 	 <bean id="colorGenerator" class="com.octo.captcha.component.image.color.SingleColorGenerator">
 	 	<constructor-arg ref="colorBlue"></constructor-arg>
 	 </bean>
 	 <bean id="simpleWhitePaster" class="com.octo.captcha.component.image.textpaster.DecoratedRandomTextPaster" >
 		<constructor-arg type="java.lang.Integer" index="0"><value>4</value></constructor-arg>
-		<constructor-arg type="java.lang.Integer" index="1"><value>4</value></constructor-arg>
+		<constructor-arg type="java.lang.Integer" index="1"><value>5</value></constructor-arg>
 		<constructor-arg  index="2" ref="colorGenerator"></constructor-arg>
 		<constructor-arg  index="3"><null></null></constructor-arg>
 	</bean>
@@ -58,8 +58,8 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd" default-la
 		<constructor-arg><value>0123456789</value></constructor-arg>
 	</bean>
 	<bean id="fontGenRandom" class="com.octo.captcha.component.image.fontgenerator.RandomFontGenerator" >
-		<constructor-arg index="0"><value>15</value></constructor-arg>
-		<constructor-arg index="1"><value>16</value></constructor-arg>
+		<constructor-arg index="0"><value>13</value></constructor-arg>
+		<constructor-arg index="1"><value>20</value></constructor-arg>
 		<constructor-arg index="2">
 			<list>
 				<ref bean="fontArial"/>				

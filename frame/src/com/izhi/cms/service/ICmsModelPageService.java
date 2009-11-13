@@ -19,6 +19,8 @@ public interface ICmsModelPageService {
 
 
 	List<Map<String, Object>> findPage(PageParameter pp,int modelId);
+	
+	List<Map<String, Object>> findAll(int modelId);
 
 	int findTotalCount(int modelId);
 

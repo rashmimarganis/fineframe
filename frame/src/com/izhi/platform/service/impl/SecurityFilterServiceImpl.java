@@ -69,7 +69,8 @@ public class SecurityFilterServiceImpl implements SecurityFilterService {
 	public void saveLogOperation(String url, Org org) {
 		if (SecurityUser.isOnline()) {
 			Function f = functionService.findFunctionByUrl(url);
-			if (f.getLog()) {
+			System.out.println("===========findFunctionByUrl:"+(f==null));
+			if (f!=null&&f.getLog()) {
 				Log log = new Log();
 				log.setOperation(f.getFunctionName());
 				log.setTime(new Date());

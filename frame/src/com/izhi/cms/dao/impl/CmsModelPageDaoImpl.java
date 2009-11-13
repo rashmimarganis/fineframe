@@ -32,7 +32,7 @@ public class CmsModelPageDaoImpl extends HibernateDaoSupport implements ICmsMode
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findJsonById(int id) {
-		String sql="select new map(o.pageId as pageId,o.pageName as pageName,o.model.modelId as modelId,o.model.name as modelName) from CmsModelPage o where o.modelPageId=?";
+		String sql="select new map(o.pageId as pageId,o.pageName as pageName,o.model.modelId as modelId,o.model.name as modelName) from CmsModelPage o where o.pageId=?";
 		return this.getHibernateTemplate().find(sql, id);
 	}
 
@@ -83,6 +83,12 @@ public class CmsModelPageDaoImpl extends HibernateDaoSupport implements ICmsMode
 	public int updateModelPage(CmsModelPage obj) {
 		this.getHibernateTemplate().update(obj);
 		return 1;
+	}
+
+	@Override
+	public List<Map<String, Object>> findAll(int modelId) {
+		String sql="select new map(o.pageId as pageId,o.pageName as pageName) from CmsModelPage o where o.model.modelId=?";
+		return this.getHibernateTemplate().find(sql, modelId);
 	}
 
 }

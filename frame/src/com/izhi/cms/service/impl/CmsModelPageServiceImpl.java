@@ -71,4 +71,9 @@ public class CmsModelPageServiceImpl implements ICmsModelPageService{
 		this.cmsModelPageDao = cmsModelPageDao;
 	}
 
+	@Override
+	public List<Map<String, Object>> findAll(int modelId) {
+		return cmsModelPageDao.findAll(modelId);
+	}
+
 }
