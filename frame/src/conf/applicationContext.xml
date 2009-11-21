@@ -93,6 +93,7 @@
 				<value>com.izhi.framework.model</value>
 				<value>com.izhi.workflow.model</value>
 				<value>com.izhi.cms.model</value>
+				<value>com.izhi.oa.model</value>
 			</list>
 		</property>
 	</bean>

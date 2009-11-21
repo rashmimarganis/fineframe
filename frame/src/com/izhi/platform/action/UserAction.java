@@ -199,7 +199,13 @@ public class UserAction extends BasePageAction {
 		this.out(JSONObject.fromObject(r).toString());
 		return null;
 	}
-
+	@Action("tree")
+	public String tree(){
+		List<Map<String,Object>> m=userService.findUsers(0);
+		String r=JSONArray.fromObject(m).toString();
+		this.getRequest().setAttribute("result", r);
+		return SUCCESS;
+	}
 	public User getObj() {
 		return obj;
 	}

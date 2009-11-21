@@ -65,4 +65,6 @@ public interface IUserService {
 	boolean unlockUser(List<Integer> ids);
 
 	boolean enableUser(List<Integer> ids);
+	
+	public List<Map<String, Object>> findUsers(Integer pid);
 }

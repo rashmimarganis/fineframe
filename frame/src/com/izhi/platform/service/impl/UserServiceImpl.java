@@ -341,5 +341,10 @@ public class UserServiceImpl  implements IUserService,
 		return false;
 	}
 
+	@Override
+	public List<Map<String, Object>> findUsers(Integer pid) {
+		return userDao.findUsers(pid);
+	}
+
 
 }

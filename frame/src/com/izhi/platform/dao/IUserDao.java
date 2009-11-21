@@ -46,4 +46,7 @@ public interface IUserDao {
 	boolean unlockUser(int id);
 	
 	boolean enableUser(int id);
+	
+	List<Map<String, Object>> findUsers(Integer pid);
+	List<Map<String, Object>> findUsersByOrg(int orgId);
 }

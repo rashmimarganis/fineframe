@@ -324,5 +324,36 @@ public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements IUserDao 
 		}
 		return r>0;
 	}
+
+
+	@Override
+	public List<Map<String, Object>> findUsers(Integer pid1) {
+		Integer pid=null;
+		if(pid1!=0){
+			pid=pid1;
+		}
+		List<Map<String, Object>> childrens=new ArrayList<Map<String,Object>>();
+		String sql="select new map('o_'||o.orgId as id,o.name as text,0 as user,o.orgId as pid) from Org o";
+		if(pid==null){
+			sql+=" where o.parent.orgId is null order by o.sort desc";
+			childrens=this.getHibernateTemplate().find(sql);
+		}else{
+			sql+=" where o.parent.orgId =? order by o.sort desc";
+			childrens=this.getHibernateTemplate().find(sql,pid);
+		}
+		for(Map<String,Object> c:childrens){
+			Integer id=(Integer)c.get("pid");
+			List<Map<String, Object>> cc =findUsers(id);
+			cc.addAll(this.findUsersByOrg(id));
+			c.put("leaf", cc.size()==0);
+			c.put("children", cc);
+		}
+		return childrens;
+	}
+	
+	public List<Map<String, Object>> findUsersByOrg(int orgId) {
+		String sql="select new map(o.userId as id,o.person.realname as text,1 as user,'true' as leaf,(case when o.person.gender='m' then 'userMale' else 'userFemale' end)as iconCls) from User o where o.org.orgId=?";
+		return this.getHibernateTemplate().find(sql,orgId);
+	}
 }
 
